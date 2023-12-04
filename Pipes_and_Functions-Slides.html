@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapters 18 and 19: Pipes and Functions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapters 18 and 19: Pipes and Functions
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Agenda
+
+* The pipe
+
+* Introduction to Functions  
+
+* Investigation: Applications to scraping
+
+---
+
+## The Household Pipe: GIGO? 
+
+![](https://i.pinimg.com/originals/58/75/e4/5875e4a7c38483336fafdd31062e0cb2.png)
+---
+
+## Magritte's Pipe 
+
+
+![](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
+
+&lt;div class="footnote"&gt;
+Image taken from a University of Alabama site, "Approaches to Modernism": [1], Fair use, https://en.wikipedia.org/w/index.php?curid=555365
+&lt;/div&gt;
+
+---
+##  The Tidyverse Pipe  
+
+![](figures/magrittr_pipe.jpeg)
+
+---
+
+## Why we need the pipe?  Violent rabbits??  
+
+
+```r
+foo_foo_1 &lt;- hop(foo_foo, through = forest)
+foo_foo_2 &lt;- scoop(foo_foo_1, up = field_mice)
+foo_foo_3 &lt;- bop(foo_foo_2, on = head)
+```
+
+Stringing commands without the pipe leads to:
+
+* Code cluttered with unimportant names  
+    + But it's not about the use of memory  
+* Need to keep track of object versions  
+    + Sequential numbering like `lakers2`?  
+
+---
+
+## Overwriting names is problematic 
+
+
+```r
+foo_foo &lt;- hop(foo_foo, through = forest)
+foo_foo &lt;- scoop(foo_foo, up = field_mice)
+foo_foo &lt;- bop(foo_foo, on = head)
+```
+
+* Need to rerun from the top when debugging  
+
+* Code is hard to follow due to repetition    
+    + What's changing each time?  
+
+---
+## Using the pipe! %&gt;% 
+
+
+```r
+foo_foo %&gt;%
+  hop(through = forest) %&gt;%
+  scoop(up = field_mice) %&gt;%
+  bop(on = head) -&gt; 
+  the_output  
+```
+
+* Easy to follow  
+* Focuses on actions  
+* Avoids clutter and repitition  
+
+---
+## The Hadley-approved Version 
+
+
+```r
+# Easy to comment out the first line when debugging
+the_output&lt;- 
+  foo_foo %&gt;%
+  hop(through = forest) %&gt;%
+  scoop(up = field_mice) %&gt;%
+  bop(on = head)
+```
+
+* Easy to follow  
+* Focuses on actions  
+* Avoids clutter and repitition  
+
+---
+## When to avoid the pipe?  
+
+* Many steps that cannot be condensed further.   
+
+* Multiple inputs/outputs (but you might want to learn about the tee "%T&gt;%")
+
+* Non-linear process
+
+
+---
+class: inverse, center, middle
+
+# Functions  
+
+---
+## From Calculus  
+
+* A function is a rule  
+
+* For every input we can only get one output  
+
+* Passes vertical line test  
+
+![](Pipes_and_Functions-Slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+## Functions in Computer Science
+
+&lt;img src="figures/Function_machine2.svg.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Why Functions?  
+
+
+```r
+#  x^2 - 5x - 14 = 0 
+(-(-5) +c(-1,1)*sqrt((-5)^2 - 4*1*(-14)))/( 2*1) 
+```
+
+```
+## [1] -2  7
+```
+
+
+```r
+# 2x^2 + 2x − 12 = 0
+(-(2) +c(-1,1)*sqrt((2)^2 - 4*(2)*(-12)))/( 2*2) 
+```
+
+```
+## [1] -3  2
+```
+
+
+```r
+#  x^2 - 4x + 4 = 0 
+(-(-4) +c(-1,1)*sqrt((-4)^2 - 4*1*(4)))/( 2*1) 
+```
+
+```
+## [1] 2 2
+```
+
+
+---
+
+## Write a Famous Function
+
+
+```r
+quad_roots &lt;- function(aval, bval, cval){
+  (-bval +c(-1,1)*sqrt(bval^2 - 4*aval*cval))/( 2*aval) 
+}
+quad_roots(1, -5, -14)  
+```
+
+```
+## [1] -2  7
+```
+
+```r
+quad_roots(2, 2, -12)  
+```
+
+```
+## [1] -3  2
+```
+
+```r
+quad_roots(1, -4, 4)  # Gives repeated roots
+```
+
+```
+## [1] 2 2
+```
+
+---
+
+## What goes in/What comes out?
+
+* Functions take input(s) defined in the function definition
+
+
+```r
+function([inputs separated by commas]){
+  # what to do with those inputs
+}
+```
+
+* By default they return the last value computed in the function
+
+* You can also define more outputs to be returned in a list as well as nice print methods
+
+
+---
+class: inverse, center, middle
+
+# Functions and Automation: Scotland First Minister's COVID speeches
+
+---
+
+
+## Goal
+
+Use to scrape all the first minister's speeches that contain COVID in the title and create a dataset of speeches containing the following information about the speeches:
+
+1. Title
+
+2. Date
+
+3. Location
+
+4. Abstract
+
+5. Text of the speech
+
+6. URL address of the speech
+
+---
+
+## Website Table of Contents 
+
+![](figs/first_min_contents.png)
+
+---
+
+## The Goal
+
+![](figs/first_min_speeches_df.png)
+
+---
+
+## Getting Oriented
+
+#### [https://www.gov.scot/collections/first-ministers-speeches/](https://www.gov.scot/collections/first-ministers-speeches/)
+
+
+![](figs/fm_speeches_p1.png)
+---
+
+![:scale 80%](figs/fm_speeches_p2.png)
+
+
+---
+## Plan
+
+1. Scrape `title`, `date`, `location`, `abstract`, and `text` from a few COVID-19 speech pages to develop the code
+
+2. Write a function that scrapes `title`, `date`, `location`, `abstract`, and `text` from COVID-19 speech pages
+
+3. Scrape the `url`s of COVID-19 speeches from the main page
+
+4. Use this function to scrape from each individual COVID-19 speech from these `url`s and create a data frame with the columns `title`, `date`, `location`, `abstract`, `text`, and `url`
+
+---
+class:  middle
+
+## 1. Scrape data from a few COVID-19 speech pages
+
+---
+background-image: url("figs/fm_speeches_picture_oct20.png")
+background-size: 25%
+background-position: 90% 90%
+
+## Read page for  October 26, 2020 speech
+
+
+```r
+# url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+speech_page &lt;- read_html("https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/")
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+```
+
+
+```r
+speech_page
+```
+
+---
+
+## Extract title
+
+Use Selector Gadget to find the appropriate node
+
+
+```r
+title &lt;- speech_page %&gt;%
+    html_node(".ds_page-header__title") %&gt;%
+    html_text()
+title
+```
+
+```
+## [1] "Coronavirus (COVID-19) update: First Minister's speech 26 October"
+```
+
+---
+
+
+## Extract date
+
+* Use `dmy()` to format
+
+
+```r
+library(lubridate)
+date &lt;- speech_page %&gt;%
+    html_node("#sg-meta__publication-date") %&gt;%
+    html_text() %&gt;%
+  dmy()
+date
+```
+
+```
+## [1] "2020-10-26"
+```
+
+
+---
+
+## Extract location
+
+
+
+```r
+location &lt;- speech_page %&gt;%
+    html_node(".ds_metadata__item:nth-child(5) strong") %&gt;%
+    html_text() 
+location
+```
+
+```
+## [1] "St Andrew's House, Edinburgh"
+```
+
+
+
+---
+
+## Extract abstract
+
+
+
+```r
+abstract &lt;- speech_page %&gt;%
+    html_node(".ds_no-margin--bottom") %&gt;%
+    html_text() 
+abstract
+```
+
+```
+## [1] "Statement given by First Minister Nicola Sturgeon at a media briefing in St Andrew's House on Monday 26 October 2020."
+```
+
+
+
+---
+
+## Extract text
+
+
+
+```r
+text &lt;- speech_page %&gt;%
+    html_node("#preamble p") %&gt;%
+    html_text() %&gt;%
+  list()
+text
+```
+
+```
+## [[1]]
+## [1] "\nGood afternoon, and thanks for joining us. I want to start with the usual daily report on the COVID statistics."
+```
+
+
+---
+
+## Put it all in a data frame
+
+
+```r
+oct_26_speech &lt;- tibble(
+  title    = title,
+  date     = date,
+  location = location,
+  abstract = abstract,
+  text     = text,
+  url      = url
+)
+oct_26_speech
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                   date       locat…¹ abstr…² text  url  
+##   &lt;chr&gt;                                   &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First M… 2020-10-26 St And… Statem… &lt;chr&gt; http…
+## # … with abbreviated variable names ¹​location, ²​abstract
+```
+
+---
+
+## Read page for October 23, 2020 speech
+
+
+```r
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/"
+speech_page &lt;- read_html(url)
+```
+
+
+```r
+speech_page
+```
+
+```
+## {html_document}
+## &lt;html dir="ltr" lang="en"&gt;
+## [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+## [2] &lt;body&gt;\n    &lt;input type="hidden" id="site-root-path" value="/"&gt;&lt;!-- Googl ...
+```
+
+---
+
+## Extract components of the October 23, 2020 speech
+
+
+```r
+title &lt;- speech_page %&gt;%
+  html_node(".ds_page-header__title") %&gt;%
+  html_text()
+date &lt;- speech_page %&gt;%
+  html_node("#sg-meta__publication-date") %&gt;%
+  html_text() %&gt;%
+  dmy()
+location &lt;- speech_page %&gt;%
+  html_node(".ds_metadata__item:nth-child(5) strong") %&gt;%
+  html_text()
+abstract &lt;- speech_page %&gt;%
+  html_node(".ds_no-margin--bottom") %&gt;%
+  html_text()
+text &lt;- speech_page %&gt;%
+  html_nodes("#preamble p") %&gt;%
+  html_text() %&gt;%
+  list()
+```
+
+---
+
+## Put it all in a data frame
+
+
+```r
+oct_23_speech &lt;- tibble(
+  title    = title,
+  date     = date,
+  location = location,
+  abstract = abstract,
+  text     = text,
+  url      = url
+)
+oct_23_speech
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                   date       locat…¹ abstr…² text  url  
+##   &lt;chr&gt;                                   &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First M… 2020-10-23 St And… Statem… &lt;chr&gt; http…
+## # … with abbreviated variable names ¹​location, ²​abstract
+```
+
+
+---
+class: inverse, center, middle
+
+# Isn't there a way to speed this up?
+
+---
+class:  center, middle
+
+# Functions to the Rescue
+
+---
+
+## When should you write a function?
+
+* When you’ve copied and pasted a block of code more than twice.
+
+---
+
+### How many times would we need to copy and paste the code we developed to scrape data on all of First Minister's COVID-19 speeches?
+
+![:scale 50%](figs/fm_speeches_p3.png)
+
+---
+
+## Why functions?
+  
+Automate common tasks in a more powerful and general way than copy-and-pasting:  
+  
+* Use names that indicate what the purpose of the function
+   + Avoid reserved R names: like `c`, `sum`
+
+* Make updating code easier allowing you to update in just one place instead of many
+
+* Eliminate mistakes with copying and pasting
+   + Forgetting to make corresponding changes in all places
+
+* Learn to write and share your own functions!
+
+---
+
+### Assuming that the page structure is the same for each speech page, how many "things" do you need to know for each speech page to scrape the data we want from it?
+
+.small-code[
+
+```r
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/"
+speech_page &lt;- read_html(url)
+title &lt;- speech_page %&gt;%
+  html_node(".ds_page-header__title") %&gt;%
+  html_text()
+date &lt;- speech_page %&gt;%
+  html_node("#sg-meta__publication-date") %&gt;%
+  html_text() %&gt;%
+  dmy()
+location &lt;- speech_page %&gt;%
+  html_node(".ds_metadata__item:nth-child(5) strong") %&gt;%
+  html_text()
+abstract &lt;- speech_page %&gt;%
+  html_node(".ds_no-margin--bottom") %&gt;%
+  html_text()
+text &lt;- speech_page %&gt;%
+  html_nodes("#preamble p") %&gt;%
+  html_text() %&gt;%
+  list()
+tibble(title = title, date  = date, location = location,  
+       abstract = abstract, text = text,  url = url)
+```
+]
+
+---
+
+## Turn your code into a function
+
+* Pick a short informative name, preferably a verb.
+
+* List inputs, or **arguments**, to the function inside `function`. If we had more the call would look like `function(x, y, z)`.
+
+* Place the code you have developed in body of the function, a `{` block that immediately follows `function(...)`.
+
+
+```r
+scrape_speech &lt;- function(url){
+  # code we developed earlier to scrape info 
+  # on a single speech goes here
+}
+```
+
+---
+## Define the function scrape_speech()
+
+.small-code[
+
+```r
+scrape_speech &lt;- function(url) {
+  speech_page &lt;- read_html(url)
+  title &lt;- speech_page %&gt;%
+  html_node(".ds_page-header__title") %&gt;%
+  html_text()
+date &lt;- speech_page %&gt;%
+  html_node("#sg-meta__publication-date") %&gt;%
+  html_text() %&gt;%
+  dmy()
+location &lt;- speech_page %&gt;%
+  html_node(".ds_metadata__item:nth-child(5) strong") %&gt;%
+  html_text()
+abstract &lt;- speech_page %&gt;%
+  html_node(".ds_no-margin--bottom") %&gt;%
+  html_text()
+text &lt;- speech_page %&gt;%
+  html_nodes("#preamble p") %&gt;%
+  html_text() %&gt;%
+  list()
+tibble(
+  title = title, date = date, location = location,
+  abstract = abstract, text = text, url = url
+)
+}
+```
+]
+
+---
+
+## Function scrape_speech() in action
+### October 23, 2020
+
+
+```r
+scrape_speech(url = "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/") %&gt;%
+glimpse()
+```
+
+```
+## Rows: 1
+## Columns: 6
+## $ title    &lt;chr&gt; "Coronavirus (COVID-19) update: First Minister's speech 23 Oc…
+## $ date     &lt;date&gt; 2020-10-23
+## $ location &lt;chr&gt; "St Andrew's House, Edinburgh"
+## $ abstract &lt;chr&gt; "Statement given by First Minister Nicola Sturgeon at a medi…
+## $ text     &lt;list&gt; &lt;"\nGood afternoon everyone. Thank you very much for joining …
+## $ url      &lt;chr&gt; "https://www.gov.scot/publications/coronavirus-covid-19-updat…
+```
+
+---
+
+## Function scrape_speech() in action
+### October 26, 2020
+
+
+```r
+scrape_speech(url = "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/") %&gt;%
+glimpse()
+```
+
+```
+## Rows: 1
+## Columns: 6
+## $ title    &lt;chr&gt; "Coronavirus (COVID-19) update: First Minister's speech 26 Oc…
+## $ date     &lt;date&gt; 2020-10-26
+## $ location &lt;chr&gt; "St Andrew's House, Edinburgh"
+## $ abstract &lt;chr&gt; "Statement given by First Minister Nicola Sturgeon at a medi…
+## $ text     &lt;list&gt; &lt;"\nGood afternoon, and thanks for joining us. I want to star…
+## $ url      &lt;chr&gt; "https://www.gov.scot/publications/coronavirus-covid-19-updat…
+```
+
+---
+
+## Automation?  
+  
+* We now have a function for scraping speech info given `url`?  
+
+* How can we get a list of speech `url`s?
+  
+---
+
+class:  center, middle
+
+# Inputs
+
+---
+
+## All URLs
+
+
+```r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page %&gt;%
+  html_nodes(".collections-list a") %&gt;%
+  html_attr("href") 
+```
+
+```
+##   [1] "/publications/business-parliament-conference-first-ministers-speech-3-february-2023/"                        
+##   [2] "/publications/first-ministers-speech-scottish-renewables-offshore-wind-conference-wednesday-25-january-2023/"
+##   [3] "/publications/update-pressures-facing-nhs-first-ministers-speech-monday-16-january/"                         
+##   [4] "/publications/pressures-facing-nhs-first-ministers-speech-monday-9-january/"                                 
+##   [5] "/publications/thecityuk-annual-conference-first-ministers-speech-1-december-2022/"                           
+##   [6] "/publications/poverty-alliance-30th-anniversary-conference-first-ministers-speech-25-november-2022/"         
+##   [7] "/publications/cop27-loss-damage-panel-first-ministers-speech-8-november-2022/"                               
+##   [8] "/publications/first-minister-opens-scottish-government-conference-loss-damage/"                              
+##   [9] "/publications/motion-condolence/"                                                                            
+##  [10] "/publications/tribute-majesty-queen/"                                                                        
+...
+```
+
+
+---
+
+## COVID-19 URLs fragments
+
+
+```r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page %&gt;%
+  html_nodes(".collections-list a") %&gt;%
+  html_attr("href") %&gt;%
+  str_subset("covid-19")
+```
+
+```
+##   [1] "/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+## Combine to get COVID-19 URLs
+
+
+```r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page %&gt;%
+  html_nodes(".collections-list a") %&gt;%
+  html_attr("href") %&gt;%
+  str_subset("covid-19")%&gt;%
+  str_c("https://www.gov.scot", .)
+```
+
+```
+##   [1] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+
+## Save COVID-19 URLs
+
+
+```r
+covid_speech_urls &lt;- all_speeches_page %&gt;%
+  html_nodes(".collections-list a") %&gt;%
+  html_attr("href") %&gt;%
+  str_subset("covid-19") %&gt;%
+  str_c("https://www.gov.scot", .)
+covid_speech_urls
+```
+
+```
+##   [1] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+
+class:  center, middle
+
+# Iteration
+
+---
+
+## Define the task
+
+* Goal: Scrape info on all COVID-19 speeches of the First Minister
+* So far:
+.very-small-code[
+
+```r
+scrape_speech(covid_speech_urls[1])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                   date       locat…¹ abstr…² text  url  
+##   &lt;chr&gt;                                   &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First M… 2022-02-22 Scotti… Statem… &lt;chr&gt; http…
+## # … with abbreviated variable names ¹​location, ²​abstract
+```
+
+
+```r
+scrape_speech(covid_speech_urls[2])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                   date       locat…¹ abstr…² text  url  
+##   &lt;chr&gt;                                   &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First M… 2022-02-08 Scotti… Statem… &lt;chr&gt; http…
+## # … with abbreviated variable names ¹​location, ²​abstract
+```
+
+
+```r
+scrape_speech(covid_speech_urls[3])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                   date       locat…¹ abstr…² text  url  
+##   &lt;chr&gt;                                   &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First M… 2022-02-01 Scotti… Statem… &lt;chr&gt; http…
+## # … with abbreviated variable names ¹​location, ²​abstract
+```
+]
+
+---
+
+## Now what?
+
+* What else do we need to do?
+  + Run the `scrape_speech()` function on all COVID-19 speech links
+  + Combine the resulting data frames from each run into one giant data frame
+
+---
+
+## Iteration
+
+* How can we tell R to apply the `scrape_speech()` function to each link in `covid_speech_urls`?
+
+---
+class: inverse, center, top
+
+background-image: url(figures/purrr.png)
+background-position: 50% 75%
+background-size: 50% 50%
+
+## We have the `purrr`fect solution! 
+
+---
+## Go to each page, scrape speech info 
+
+* Map the `scrape_speech()` function
+* to each element of `covid_speech_urls`
+* and return a data frame by binding rows together
+
+In other words, we want to **map** the `scrape_speech()` function to each element of `covid_speech_urls`:
+
+
+```r
+covid_speeches &lt;- map_df(covid_speech_urls, scrape_speech)
+head(covid_speeches)
+```
+
+
+---
+
+## Caution  
+
+* If you get `HTTP Error 429 (Too many requests)` you might want to slow down your hits.
+
+* You can add a `Sys.sleep()` call to slow down your function:
+
+
+```r
+scrape_speech() &lt;- function(x){
+* Sys.sleep(runif(1))
+  ...
+
+}
+```
+
+
+.footnote[**IMPORTANT NOTE**: This exercise is intended to illustrate methods for using functions to obtain data from the web. For large scale automated processes, be sure to obtain permission from the web site you wish to scrape.]
+
+---
+# Acknowledgement  
+
+Web scraping introduction to functions adapted from materials provided by [Data Science in a Box](https://datasciencebox.org/) at https://github.com/rstudio-education/datascience-box. 
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

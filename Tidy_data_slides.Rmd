@@ -1,0 +1,343 @@
+---
+title: "Chapter 12 Tidy Data"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+
+```{r packages, echo=FALSE}
+library(tidyverse)
+```
+
+
+# Tidy Data  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png')
+```
+
+* Every variable has its own column  
+
+* Every case has its own row  
+
+* Every value has its own cell  
+
+.footnote[Source: R4DS]
+
+---
+background-image: url(figures/tidying_up_cover.jpg)
+background-position: 50% 30%
+background-size: contain
+
+class: left, bottom
+
+--
+# Tidying data sparks joy!
+
+---
+
+# Why tidy data?  
+
+1. Easy to understand
+
+1. Consistent structure works predictably with familiar tools  
+
+1. Tidyverse tools optimized for this structure  
+
+
+---
+
+# What's Tidy for you may not be tidy for me?  
+
+* Tidy may be in the eye of the beholder  
+
+* College course records  
+
+    + Project 1: Students are of interest so student is the case but...
+    
+    + Project 2: Individual courses are of primary interest so course is the case 
+    
+* The definition of tidy for a given data set could be ambiguous
+
+---
+
+# Why not tidy data?  
+
+1. Gain doesn't justify the trouble  
+
+1. Analytical methods better suited for other structures  
+
+1. Discipline-specific expectations
+
+---
+
+# Sample Datasets: `table1`  
+
+```{r}
+# Tidy Dataset
+table1
+```
+
+---
+# Sample Datasets: `table2`
+
+```{r}
+# Untidy Dataset
+# Variables appear in rows
+# Two rows per case
+table2
+```
+
+---
+
+# Sample Datasets: `table3`
+
+```{r}
+# Untidy Dataset
+# Two values in one cell (both "cases" and "population")
+table3
+```
+
+---
+
+### Sample Datasets: `table4a` and `table4b` 
+
+```{r}
+# Untidy Dataset
+# Columns are the values of the year variable 
+# Cases and Population are split across two columns
+table4a # cases
+table4b # population
+```
+
+---
+
+# Pivoting: Longer or Wider?
+
+Once you understand the data, you may need to resolve one of the following problems to carry out analysis using **tidyverse** tools:  
+
+1. One variable might be spread across multiple columns.   
+    + Tables 4a and 4b because data are in year-specific columns  
+
+2. One observation might be scattered across multiple rows.  
+    + Table 2 because observation is Country-Year combination  
+
+---
+
+# Pivoting Longer 
+
+Pivoting **table4** into a longer, tidy form
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png')
+```
+
+* Each year-country combination gets its own row.
+
+* Observations are year-country combination.
+
+.footnote[Source: R4DS]
+
+---
+
+### The `pivot_longer()` Command
+
+* Format: 
+```
+df %>% 
+  pivot_longer(columns, names_to = key, values_to = value, 
+     ..., values_drop_na = FALSE)
+```
+
+Referring to sample `table4a` : 
+
+* `columns` specifies the columns to pivot into the longer format
+
+* `key` specifies the name of the variable whose values form the column names  
+    + year  
+    
+* `value` specifies the variable whose values are spread over the cells 
+    + number of `cases` or `population`  
+    
+    
+**Note:** `key` and `value` are new columns whose names you specify. 
+
+---
+
+# `pivot_longer()` Example
+
+```{r}
+table4a %>% 
+  pivot_longer(!country, names_to = "year", values_to = "cases")
+```
+
+--
+* Note use of `!country` to specify all columns except `country`
+  + We used dplyr::select() style notation to select columns to pivot
+    
+
+---
+
+# Pivoting Wider  
+
+Pivot **table2** into a "wider", tidy form.
+
+```{r, out.width='80%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://d33wubrfki0l68.cloudfront.net/8350f0dda414629b9d6c354f87acf5c5f722be43/bcb84/images/tidy-8.png')
+```
+
+* Use when an observation is scattered across multiple rows
+
+* Spreads variables across the columns
+
+
+.footnote[Source: R4DS]
+
+---
+
+### The `pivot_wider()` Command
+
+* Use `pivot_wider()` when an observation is scattered across multiple rows as in `table2`  
+
+* Format: 
+
+```
+df %>% 
+  pivot_wider(data, names_from = key, 
+  values_from = value, …, values_fill = NA)
+```
+* We need two parameters:  
+
+    +  The column that contains variable names, the `key` column.
+        -  `type` for `table2`
+        
+    + The column that contains **values** from multiple variables, the value column. 
+        -   `count` for `table2`
+
+---
+
+
+# `pivot_wider()` Example
+
+```{r}
+table2 %>% 
+  pivot_wider(names_from = type, values_from = count)
+```
+
+--
+* Note use of `!country` to specify all columns except `country`
+  + We used dplyr::select() style notation to select columns to pivot
+    
+
+---
+
+# Separate and Unite  
+
+* Use `separate()` when we have one column that contains more than one variable  
+    + Use common separators or specify a column number for the split  
+
+--
+
+* Use `unite()` to (re-)combine multiple columns into a single column 
+    + Specify the separator to use when combining
+  
+
+---
+
+## Separate 
+
+Separate each cell in a column to make several columns.  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("figures/separate.png")
+```
+
+
+* By default, splits using any non-alphanumeric characters
+
+* Split character can be specified using `sep = ""`
+
+---
+
+## Separate: Basketball data example
+
+U of M Basketball Results 2017-18:   
+
+```{r, echo = F, message = FALSE}
+u_of_m_bball <- read_csv(file = "data/u_of_m_bball_results.csv")
+```
+
+```{r}
+u_of_m_bball
+```
+
+
+---
+
+## Separate: Basketball data example
+
+Separate the First Two Columns into Their Parts 
+
+```{r}
+df_sep <- u_of_m_bball %>% 
+  separate(Date, c("Weekday","Month", "Day")) %>% 
+  separate(Result, c("Win_loss", "Pts_For", "Pts_Against"))
+df_sep
+```
+
+---
+
+## Unite  
+
+Collapse cells across several columns
+make a single column.  
+
+  + Specify separator or use default "_"
+
+```{r, out.width='80%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("figures/unite.png")
+```
+
+* Above example uses no separator by specifying `sep = ""`.
+
+---
+
+###  Example: Unite the Win/Loss Columns
+
+Create a new Score column from two columns:  
+
+```{r}
+df_sep %>% unite(Score, c(Pts_For, Pts_Against), sep = " to ")
+```
+
+* Note the text separator "to" specified along with surrounding blanks.
+---
+
+## Missing Values 
+
+Two distinct types of missing variables in R4DS:  
+
+1. *Explicit:* data cell is empty or contains NA or similar code  
+    + Can be omitted using `na.rm = TRUE` in `gather()`
+
+2. *Implicit:* data are not present but no NA code  
+    + Structure of the data confirms there are missing data
+    + Missing number for one day of the week or a particular year/month combination  
+    + Can be made explicit using `complete()` specifying the columns whose combinations should appear in the data.
+    
+$\Rightarrow$ Use `fill()` to fill-in missing values up or down a column.

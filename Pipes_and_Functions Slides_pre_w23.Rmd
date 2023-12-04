@@ -1,0 +1,619 @@
+---
+title: "Chapters 18 and 19: Pipes and Functions"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache = TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(forcats)
+library(lubridate)
+library(rvest)
+#library(backports)
+```
+
+
+# Agenda
+
+* The pipe
+
+* Introduction to Functions  
+
+* Investigation: Applications to scraping
+
+---
+
+## The Household Pipe: GIGO? 
+
+![](https://i.pinimg.com/originals/58/75/e4/5875e4a7c38483336fafdd31062e0cb2.png)
+---
+
+## Magritte's Pipe 
+
+
+![](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
+
+<div class="footnote">
+Image taken from a University of Alabama site, "Approaches to Modernism": [1], Fair use, https://en.wikipedia.org/w/index.php?curid=555365
+</div>
+
+---
+##  The Tidyverse Pipe  
+
+![](figures/magrittr_pipe.jpeg)
+
+---
+
+## Why we need the pipe?  Violent rabbits??  
+
+```{r, eval = FALSE}
+foo_foo_1 <- hop(foo_foo, through = forest)
+foo_foo_2 <- scoop(foo_foo_1, up = field_mice)
+foo_foo_3 <- bop(foo_foo_2, on = head)
+```
+
+Stringing commands without the pipe leads to:
+
+* Code cluttered with unimportant names  
+    + But it's not about the use of memory  
+* Need to keep track of object versions  
+    + Sequential numbering like `lakers2`?  
+
+---
+
+## Overwriting names is problematic 
+
+```{r, eval = FALSE}
+foo_foo <- hop(foo_foo, through = forest)
+foo_foo <- scoop(foo_foo, up = field_mice)
+foo_foo <- bop(foo_foo, on = head)
+```
+
+* Need to rerun from the top when debugging  
+
+* Code is hard to follow due to repetition    
+    + What's changing each time?  
+
+---
+## Using the pipe! %>% 
+
+```{r, eval = FALSE}
+foo_foo %>%
+  hop(through = forest) %>%
+  scoop(up = field_mice) %>%
+  bop(on = head) -> 
+  the_output  
+```
+
+* Easy to follow  
+* Focuses on actions  
+* Avoids clutter and repitition  
+
+---
+## The Hadley-approved Version 
+
+```{r, eval = FALSE}
+# Easy to comment out the first line when debugging
+the_output<- 
+  foo_foo %>%
+  hop(through = forest) %>%
+  scoop(up = field_mice) %>%
+  bop(on = head)
+```
+
+* Easy to follow  
+* Focuses on actions  
+* Avoids clutter and repitition  
+
+---
+## When to avoid the pipe?  
+
+* Many steps that cannot be condensed further.   
+
+* Multiple inputs/outputs (but you might want to learn about the tee "%T>%")
+
+* Non-linear process
+
+
+---
+class: inverse, center, middle
+
+# Functions  
+
+---
+## From Calculus  
+
+* A function is a rule  
+
+* For every input we can only get one output  
+
+* Passes vertical line test  
+
+```{r, echo = F, fig.height = 4, warning = FALSE}
+x <- seq(-2, 6, .05)
+y <- x^3 - 6*x^2 + 4*x + 12
+plot(x, y, 
+     type="l", 
+     xaxt='n', yaxt='n', 
+     bty='n', 
+     xlab='', ylab='', 
+     col="blue")
+##  Next add in your axis arrows:
+arrows(min(x), 0, max(x), 0, lwd=1, length=0.15)
+arrows(0, min(y), 0, max(y), lwd=1, length=0.15)
+##  And plot your x/y labels.  Note that if you want them
+##    actually at the end of the arrows you would need to 
+##    remove the pos= argument and shorten your arrows by
+##    a small amount.  To match your original figure, you can
+##    alter the x/y coordinate to be the max() instead.
+text(0, max(y), "f(x)", pos=2)
+text(max(x), 0, "x", pos=3)
+#axis(1)
+#axis(2)
+```
+
+---
+
+## Functions in Computer Science
+
+```{r, out.width = '30%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/Function_machine2.svg.png')
+```
+
+
+---
+## Why Functions?  
+
+```{r}
+#  x^2 - 5x - 14 = 0 
+(-(-5) +c(-1,1)*sqrt((-5)^2 - 4*1*(-14)))/( 2*1) 
+```
+
+```{r}
+# 2x^2 + 2x − 12 = 0
+(-(2) +c(-1,1)*sqrt((2)^2 - 4*(2)*(-12)))/( 2*2) 
+```
+
+```{r}
+#  x^2 - 4x + 4 = 0 
+(-(-4) +c(-1,1)*sqrt((-4)^2 - 4*1*(4)))/( 2*1) 
+```
+
+
+---
+
+## Write a Famous Function
+
+```{r}
+quad_roots <- function(aval, bval, cval){
+  (-bval +c(-1,1)*sqrt(bval^2 - 4*aval*cval))/( 2*aval) 
+}
+quad_roots(1, -5, -14)  
+quad_roots(2, 2, -12)  
+quad_roots(1, -4, 4)  # Gives repeated roots
+```
+
+---
+class: inverse, center, middle
+
+# Functions and Automation  
+
+---
+## A Quick Exercise: Popular TV shows
+
+RStudio Cloud $\rightarrow$ Web scraping + automation
+
+1. Scrape the list of most popular TV shows on IMDB: http://www.imdb.com/chart/tvmeter  
+
+2. Click through on each of the *first three* (or however many you can get through) tv show detail pages to also obtain genres and runtime.  
+
+3. Time permitting, also try to get the following:  
+    + Number of episodes so far  
+    + Certificate (PG, PG-13, etc.)  
+    + First five plot keywords  
+    + Country  
+    + Language
+  
+4. Add this information to the data frame you created in step 1 and tidy up.  
+
+---
+class: inverse, center, middle
+
+# Functions to the Rescue
+
+---
+
+## Start at the Beginning
+
+Read and save data for the top 3 TV shows:
+
+```{r message=FALSE}
+library(tidyverse)
+library(rvest)
+
+wanda <- read_html("http://www.imdb.com/title/tt9140560/")
+sinner <- read_html("http://www.imdb.com/title/tt6048596/")
+behind <- read_html("http://www.imdb.com/title/tt9698442/")
+```
+
+---
+## Why functions?
+
+Automate common tasks in a power powerful and general way than copy-and-pasting:  
+
+* Use names that indicate what the purpose of the function
+    + Avoid reserved R names: like `c`, `sum`  
+    
+* Make updating code easier allowing you to update in just one place instead of many  
+
+* Eliminate mistakes with copying and pasting  
+    + Forgetting to make corresponding changes in all places  
+    
+* Learn to write and share your own functions!  
+---
+
+
+## When to consider writing a function? 
+
+"...whenever you’ve copied and pasted a block of code more than twice" [R4DS]
+
+---
+### When to consider writing a function? 
+
+*  Do you see any problems in the code below?  
+
+```{r, eval=FALSE}
+wanda_episode <- wanda %>%
+  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_text() %>%
+  str_replace(" episodes", "") %>%
+  parse_number()
+
+sinner_episode <- sinner %>%
+  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_text() %>%
+  str_replace(" episodes", "") %>%
+  parse_number()
+
+behind_episode <- behind %>%
+  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_text() %>%
+  str_replace(" episodes", "") %>%
+  parse_number()
+```
+
+
+---
+
+## Inputs
+How many inputs does the following code have?
+
+```{r eval=FALSE}
+wanda_episode <- wanda %>%
+  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_text() %>%
+  str_replace(" episodes", "") %>%
+  parse_number()
+```
+---
+## Turn your code into a function
+
+*  Pick a short but informative **name**, preferably a verb.  
+
+*  List inputs, or **arguments**, to the function inside `function()`.  
+    + With more than one input, we would have  `function(x, y, z)`.
+
+
+
+```{r eval=FALSE}
+scrape_episode <- function(x){  #<<
+  
+  
+  
+  
+  
+}  
+```
+
+---
+
+## Turn your code into a function
+
+*  Pick a short but informative **name**, preferably a verb.  
+
+*  List inputs, or **arguments**, to the function inside `function()`.  
+    + With more than one input, we would have  `function(x, y, z)`.
+
+* Place the **code** you have developed in body of the function, a `{` block that immediately follows `function(...)`.  
+
+```{r}
+scrape_episode <- function(x){
+  x %>%                                                    #<<
+    html_nodes(".np_right_arrow .bp_sub_heading") %>%      #<<
+    html_text() %>%     #<<
+    str_replace(" episodes", "") %>%    #<<
+    parse_number()   #<<
+}
+```
+---
+## What do we get when we run it?  
+
+```{r}
+scrape_episode(wanda)
+```
+
+---
+## Check your function
+
+```{r, out.height = '10%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/episode_wanda.png')
+```
+
+```{r}
+scrape_episode(wanda)
+```
+
+```{r, out.height = '10%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/episode_sinner.png')
+```
+
+```{r}
+scrape_episode(sinner)
+```
+
+---
+## Check your function
+
+```{r, out.height = '10%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/episode_behind.png')
+```
+
+```{r}
+scrape_episode(behind)
+```
+
+---
+## Naming functions
+
+* Names should be short but clearly evoke what the function does
+
+* Names should be verbs, not nouns
+
+* Multi-word names should be separated by underscores  
+    + `snake_case` as opposed to `camelCase`
+
+*  A family of functions should be named similarly 
+    + `scrape_title`, `scrape_episode`, `scrape_genre`, etc.
+---
+## Scraping show info
+
+```{r}
+scrape_show_info <- function(x){
+
+  title <- x %>% #<<
+    html_node("#title-overview-widget h1") %>%
+    html_text() %>%
+    str_trim()
+
+  runtime <- x %>% #<<
+    html_node("#titleDetails time") %>%
+    html_text() %>%
+    str_replace("\\n", "") %>%
+    str_replace("min", "") %>%
+    str_trim()
+  
+  genres <- x %>% #<<
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
+    html_text() %>%
+    str_trim() %>%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres) #<<
+}
+```
+---
+## Using our function
+
+```{r}
+scrape_show_info(wanda)
+scrape_show_info(sinner)
+scrape_show_info(behind)
+```
+
+---
+
+## Toward a still more powerful function
+
+How would you update the following function to use the URL of the page as an argument?
+
+.scroll-box-20[
+```{r eval=FALSE}
+scrape_show_info <- function(x){
+
+  title <- x %>%
+    html_node("#title-overview-widget h1") %>%
+    html_text() %>%
+    str_trim()
+
+  runtime <- x %>%
+    html_node("#titleDetails time") %>%
+    html_text() %>%
+    str_replace("\\n", "") %>%
+    str_replace("min", "") %>%
+    str_trim()
+  
+  genres <- x %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
+    html_text() %>%
+    str_trim() %>%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+
+.scroll-output[
+```{r}
+
+scrape_show_info <- function(x){
+
+    y <- read_html(x) #<<
+
+    
+    title <- y %>%
+    html_node("#title-overview-widget h1") %>%
+    html_text() %>%
+    str_trim()
+
+  runtime <- y %>%
+    html_node("#titleDetails time") %>%
+    html_text() %>%
+    str_replace("\\n", "") %>%
+    str_replace("min", "") %>%
+    str_trim()
+  
+  genres <- y %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
+    html_text() %>%
+    str_trim() %>%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+## Let's check
+
+```{r}
+wanda_url <- "https://www.imdb.com/title/tt9140560/"
+sinner_url <- "http://www.imdb.com/title/tt6048596/"
+behind_url <- "http://www.imdb.com/title/tt9698442/"
+
+```
+
+---
+
+## Let's check
+
+```{r}
+scrape_show_info(wanda_url)
+scrape_show_info(sinner_url)
+scrape_show_info(behind_url)
+```
+
+---
+
+## Automation?  
+
+* We now have a function for scraping TV show info given URL  
+
+* Where can we get a list of URLS ot top 100 TV shows on IMDB?  
+
+* Your turn: Write the code that will do this!  
+    + Hint: You'll need the `paste()` function to construct the URL
+
+---
+
+.scroll-output[
+```{r}
+urls <- read_html("http://www.imdb.com/chart/tvmeter") %>%
+  html_nodes(".titleColumn a") %>%
+  html_attr("href") %>%
+  paste("http://www.imdb.com", ., sep = "") %>%
+  str_extract(".*tt[0-9]{7,8}")  
+head(urls)
+```
+]
+
+
+---
+### Go to each page, scrape show info 
+
+* Now we need a way to tell R to go to each page on the `urls` list and run the `scrape_show_info()` function on that page.
+
+.scroll-box-20[
+```{r}
+# This could get a bit much!
+scrape_show_info(urls[1])
+scrape_show_info(urls[2])
+scrape_show_info(urls[3])
+```
+]
+
+---
+class: inverse, center, top
+
+background-image: url(figures/purrr.png)
+background-position: 50% 75%
+background-size: 50% 50%
+
+## We have the `purrr`fect solution!  
+
+
+---
+
+## Go to each page, scrape show info 
+
+In other words, we want to **map** the `scrape_show_info` function to each element of `show_urls`:
+
+```{r eval=FALSE}
+top_100_shows <- map_df(urls, scrape_show_info)
+top_100_shows
+```
+
+* Visits `urls` one after another and scrapes the info.  
+
+* `map_df` outputs a data frame (tibble) by binding rows together
+
+---
+
+## Caution  
+
+* If you get `HTTP Error 429 (Too many requests)` you might want to slow down your hits.
+
+* You can add a `Sys.sleep()` call to slow down your function:
+
+```{r eval=FALSE}
+scrape_show_info <- function(x){
+  Sys.sleep(runif(1))  #<<
+  ...
+
+}
+```
+
+---
+# Your turn
+
+### Can you create a similar function to access information on the Top Rated TV Shows on IMDB (there should be 250 on the list)?
+
+
+.footnote[**IMPORTANT NOTE**: This exercise is intended to illustrate methods for using functions to obtain data from the web. For large scale automated processes, be sure to obtain permission from the web site you wish to scrape.]
+
+---
+# Acknowledgement  
+
+Web scraping introduction to functions adapted from materials provided by [Data Science in a Box](https://datasciencebox.org/) at https://github.com/rstudio-education/datascience-box. 
+
+

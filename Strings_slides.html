@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 14 Strings</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
+    <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+    <script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 14 Strings
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+
+# Outline  
+
+* Review of joins 
+
+* Strings  
+
+* Regular expressions
+
+---
+
+# Six kinds of joins  
+
+Mutating joins:  
+
+* Inner, Left, Right, Full  
+
+Filtering joins:  
+
+* Anti-join, Semi-join
+
+---
+
+# Visualizing Joins in Soccer Data  
+
+
+&lt;img src="figures/soccer_players_join_image.png" width="150%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+# Reflection  
+
+1) Compare/contrast the joins. Think of situations where you might prefer one over the other.
+
+--
+
+2) The filtering join `semi_join()` is most similar to which of the mutating joins? Why?
+
+---
+
+# What is a string?  
+
+
+![](https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/Spool_of_string.jpg/544px-Spool_of_string.jpg)&lt;!-- --&gt;
+
+---
+background-image: url(figures/stringr.png)
+background-position: 50% 75%
+background-size: 50%
+
+# No, really! What is a string?
+
+
+---
+
+## What are strings and why do we care about them?  
+
+* Untidy data may contain problematic strings, hidden characters
+
+--
+
+* Scraping from web sources often requires locating, removing  or replacing strings
+
+---
+
+## Strings in the Wild  
+
+&lt;img src="figures/activity_roster.png" width="2800" /&gt;
+
+
+---
+
+### Detecting Strings Using **stringr** `str_()` Functions
+
+
+
+Detect text in a vector of the states that have hosted the super bowl:  
+
+```r
+states
+```
+
+```
+##  [1] "California" "Florida"    "Louisiana"  "Texas"      "Michigan"  
+##  [6] "Minnesota"  "Georgia"    "Arizona"    "Indiana"    "New Jersey"
+```
+
+---
+
+## `str_detect()`
+
+
+```r
+str_detect(states, "ana")
+```
+
+```
+##  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
+```
+
+```r
+str_detect(states, "ANA")
+```
+
+```
+##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+---
+
+## `str_replace()` 
+
+.scroll-box-16[
+
+```r
+str_replace(states, "ana", "X")
+```
+
+```
+##  [1] "California" "Florida"    "LouisiX"    "Texas"      "Michigan"  
+##  [6] "Minnesota"  "Georgia"    "Arizona"    "IndiX"      "New Jersey"
+```
+
+```r
+str_replace_all(states, "i", "X")
+```
+
+```
+##  [1] "CalXfornXa" "FlorXda"    "LouXsXana"  "Texas"      "MXchXgan"  
+##  [6] "MXnnesota"  "GeorgXa"    "ArXzona"    "IndXana"    "New Jersey"
+```
+]
+---
+
+## `str_sub()` and `str_count()` 
+
+
+```r
+str_sub(states, 2, 4)
+```
+
+```
+##  [1] "ali" "lor" "oui" "exa" "ich" "inn" "eor" "riz" "ndi" "ew "
+```
+
+```r
+str_count(states, "e")
+```
+
+```
+##  [1] 0 0 0 1 0 1 1 0 0 3
+```
+
+and many more...
+
+---
+
+## Strings  
+
+Get to know your cheatsheet!  
+
+[Stringr cheatsheet](https://posit.co/wp-content/uploads/2022/10/strings-1.pdf)
+
+&lt;img src="figures/cheat_string_image.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, center, middle
+
+# What about more challenging string problems?
+
+---
+background-image: url(https://imgs.xkcd.com/comics/regular_expressions.png)
+background-position: 50% 75%
+background-size: 50%
+
+## Regular expressions to the rescue!
+
+
+---
+## Regular Expressions 
+
+* Regular expressions or *regexps* concisely describe patterns in strings  
+
+* They are powerful but can also be cryptic and confusing  
+
+* Using just the right *regexp* can   
+
+    + save lots of time and effort cleaning data  
+    
+    + help to tame very messy data
+    
+* You don't need to know everything!  
+
+* Try the resources on Moodle
+
+---
+### Using str_view() to verify regexps
+
+
+```r
+#starts with M or L
+str_detect(states, "^[ML]")
+```
+
+```
+##  [1] FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE
+```
+
+```r
+str_view(states, "^[ML]")
+```
+
+<div id="htmlwidget-db7f58f70b291f1f58eb" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-db7f58f70b291f1f58eb">{"x":{"html":"<ul>\n  <li>California<\/li>\n  <li>Florida<\/li>\n  <li><span class='match'>L<\/span>ouisiana<\/li>\n  <li>Texas<\/li>\n  <li><span class='match'>M<\/span>ichigan<\/li>\n  <li><span class='match'>M<\/span>innesota<\/li>\n  <li>Georgia<\/li>\n  <li>Arizona<\/li>\n  <li>Indiana<\/li>\n  <li>New Jersey<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+background-image: url( https://imgs.xkcd.com/comics/backslashes.png)
+background-position: 50% 50%
+background-size: contain
+class: left, top
+
+## regexp: It's not just another \\-er flick!
+
+.pull-left[.footnote[Source:https://xkcd.com/1638/]]
+---
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cute_grey_kitten.jpg/800px-Cute_grey_kitten.jpg)
+background-size: contain
+class: right, bottom
+
+# Practice makes purrfect!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

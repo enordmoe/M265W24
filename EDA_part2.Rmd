@@ -1,0 +1,191 @@
+---
+title: "Exploratory Data Analysis: Part 2"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+
+```{r packages, echo=FALSE}
+library(tidyverse)
+library(fueleconomy)
+```
+
+
+# Review from Last Time
+
+1. Compare and contrast `geom_histogram()` and `geom_freqpoly()` functions?
+
+--
+
+2. What is `binwidth` used for?
+
+--
+
+3. What is `coord_cartesian()` for?
+
+
+---
+class: inverse, center, middle
+
+# Shiny Apps on RStudio
+
+
+### Diamond data
+
+###  Old Faithful eruption times
+
+
+---
+
+
+
+# Graphical Methods for Exploring Relationships
+
+* Quantitative and quantitative variable
+  + Scatterplot with smoothing line
+  + Conditional boxplots
+
+* Categorical and quantitative variable
+  + Boxplots
+  + Faceted plots (histogram)
+    
+
+---
+# Price vs Carat Weight 
+Use only diamonds less than 3 carats
+
+```{r diamond-scatter, fig.height = 4}
+smaller <- filter(diamonds, carat <= 3)
+ggplot(data = smaller, mapping = aes(x = carat, y = price)) +
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# Boxplot
+
+---
+
+# Boxplot
+
+A **boxplot** is 
+
+  * A visual depiction of the extremes,  quartiles, and outliers in a set of data
+  
+--
+
+  * Especially useful for a rough comparison of the center and spread of a variable across several sub-groups.
+
+---
+
+# Constructing a Boxplot 
+
+1. Draw a numerical scale appropriate for the data.
+
+2. Draw a box stretching from 25th to 75th percentile representing the middle 50% of the data.
+
+3. Divide the box with a line at the median.
+
+4. Draw a line (whisker) from each quartile to the most extreme data value that is **not an outlier**.
+
+5. Identify each outlier individually by plotting with a symbol such as an asterisk or dot.
+
+**Note:** Use side-by-side boxes to compare sub-groups.
+
+---
+background-image: url(https://d33wubrfki0l68.cloudfront.net/153b9af53b33918353fda9b691ded68cd7f62f51/5b616/images/eda-boxplot.png)
+background-position: 50% 50%
+background-size: contain
+class: center, top
+
+# A Picture is Worth 1000 Words 
+
+.pull-right[.footnote[Source: R4DS]]
+---
+
+## Boxplot example comparing  mileage by year
+### Oops, what went wrong?
+```{r,fig.height=3}
+library(fueleconomy)
+cardata <- vehicles %>% semi_join(common)
+ggplot(data = cardata, aes(x = hwy, y = year)) +
+  geom_boxplot() + 
+  labs(y = "")
+```
+
+---
+### Boxplot example comparing  mileage by year
+#### That's better and add some color
+
+```{r,fig.height=4}
+ggplot(data = cardata, aes(x = hwy, y = factor(year), color = factor(year))) +
+  geom_boxplot() + 
+  labs(x = "")
+```
+
+---
+### Boxplot example comparing  mileage ascending by median mileage
+
+```{r,fig.height=5}
+ggplot(data = cardata, aes(x = hwy, y =  reorder(factor(year), -hwy, median),  color = factor(year))) + 
+  geom_boxplot() + 
+  labs(x = "")
+```
+
+---
+
+# Outliers
+
+* Often best identified using judgment by inspection of a visual data display.
+
+* Use width of the box (IQR = 75th-25th percentile) to help detect outliers
+
+* __Rule of Thumb__ suspected outliers are data values more than 1.5 IQRs beyond the quartiles
+
+---
+
+## Quantitative and Categorical Relationships
+
+* Compare the distribution of a quantitative variable across groups determined by the categorical variable(s).
+
+    + Use side-by-side boxplots for an overview.
+   
+    + Use comparative histograms or freqpoly to see more detail.
+    
+--
+
+* Any of the statistics we use for a quantitative variable can be looked at separately for each level of a categorical variable.
+
+
+---
+
+### Using Conditional Boxplots with Quantitative Data 
+
+* Use cut functions (`cut_interval`, `cut_width`, etc) to discretize one of the continuous variables.
+
+```{r, fig.height = 4}
+ggplot(data = smaller, mapping = aes(x = carat, y = price)) +
+  geom_boxplot(mapping = aes(group = cut_width(carat, 0.25, boundary = 0)))
+```
+
+

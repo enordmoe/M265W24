@@ -1,0 +1,288 @@
+---
+title: "Data Visualisation Part I"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+
+# Topics for Today
+
+* A Brief History of Visualisation
+
+* How to construct a graph (paper and pencil)
+
+* Introduction to the Grammar of Graphics
+
+* Getting started with **ggplot2**
+
+* Visualising a famous data set
+
+* Aesthetics!
+
+---
+
+# Learning Outcomes for Today
+
+* Be able to describe the main ideas of the grammar of graphics.
+
+* Be able to construct a labeled **ggplot2** graph with 3 aesthetics.
+
+* Be able to explain the role of aesthetics in constructing **ggplot2** graphs.
+
+
+---
+
+# Make a Hand-Drawn Graph
+
+*Consider the following data
+
+```{r, echo = FALSE}
+set.seed(695)
+car_sub <- mpg %>%
+filter(year == 2008) %>%
+  select(1:3, 7, 9) %>%
+  sample_n(10)
+car_sub
+```
+
+**Task:**  Make a hand-drawn graph that shows the relationship between engine displacement (`displ`) and highway mileage (`hwy`). For each point in your graph, identify  the  drivetrain (`drv`) of the vehicle. 
+
+---
+
+## Discussion
+
+>*  What were the steps in your process? 
+
+--
+
+>*  What choices did you need to make?
+
+--
+
+>*  Suppose you had total sales for the model year available for each car. How could you show that on your graph?
+
+
+---
+
+class: center, middle
+
+## "The simple graph has brought more information to the data analyst’s mind than any other device."
+
+
+### --- John Tukey 
+
+![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/John_Tukey.jpg/119px-John_Tukey.jpg)
+
+
+.left[.footnote[Source: https://en.wikipedia.org/w/index.php?curid=17099473]]
+
+---
+
+##  Brief History of Visualization: Leland Wilkinson
+
+![Grammar of Graphics](https://images-na.ssl-images-amazon.com/images/I/41ZIHtc9TJL._SX327_BO1,204,203,200_.jpg) 1999, 2005  
+
+
+---
+
+## The Grammar of Graphics  - Leland Wilkinson
+
+```{r, out.width='75%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://cdn-images-1.medium.com/max/2600/1*MMZuYgeC_YjXNC1r4D4sog.png')
+```
+
+
+<span class = "footnote"> 
+Source: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18]
+</span>
+
+---
+
+
+## The Grammar of Graphics  - Leland Wilkinson
+
+```{r, out.width='75%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/1_w1RnmuE7VRK9aCAbtW9KAQ.gif')
+```
+
+
+<div class = "footnote">
+Source: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18
+</div>
+
+
+---
+
+
+
+##  Brief History of Visualization (cont'd): Hadley Wickham
+
+.pull-left[
+```{r, out.width='75%', fig.align='left', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Hadley-wickham2016-02-04.jpg/200px-Hadley-wickham2016-02-04.jpg')
+```
+]
+
+--
+
+.pull-right[
+```{r, out.width='75%', fig.align='left', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://images-na.ssl-images-amazon.com/images/I/31uXd9st7ZL._SX329_BO1,204,203,200_.jpg')
+```
+]
+
+---
+class: top, left, inverse
+background-image: url(img/r-ladies.png)
+background-size: 70% 70%
+
+### But the R community is becoming more diverse
+
+
+---
+
+
+# Introduction to ggplot2
+
+* **ggplot2** implements the grammar of graphics 
+
+*  Basic graphing template 
+
+```{r, eval=FALSE}
+ ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) +
+  other options
+```
+
+1. Begin with the `ggplot()` function  
+    + Construct base coordinate system
+
+1. Add layers 
+
+1. Map variables to aesthetics (visual properties)  
+
+1. Use the `+` sign to connect lines
+
+---
+
+# ggplot2 Example  
+
+Why does this work?
+
+```{r, fig.height = 2}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+... but this does not?  
+```{r, fig.height = 2, eval = FALSE}
+ggplot(data = mpg) 
+  + geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+---
+class: center, top
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/2560px-Star_Wars_Logo.svg.png)
+background-size: contain
+
+---
+class: center, middle, inverse
+
+# Star Wars Character Analysis Using **ggplot2**
+---
+class: inverse, center, middle
+
+# Aesthetics 
+
+---
+
+# Aesthetics
+
+We can map specific variables in the data to various features of the plot:
+
+* Aesthetics  (`aes`)
+    + shape  
+    + color  
+    + size  
+    + alpha (transparency)  
+    
+* Faceting: use categorical variables to view cross sections of the data     
+
+**Note:**  Not all aesthetics can be used with all types of graphs. More to come on this.
+
+---
+
+# Aesthetics summary  
+
+* Behavior of aesthetics depends on the nature of the variable:
+
+    + Factor and discrete quantiative variables are measured (or often counted) on a
+    discrete scale or by categories
+
+    + Continuous variable are measured on a continuous scale
+
+
+| Aesthetics |             Discrete/Factor             |                Continuous               |
+|:----------:|:---------------------------------------:|:---------------------------------------:|
+| color      |            palette of colors            |   gradient  (e.g, dark blue to light)   |
+| size       |              discrete steps             | linear mapping between radius and value |
+| shape      | different shape for each level/category |       shouldn't (and doesn't) work      |
+
+---
+
+### Aesthetics summary: Mapping vs Customization
+
+*  Use aesthetics for mapping features of a plot to a variable   
+
+```{r, fig.height = 5}
+ggplot(data = mpg) +
+   geom_point(mapping = aes(x = displ, y = hwy, size = cyl))
+```
+
+---
+
+### Aesthetics summary: Mapping vs Customization (cont'd)  
+
+* Define the features in the `geom` outside the `aes()` function for aesthetic 
+customizations **not** mapped to a variable  
+
+```{r, fig.height = 4.5}
+ggplot(data = mpg) +
+   geom_point(mapping = aes(x = displ, y = hwy),  size = 0.5)
+```
+
+---
+class: inverse, center, middle, 
+
+# Comic Heroes Investigation  
+
+???
+
+# Comic Heroes Investigation   
+
+* Find the `superheroes.Rmd` in today's project folder.  
+
+* Complete the analysis for more practice with `ggplot2`  
+
+* Ask questions.  
+
+
+

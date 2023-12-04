@@ -1,0 +1,152 @@
+---
+title: "Introduction to R and RMarkdown"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+
+```{r, echo=F,message=FALSE}
+library(tidyverse)
+```
+
+
+# Learning Outcomes for Today
+
+* Become comfortable with basics of R syntax and running scripts
+
+* Become familiar with the RStudio IDE
+
+* Creating RMarkdown documents
+
+* Gain awareness of available references
+
+* Use RMarkdown to create a document that will be pushed to a GitHub repository
+ 
+
+---
+# R and RStudio 
+
+![:scale 10%](figs/Intro_to_Math265/stickers/R_logo.svg.png) is the statistical programming language.
+
+
+--
+
+
+![:scale 10%](figs/Intro_to_Math265/stickers/RStudio.png) is the IDE (Integrated Development Environment). 
+
+--
+
+.center[![:scale 75%](figs/Intro_to_Math265/engine-dashboard.png)]
+
+Source: moderndive.com
+
+
+
+---
+class: inverse, center, middle
+
+# R and RStudio Demo 
+
+---
+
+# R and RStudio Demo Topics  
+
+* Console
+
+* R as calculator
+
+* Getting help
+
+* Variables
+
+* Vectors
+
+* Data Frames
+
+* Functions
+
+* Indexing
+
+* Lists
+
+---
+
+
+# RMarkdown documents  
+
+**R Markdown** is a file format for making dynamic documents with R. An R Markdown document is written in *markdown* (an easy-to-write plain text format).  
+
+* Input (`Rmd`) can contain chunk and inline R code, text content, LaTeX, and markdown tables.  
+
+--
+
+* Output (`HTML`) contains text, code, tables and figures in a formatted HTML document.
+
+    - Report format can be customized using templates, css, etc.
+
+---
+
+# The RMarkdown Process  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('http://www.geo.uzh.ch/microsite/reproducible_research/post/rr-r-publication/img/processRStudio.png')
+```
+
+Source:  http://www.geo.uzh.ch/microsite/reproducible_research/post/rr-r-publication/  
+
+---
+
+# Reproducibility  
+
+Value of reproducibility: 
+
+* Transparency of research
+
+--
+
+* Verification of code
+
+--
+
+* Longer term
+    - use code/analysis for new or updated data
+    - extend/modify analysis for other settings/data
+    
+---
+class: inverse, center, middle
+
+# RMarkdown demo  
+
+---
+
+## RMarkdown demo topics  
+
+* YAML
+
+* Knitting
+
+* Inline code
+
+* Code chunks
+
+* Markdown formatting
+
+* Running code chunks
+
+* Setting parameters
+
+* Console vs RMarkdown environments
+

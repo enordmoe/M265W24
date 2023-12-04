@@ -1,0 +1,75 @@
+---
+title: "Introduction to Choropleth Maps"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+
+
+## Choropleth Maps
+
+* **Choropleth map**:  map in which areas are shaded to represent the quantity of a statistical variable (or transformation thereof) 
+
+* Etymology: area + multitude
+    + often used to represent population density  
+
+---
+
+## Examples: Flu Incidence by State
+
+```{r, out.width = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://s.w-x.co/util/image/w/flugettingworse.jpg?v=at&w=485&h=273')
+```
+
+Source: CDC
+
+---
+## Examples: Singapore Property Prices by Neighborhood
+
+[Interactive heat map](https://www.srx.com.sg/heat-map)
+
+Source: Singapore Real Estate Exchange
+
+---
+## Examples 
+
+```{r, out.width = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('http://2.bp.blogspot.com/-C1Sc-8q_yWw/T_RV9Pe-m1I/AAAAAAAABPY/KA2E-vu8OO4/s1600/twitterbeerchurchfixed.jpg')
+```
+
+Source: Floatingsheep.org  
+
+---
+
+## R Package **maps**  
+
+You can make heat maps with the R package **maps**!  
+
+* Use `geom_polygon()` to draw and shade maps.  
+    + Check out [Rcolors](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf) for choices.  
+    + Or [R color cheatsheet](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf) if you're really ambitious  
+    
+* Use `geom_points()` to add specific points to your maps.  
+
+* See the tutorial for details.  
+    

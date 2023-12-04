@@ -1,0 +1,215 @@
+---
+title: "Chapter 14 Strings"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+# Outline  
+
+* Review of joins 
+
+* Strings  
+
+* Regular expressions
+
+---
+
+# Six kinds of joins  
+
+Mutating joins:  
+
+* Inner, Left, Right, Full  
+
+Filtering joins:  
+
+* Anti-join, Semi-join
+
+---
+
+# Visualizing Joins in Soccer Data  
+
+
+```{r, out.width = '150%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/soccer_players_join_image.png')
+```
+
+
+---
+
+
+# Reflection  
+
+1) Compare/contrast the joins. Think of situations where you might prefer one over the other.
+
+--
+
+2) The filtering join `semi_join()` is most similar to which of the mutating joins? Why?
+
+---
+
+# What is a string?  
+
+
+```{r, echo = FALSE}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/Spool_of_string.jpg/544px-Spool_of_string.jpg")
+```
+
+---
+background-image: url(figures/stringr.png)
+background-position: 50% 75%
+background-size: 50%
+
+# No, really! What is a string?
+
+
+---
+
+## What are strings and why do we care about them?  
+
+* Untidy data may contain problematic strings, hidden characters
+
+--
+
+* Scraping from web sources often requires locating, removing  or replacing strings
+
+---
+
+## Strings in the Wild  
+
+```{r, echo = FALSE}
+knitr::include_graphics("figures/activity_roster.png")
+```
+
+
+---
+
+### Detecting Strings Using **stringr** `str_()` Functions
+
+```{r, echo = FALSE}
+states <- c("California", "Florida", "Louisiana", "Texas", "Michigan", 
+"Minnesota", "Georgia", "Arizona", "Indiana", "New Jersey")
+```
+
+Detect text in a vector of the states that have hosted the super bowl:  
+```{r}
+states
+```
+
+---
+
+## `str_detect()`
+
+```{r}
+str_detect(states, "ana")
+str_detect(states, "ANA")
+```
+
+---
+
+## `str_replace()` 
+
+.scroll-box-16[
+```{r}
+str_replace(states, "ana", "X")
+str_replace_all(states, "i", "X")
+```
+]
+---
+
+## `str_sub()` and `str_count()` 
+
+```{r}
+str_sub(states, 2, 4)
+str_count(states, "e")
+```
+
+and many more...
+
+---
+
+## Strings  
+
+Get to know your cheatsheet!  
+
+[Stringr cheatsheet](https://posit.co/wp-content/uploads/2022/10/strings-1.pdf)
+
+```{r, out.width = '60%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/cheat_string_image.png')
+```
+
+---
+class: inverse, center, middle
+
+# What about more challenging string problems?
+
+---
+background-image: url(https://imgs.xkcd.com/comics/regular_expressions.png)
+background-position: 50% 75%
+background-size: 50%
+
+## Regular expressions to the rescue!
+
+
+---
+## Regular Expressions 
+
+* Regular expressions or *regexps* concisely describe patterns in strings  
+
+* They are powerful but can also be cryptic and confusing  
+
+* Using just the right *regexp* can   
+
+    + save lots of time and effort cleaning data  
+    
+    + help to tame very messy data
+    
+* You don't need to know everything!  
+
+* Try the resources on Moodle
+
+---
+### Using str_view() to verify regexps
+
+```{r}
+#starts with M or L
+str_detect(states, "^[ML]")
+str_view(states, "^[ML]")
+```
+
+---
+background-image: url( https://imgs.xkcd.com/comics/backslashes.png)
+background-position: 50% 50%
+background-size: contain
+class: left, top
+
+## regexp: It's not just another \\-er flick!
+
+.pull-left[.footnote[Source:https://xkcd.com/1638/]]
+---
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cute_grey_kitten.jpg/800px-Cute_grey_kitten.jpg)
+background-size: contain
+class: right, bottom
+
+# Practice makes purrfect!

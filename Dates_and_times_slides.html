@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 16 Dates and Times</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 16 Dates and Times
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+# Outline
+
+* Problems with dates and times  
+
+* Parsing functions
+
+* Intervals, periods, and durations  
+
+---
+
+# Factors Review
+
+* Be careful about piping with factors. Why?
+
+--
+
+* What is the difference between `fct_count()` and `fct_unique()`?
+
+--
+
+* Compare and contrast `fct_infreq()` and `fct_reorder()`?
+
+--
+
+* Income is recorded in 20 narrow categories but I want to regroup to have just 4 categories. 
+What `fct_xxx()` function should I use?
+
+--
+
+* How do you tell R to drop empty factor levels that do not occur in the data?   
+    + How could this happen?
+
+---
+
+.pull-left[
+# Dates and
+![Dates Image](figures/dates.jpeg)
+]
+
+.pull-right[
+# Thyme?
+![Thyme Image](figures/thyme.jpeg)
+
+]
+
+---
+
+# Dates and Times are Challenging! 
+
+* Many formats for writing times
+
+* Leap years (and leap seconds!)
+
+* Irregular months
+
+* Time zones
+
+* Daylight savings time (when is a day not a day?)
+
+
+
+---
+
+## Those tricky dates...
+
+
+```r
+parse_date("March 21st, 1992")
+```
+
+```
+## [1] NA
+```
+
+```r
+parse_date("12th of Jan, 2016")
+```
+
+```
+## [1] NA
+```
+
+---
+## Those tricky dates...
+
+
+```r
+parse_date("1942Jan03")
+```
+
+```
+## [1] NA
+```
+
+```r
+parse_date("July041776 0930")
+```
+
+```
+## [1] NA
+```
+
+---
+class: inverse, center, top
+
+background-image: url(figures/data_sci_superhero.png)
+background-position: 50% 75%
+background-size: 65% 65%
+
+## **lubridate** to the rescue
+
+
+---
+
+## **lubridate** parsing functions  
+
+
+```r
+mdy("March 21st, 1992")
+```
+
+```
+## [1] "1992-03-21"
+```
+
+```r
+dmy("12th of Jan, 2016")
+```
+
+```
+## [1] "2016-01-12"
+```
+
+```r
+ymd("1942Jan03")
+```
+
+```
+## [1] "1942-01-03"
+```
+
+```r
+mdy_hm("July041776 0930")
+```
+
+```
+## [1] "1776-07-04 09:30:00 UTC"
+```
+
+---
+
+## Parsing functions
+
+**lubridate** has a series of smart functions for parsing dates that do better than "parse_date()":
+
+* Dates only:  
+    + `ymd()`, `dmy()`, ...   
+  
+* Dates and times:  
+    + `ymd_hms()`, `dmy_hms()`, `dmy_h()`, `ydm_h()`  
+    
+* See the Cheat Sheet and help files for more functions and details  
+
+---
+# Difficult Questions about Dates and Times
+
+
+* What day is one year after January 1, 2019?  
+
+* What day is one month after February 15, 2019?  
+
+* What time is 60 minutes after 1:30 am on March 10, 2019?
+
+    + What is the last day of February?  
+
+### Why are these question difficult?
+
+---
+## **lubridate** has several ways of dealing with these problems
+
+* Answers depend on the starting point
+
+
+```r
+dmy("01-Jan-2019") + years(1)
+```
+
+```
+## [1] "2020-01-01"
+```
+
+```r
+dmy("01-Jan-2019") + days(365)
+```
+
+```
+## [1] "2020-01-01"
+```
+
+---
+## **lubridate** has several ways of dealing with these problems
+
+* Leap year gives different results
+
+```r
+dmy("01-Jan-2020") + years(1)
+```
+
+```
+## [1] "2021-01-01"
+```
+
+```r
+dmy("01-Jan-2020") + days(365)
+```
+
+```
+## [1] "2020-12-31"
+```
+
+---
+
+## **lubridate** has several ways of dealing with these problems
+
+
+```r
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") 
+```
+
+```
+## [1] "2019-03-10 01:30:00 EST"
+```
+
+```r
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + minutes(60)
+```
+
+```
+## [1] NA
+```
+
+```r
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + dminutes(60)
+```
+
+```
+## [1] "2019-03-10 03:30:00 EDT"
+```
+
+---
+
+## Timespans in **lubridate**  
+
+* **Periods**: track changes in clock times ignoring irregularities
+    + `minutes()`, `years()`, etc.
+    + No `months()` because they're too irregular
+--
+
+* **Durations**: track the passage of physical time
+    + `dminutes()`, `dhours()`, `dweeks()`, etc.
+    + Underlying object stored in seconds
+
+--
+
+* **Intervals**: represent specific intervals of the timeline, 
+bounded by start and end date-times
+
+* Can be confusing `\(\Rightarrow\)` see **lubridate** Cheat Sheet for helpful examples
+
+---
+
+## Other useful functions: Rounding date-times  
+
+
+&lt;img src="figures/rounding_dates.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, center, middle
+
+# Your turn: Complete the tutorial on rstudio.kzoo.edu
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

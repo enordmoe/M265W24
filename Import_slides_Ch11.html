@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 11 Data Import</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 11 Data Import
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Review of R Variable Types
+
+Some R data types:
+
+* **logical**: `lgl`: logical contains only TRUE or FALSE values  
+
+* **double**: `dbl`: for double-precision, or real numbers  
+
+* **integer**: `int`  
+
+* **character**:  `chr`:  character vectors, or strings    
+
+* and others we'll focus on later like factors,  times and dates
+---
+class: inverse, left, middle
+
+# Demo: Import data sets 
+
+## `heroes.csv`
+## `cat-lovers.csv`
+
+---
+
+## Two Types of Data Sets 
+
+* Tabular data: rows and columns
+    + Sometimes tidy (for next time)
+
+--
+
+* Non-Tabular data  
+    + Non-rectangular  
+    + Linked data sets 
+    + Mixed data types: variables are values, lists, other objects
+    + Require careful handling  
+
+---
+class: inverse, center, middle
+
+# Demo: Examples of less friendly data sets  
+
+&lt;!-- Duke basketball data and Anna R.'s Activity Roster Data, Math Department classes --&gt;
+
+
+---
+
+# Common data set types and corresponding `read_` functions
+
+* `read_csv()`
+    + for reading comma delimted files
+    
+--
+
+* `read_tsv()`
+    + for reading tab delimited files
+    + tabs between each data value
+
+---
+
+# Common data set types and corresponding `read_` functions
+
+
+* `read_delim()`
+    + flexible command for reading data with more general delimiters (e.g., `|`, `\`, etc.)
+    + delimiter specified as part of the command
+
+--
+
+* `read_fwf()`
+    + for reading fixed-width format files
+    + requires column positions be specified but helper functions available
+
+---
+### Refer to Useful Arguments on the Cheat Sheet
+
+* Typically assume csv files have variables names as first line followed by data starting on the second line
+
+--
+
+* Handling exceptions:  
+    + No header row in input:    
+      `read_csv(df, col_names = FALSE)`
+    + Override header variable names:   
+      `read_csv(df, col_names = c("x", "y", "z"))`  
+    + Skip 5 lines before reading:   
+      `read_csv(df, skip = 5)`   
+    + Read a subset (first 100 lines):   
+      `read_csv(df, n_max = 100)`  
+    + Specify missing values:   
+      `read_csv(df, na = c("-999", "."))`  
+
+.footnote[Source: [Data Import Cheatsheet]( https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf)]
+
+---
+    
+## Suggested Process for Reading Challenging Data Sets  
+
+1. First pass using: `df &lt;- read_csv("file.csv")`  
+
+2. Use `problems(df)` to diagnose problems 
+
+3. Use helper functions  
+    * Use a `col_` function to guide parsing  OR  
+    * Read as character vectors and use `parse_` functions 
+    
+---
+
+# Parsing  
+
+* What is **parsing**?  
+  + The process of analyzing a string of symbols, either in natural language, computer languages or data structures, conforming to the rules of a formal grammar.
+
+--
+
+* Parser functions in R for parsing vectors:
+    + For logicals:  `parse_logical()`  
+    + For numbers: `parse_number()`, `parse_double()`, `parse_integer()`  
+    + For dates and times: `parse_datetime()`, `parse_date()`, and `parse_time()`  
+    + For characters: `parse_character()`: especially for using other character encodings
+    
+---
+
+## **readr** Strategy for Parsing Files
+
+* Guesses variable types based on first 1,000 rows (default)  
+
+* Tests variable types in order:  
+
+    1. Logicals  
+    1. Numbers  
+    1. Dates and Times  
+    1. Leaves as a character if all of the above fail.  
+    
+* Performs well except when...  
+    + First 1,000 rows don't tell the whole story  
+    + Lots of missing values, NAs, especially non-standard missing values
+    
+* Use `problems()` or `guess_` functions to help diagnose what went wrong
+
+---
+
+## Troubleshooting Bad Reading
+
+* Try `read_csv()` on the original CSV file  
+
+* Use `problems()` to diagnose difficulties  
+
+* Use `col_types` specifications to override incorrect guesses  
+
+* Proceed iteratively column by column 
+
+* For major problems, go extreme:  
+    + Read into a character vector of lines with `read_lines()`
+    + **More extreme**: Read into one long character string using `read_file()`
+
+
+Note: Process is similar for other file formats
+
+---
+
+# Using R `guess_xyz()` functions  
+
+* Use `guess_parser()` to understand why R identifies a variable as a certain type. 
+
+* Can be useful in editing data or overriding default `col_type()` specifications in, say,  `read_csv()`
+
+---
+
+## Writing files  
+
+* Writing to text files:  
+    + `write_csv()` or `write_tsv()`  OR 
+    + `write_excel_csv()` for writing to a CSV for use in Excel (if you have to)
+
+--
+
+* Writing to R binary format 
+    + `write_rds()` for reliably writing and re-reading interim results (`read_rds()`) 
+
+---
+class: inverse, center, middle
+
+# Demo: Learn by Doing with Trial and Error
+    
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

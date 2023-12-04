@@ -1,0 +1,222 @@
+---
+title: "Iteration: Loops and Purrr"
+author: E. Nordmoe
+output:
+  rmdshower::shower_presentation:
+    self_contained: true
+    katex: true
+    ratio: 16x10
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(purrr)
+```
+
+## 21. Iteration: Loops and purrr { .white }
+
+<img src="figures/scifi.jpg" class="cover">
+
+<p class="white">
+E. Nordmoe
+</p>
+
+## Outline
+
+* Review of vectors  
+* Loops   
+* purrr Maps: An alternative to loops  
+* Exercises  
+
+## Tools for Reducing Code Duplication  
+
+* Functions  
+    + Extract repeated patterns for easy re-use
+* Iteration  
+    + Do the same thing to multiple inputs  
+    + Apply multiple functions to same input  
+    
+## Iteration  
+
+* Loops  
+    + explicit and obvious  
+* Functional programming
+    + efficient  
+    + powerful  
+    + can be confusing  
+    
+## A Basic Loop 
+
+```{r, eval = FALSE}
+output <- vector("double", ncol(df))  # 1. output
+for (i in seq_along(df)) {            # 2. sequence
+  output[[i]] <- median(df[[i]])      # 3. body
+}
+output
+```
+
+## Components  
+
+>1. Output: make space to store the results    
+>2. Sequence: determines what to loop over  
+>3. Body: Code that does the work  
+
+# Try on `mtcars`
+
+
+## Generalize to use a loop to create a function  
+
+* Get all means of a data frame  
+```{r, eval = FALSE}
+col_mean <- function(df) {
+  output <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    output[i] <- mean(df[[i]])
+  }
+  output
+}
+col_mean(mtcars)
+```
+
+
+## Try  on `mtcars`
+<img src="figures/cat.jpeg" class="cover">
+
+
+## for loop variations  
+
+1. Modifying an existing object, instead of creating a new object.  
+2. Looping over names or values, instead of indices.  
+3. Handling outputs of unknown length 
+4. Handling sequences of unknown length 
+
+==> See R4DS for more details!
+
+## Modify Data Frame: Standardize  
+
+Step 1: Create the Function   
+```{r}
+standardize <- function(x) {
+xbar <- mean(x, na.rm = TRUE)
+sdx <- sd(x,na.rm = TRUE)
+(x - xbar) / sdx 
+}
+```
+
+## Modify Data Frame: Standardize  (cont'd)
+
+Step 2: Apply the function by looping  
+
+```{r, eval = FALSE}
+for (i in seq_along(mtcars)) { 
+  mtcars[[i]] <- standardize(mtcars[[i]])
+}
+head(mtcars)
+```
+
+
+## Using for loops to do functional programming  
+
+* Following is abstraction of `col_mean()` and `col_median()` functions.  
+* Arguments are data frame and function
+```{r, eval = FALSE}
+col_summary <- function(df, fun) {
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[[i]] <- fun(df[[i]])
+  }
+  out
+}
+col_summary(df, median)
+col_summary(df, mean)
+```
+
+# Try on `mtcars`
+
+## Use purrr to simplify  
+* Map functions loop over a vector (data frame), do something to each element, and save the results  
+* Specific map function determines output:  
+    + `map()` ==> list  
+    + `map_lgl()` ==> logical vector
+    + `map_dbl()` ==> double vector
+    +  and so on
+
+## Try these on `mtcars`  
+
+```{r, eval = FALSE}
+map(df, mean)
+map_dbl(df, mean)
+# Or even this? 
+map_chr(df, mean)
+# Or this, surely not
+map_int(df, mean)
+```
+
+## Recall Scraping Script
+
+* Uses `map_df` to create a data frame by binding rows
+
+```{r, eval = FALSE}
+map_df(covid_speech_urls, scrape_speech)
+```
+
+
+## Mapping over two arguments: `map2()`  
+
+```{r, eval = FALSE}
+# mu and sigma are the arguments  
+# rnorm is the function
+mu = list(5, 10, -3)
+sigma = list(1, 5, 10)
+map2(mu, sigma, rnorm, n = 5) 
+```
+
+## Mapping over multiple arguments: `pmap()`
+
+```{r, eval = FALSE}
+pmap(list(mu,sigma), rnorm, n = 5)
+# or more generally  
+n = list(1, 3, 5)
+# name arguments for stability
+pmap(list(mean = mu, sd = sigma, n = n), rnorm)
+```
+
+## Study the purrr Cheat Sheet
+<img src="figures/cat.jpeg" class="cover">
+<p style="margin-top:11cm;">
+https://posit.co/wp-content/uploads/2022/10/purrr.pdf
+</p>
+
+## Advanced functional programming!  
+
+```{r, eval = FALSE}
+fun <- function(f) pmap(list(x = mtcars, na.rm = TRUE), f)
+param <- list(list(mean), list(median), list(sd))
+
+#was
+invoke_map(.f = fun, .x = param)
+#now
+map(param, fun)
+```
+1. At the `invoke_map()` level, `fun` takes as arguments `param`, which are the functions we want to apply to `mtcars`.
+2. Next, at the `fun` level, these functions stored in `param` are applied by `pmap()`, one at a time, to each column in `mtcars`.
+
+
+
+
+## Try these on  Pokemon data 
+<img src="figures/pokemon.gif" class="cover">
+
+
+
+
+## More information
+### About R markdown: http://rmarkdown.rstudio.com
+### About shower: https://github.com/shower/shower
+### Example shower presentation: http://shwr.me/

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 13 Relational Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 13 Relational Data
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+# Outline  
+
+* Tables 
+
+* Keys  
+
+* Mutating Joins
+
+* Filtering Joins  
+
+---
+
+# Keys
+
+* A variable or set of variables used to connect each pair of tables are called **keys**  
+
+* Examples of potential keys  
+    + Academic records: Student ID 
+    + Employee database: Social security number  
+    + Medical records: Date of birth AND name
+    + Roster: First and Last name
+    + Public health data: Country code  
+    
+* Think of two or three tables that could be joined using these keys.  
+
+---
+
+# Key Facts  
+
+Two main types:  
+
+* **Primary key:** uniquely identifies an observation in its own table  
+
+* **Foreign key:** uniquely identifies an observation in another table  
+    + Could be the same variable(s) OR 
+    + Could have a different name in the foreign table
+
+* **Surrogate keys:** somtimes added when there is no primary key (an arbitrary case id or row number)
+
+---
+
+## Linking Student Data Tables 
+
+&lt;img src="figures/linked_student_tabes_graph.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+## Airline Flights Data 
+
+Consists of 5 tables:  
+
+* `flights`: on-time data for all flights departing NYC area in 2013
+
+* `airlines`: contains airline code and name  
+
+* `airports`: gives static information about each airport by 3-character code
+
+* `planes`: gives static information about each plane by `tailnum`
+
+* `weather`: gives dynamic hourly weather info near each NYC airport
+
+---
+
+## Linking Airline Flights Tables  
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/245292d1ea724f6c3fd8a92063dcd7bfb9758d02/5751b/diagrams/relational-nycflights.png" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## From the Data Transformation Cheatsheet  
+
+&lt;img src="figures/relational_cheatsheet.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Mutating Joins  
+
+Use a "Mutating Join" to join one table to columns from another  
+
+* Matching values with the rows they correspond to.   
+
+* Each type of join retains a different combination of values from the tables.  
+
+---
+
+## Kinds of Mutating Joins  
+
+* Four ways to join these two tables
+
+&lt;img src="figures/tables_x_and_y.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Kinds of Mutating Joins  (cont'd)
+
+&lt;img src="figures/mutating_joins.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Visualizing Joins  
+
+* Consider two simple tibbles:  
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/static/png/original-dfs.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+* An excellent set of [animations](https://www.garrickadenbuie.com/project/tidyexplain/) have been developed by Garrick Aden-Buie to help visualize how each type of join works. 
+
+---
+
+## Mutating Joins: Outer Joins
+
+* Outer joins keeps observations that appear in at least one of the tables. 
+
+* These joins add  additional "virtual" observations to each table.   
+
+* Missing variable information are filled in with NAs.
+
+---
+
+## Outer Join Examples: Full Join  
+
+* A full join keeps all observations in x and y.
+* Code example:  
+
+```r
+full_join(x, y, by = "key")
+```
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/full-join.gif" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Outer Join Examples: Left Join  
+* A left join keeps all observations in x.  
+* Similar to using a lookup table.
+* Code example:  
+
+```r
+left_join(x, y, by = "key")
+```
+
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/left-join.gif" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Outer Join Examples: Right Join  
+
+* A right join keeps all observations in y.  
+* Equivalent to doing a Left Join swapping x and y.  
+* Code example:  
+
+```r
+right_join(x, y, by = "key")
+```
+
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/right-join.gif" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+### Mutating Joins: Inner Join  
+
+* An inner join matches pairs of observations whenever their keys are equal.
+* Code example:  
+
+```r
+inner_join(x, y, by = "key")
+```
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/inner-join.gif" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+
+
+### The Perils of Duplicate Keys  
+
+&lt;img src="figures/duplicate_keys.png" width="1152" height="100%" style="display: block; margin: auto;" /&gt;
+
+**Note**: When you join duplicated keys, you get all possible combinations!
+
+`\(\Rightarrow\)`  Remove duplicates with `distinct()`
+
+
+---
+
+## Filtering Joins  
+
+Use a "Filtering Join" to filter one table against the rows of another.  
+* Useful for determining which rows in a table 
+
+    + *Have* a match (`semi_join()`)  
+
+    + Do *not* have a match (`anti_join()`)
+
+---
+
+## Kinds of Filtering Joins  
+
+&lt;img src="figures/filtering_joins.png" width="1421" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Kinds of Filtering Joins: Semi Join
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/semi-join.gif" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+## Kinds of Filtering Joins: Anti Join
+
+&lt;img src="https://www.garrickadenbuie.com/project/tidyexplain/images/anti-join.gif" height="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Visualizing Joins in Soccer Data  
+
+
+&lt;img src="figures/soccer_players_join_image.png" width="150%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Questions for Soccer Joins  
+
+Thought experiment: For these two tables, think about what tibble would be produced by each of the 6 joins.  Draw the tible you expect to be produced and answer the following?  
+
+1) How many rows and columns? 
+
+2) Which rows are included/excluded?  
+
+3) Are NA values produced by join? Where?
+
+4) Which columns are included/excluded?
+
+---
+
+## Reflection Questions
+
+1) Compare/contrast the joins. Think of situations where you might prefer one over the other.    
+
+2) The filtering join `semi_join()` is most similar to which of the mutating joins? Why?   
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 15 Factors</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 15 Factors
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Outline
+
+* Types of variables  
+
+* What are factors?  
+
+* Ordering levels  
+
+* Collapsing 
+
+---
+
+# Scraping Review  
+
+* Go to `yelp.com` 
+
+* Look for **restaurants** in the city of your choice
+
+* Identify the CSS selectors you would use to get the following variables:  
+
+  + Name of restaurant  
+  
+  + Number of reviews 
+  
+  + Neighborhood  
+  
+---
+
+# Reminder: Type of Variables
+
+Seven data types in R
+
+* `int` : integer  
+
+* `dbl`: for double-precision, or real numbers  
+
+* `chr`:  character vectors, or strings  
+
+* `dttm`: date-times (a date + a time)  
+
+* `lgl`: logical contains only TRUE or FALSE values    
+
+* **`fctr`: factors used to represent categorical variables**   
+
+* `date`: dates
+
+---
+
+# Factors  
+
+* Used to represent categorical variables 
+
+* Two broad kinds of `factors` 
+  + Nominal: no natural ordering  
+      - e.g., gender, nationality, race, marital status, religion, ethnicity  
+      
+  + Ordinal: categories have a natural underlying order  
+      - e.g. ,education levels, liking, overall rating, level of approval
+
+---
+# Creating a Factor in R: From scratch
+
+* Input data and levels separately
+
+
+```r
+zodiac &lt;- c("Pig", "Dog", "Rabbit", "Rat")
+# Sorting not useful 
+sort(zodiac)
+```
+
+```
+## [1] "Dog"    "Pig"    "Rabbit" "Rat"
+```
+
+```r
+zodiac_levels &lt;- c("Rat", "Ox", "Tiger", "Rabbit", "Dragon", 
+  "Snake", "Horse", "Sheep", "Monkey", "Rooster", "Dog", "Pig")
+zodiac_fac &lt;- factor(zodiac, levels = zodiac_levels)
+zodiac_fac
+```
+
+```
+## [1] Pig    Dog    Rabbit Rat   
+## 12 Levels: Rat Ox Tiger Rabbit Dragon Snake Horse Sheep Monkey Rooster ... Pig
+```
+
+---
+class: inverse, center, middle
+
+# Learning from Factors in the Wild
+
+---
+
+## Kaggle State of Data Science Survey
+
+* Comprehensive industry survey conducted in 2017  
+
+* Over 16,000 responses  
+
+* Not all respondents were shown all questions  
+
+    + Job related questions for employed data scientists
+    
+    + Learning related questions for students
+    
+* [`multipleChoiceResponses.csv`](https://www.kaggle.com/kaggle/kaggle-survey-2017?select=multipleChoiceResponses.csv) contains over 16K rows and 228 variables
+
+.footnote[
+**Source**: Kaggle https://www.kaggle.com/kaggle/kaggle-survey-2017
+]
+
+
+---
+## Data codebook in `schema.csv`  
+
+&lt;img src="figures/kaggle_schema_lg.png" width="1920" height="100%" style="display: block; margin: auto;" /&gt;
+---
+## Import and Glimpse the Data
+
+.scroll-box-20[
+
+```r
+ks_data &lt;- read_csv(file = "kaggle-survey-2017_data/multipleChoiceResponses.csv")
+glimpse(ks_data)
+```
+
+```
+## Rows: 16,716
+## Columns: 228
+## $ GenderSelect                                &lt;chr&gt; "Non-binary, genderqueer, …
+## $ Country                                     &lt;chr&gt; NA, "United States", "Cana…
+## $ Age                                         &lt;dbl&gt; NA, 30, 28, 56, 38, 46, 35…
+## $ EmploymentStatus                            &lt;chr&gt; "Employed full-time", "Not…
+## $ StudentStatus                               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ LearningDataScience                         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ CodeWriter                                  &lt;chr&gt; "Yes", NA, NA, "Yes", "Yes…
+## $ CareerSwitcher                              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ CurrentJobTitleSelect                       &lt;chr&gt; "DBA/Database Engineer", N…
+## $ TitleFit                                    &lt;chr&gt; "Fine", NA, NA, "Poorly", …
+## $ CurrentEmployerType                         &lt;chr&gt; "Employed by a company tha…
+## $ MLToolNextYearSelect                        &lt;chr&gt; "SAS Base", "Python", "Ama…
+## $ MLMethodNextYearSelect                      &lt;chr&gt; "Random Forests", "Random …
+## $ LanguageRecommendationSelect                &lt;chr&gt; "F#", "Python", "R", "Pyth…
+## $ PublicDatasetsSelect                        &lt;chr&gt; "Dataset aggregator/platfo…
+## $ LearningPlatformSelect                      &lt;chr&gt; "College/University,Confer…
+## $ LearningPlatformUsefulnessArxiv             &lt;chr&gt; NA, NA, "Very useful", NA,…
+## $ LearningPlatformUsefulnessBlogs             &lt;chr&gt; NA, NA, NA, "Very useful",…
+## $ LearningPlatformUsefulnessCollege           &lt;chr&gt; NA, NA, "Somewhat useful",…
+## $ LearningPlatformUsefulnessCompany           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ LearningPlatformUsefulnessConferences       &lt;chr&gt; "Very useful", NA, NA, "Ve…
+## $ LearningPlatformUsefulnessFriends           &lt;chr&gt; NA, NA, NA, "Very useful",…
+## $ LearningPlatformUsefulnessKaggle            &lt;chr&gt; NA, "Somewhat useful", "So…
+## $ LearningPlatformUsefulnessNewsletters       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ LearningPlatformUsefulnessCommunities       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ LearningPlatformUsefulnessDocumentation     &lt;chr&gt; NA, NA, NA, "Very useful",…
+## $ LearningPlatformUsefulnessCourses           &lt;chr&gt; NA, NA, "Very useful", "Ve…
+## $ LearningPlatformUsefulnessProjects          &lt;chr&gt; NA, NA, NA, "Very useful",…
+## $ LearningPlatformUsefulnessPodcasts          &lt;chr&gt; "Very useful", NA, NA, NA,…
+## $ LearningPlatformUsefulnessSO                &lt;chr&gt; NA, NA, NA, NA, NA, "Very …
+## $ LearningPlatformUsefulnessTextbook          &lt;chr&gt; NA, NA, NA, NA, "Somewhat …
+## $ LearningPlatformUsefulnessTradeBook         &lt;chr&gt; "Somewhat useful", NA, NA,…
+## $ LearningPlatformUsefulnessTutoring          &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ LearningPlatformUsefulnessYouTube           &lt;chr&gt; NA, NA, "Very useful", NA,…
+## $ BlogsPodcastsNewslettersSelect              &lt;chr&gt; "Becoming a Data Scientist…
+## $ LearningDataScienceTime                     &lt;chr&gt; NA, "1-2 years", "1-2 year…
+## $ JobSkillImportanceBigData                   &lt;chr&gt; NA, NA, "Necessary", NA, N…
+## $ JobSkillImportanceDegree                    &lt;chr&gt; NA, "Nice to have", NA, NA…
+## $ JobSkillImportanceStats                     &lt;chr&gt; NA, "Unnecessary", NA, NA,…
+## $ JobSkillImportanceEnterpriseTools           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportancePython                    &lt;chr&gt; NA, "Unnecessary", NA, NA,…
+## $ JobSkillImportanceR                         &lt;chr&gt; NA, NA, "Necessary", NA, N…
+## $ JobSkillImportanceSQL                       &lt;chr&gt; NA, "Necessary", NA, NA, N…
+## $ JobSkillImportanceKaggleRanking             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportanceMOOC                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportanceVisualizations            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportanceOtherSelect1              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportanceOtherSelect2              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ JobSkillImportanceOtherSelect3              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ CoursePlatformSelect                        &lt;chr&gt; NA, NA, "Coursera,edX", NA…
+## $ HardwarePersonalProjectsSelect              &lt;chr&gt; NA, NA, "Basic laptop (Mac…
+## $ TimeSpentStudying                           &lt;chr&gt; NA, "2 - 10 hours", "2 - 1…
+## $ ProveKnowledgeSelect                        &lt;chr&gt; NA, "Master's degree", "Gi…
+## $ DataScienceIdentitySelect                   &lt;chr&gt; "Yes", "Yes", "Yes", "Yes"…
+## $ FormalEducation                             &lt;chr&gt; "Bachelor's degree", "Mast…
+## $ MajorSelect                                 &lt;chr&gt; "Management information sy…
+## $ Tenure                                      &lt;chr&gt; "More than 10 years", "Les…
+## $ PastJobTitlesSelect                         &lt;chr&gt; "Predictive Modeler,Progra…
+## $ FirstTrainingSelect                         &lt;chr&gt; "University courses", "Uni…
+## $ LearningCategorySelftTaught                 &lt;dbl&gt; 0, 10, 20, 30, 60, 45, 40,…
+## $ LearningCategoryOnlineCourses               &lt;dbl&gt; 0, 30, 50, 0, 5, 25, 0, 40…
+## $ LearningCategoryWork                        &lt;dbl&gt; 100, 0, 0, 40, 5, 20, 0, 0…
+## $ LearningCategoryUniversity                  &lt;dbl&gt; 0, 30, 30, 30, 30, 0, 50, …
+## $ LearningCategoryKaggle                      &lt;dbl&gt; 0, 30, 0, 0, 0, 10, 10, 10…
+## $ LearningCategoryOther                       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ MLSkillsSelect                              &lt;chr&gt; "Computer Vision,Natural L…
+## $ MLTechniquesSelect                          &lt;chr&gt; "Evolutionary Approaches,N…
+## $ ParentsEducation                            &lt;chr&gt; "A doctoral degree", "A ba…
+## $ EmployerIndustry                            &lt;chr&gt; "Internet-based", NA, NA, …
+## $ EmployerSize                                &lt;chr&gt; "100 to 499 employees", NA…
+## $ EmployerSizeChange                          &lt;chr&gt; "Increased slightly", NA, …
+## $ EmployerMLTime                              &lt;chr&gt; "3-5 years", NA, NA, NA, "…
+## $ EmployerSearchMethod                        &lt;chr&gt; "I visited the company's W…
+## $ UniversityImportance                        &lt;chr&gt; "Not very important", NA, …
+## $ JobFunctionSelect                           &lt;chr&gt; "Build prototypes to explo…
+## $ WorkHardwareSelect                          &lt;chr&gt; "Gaming Laptop (Laptop + C…
+## $ WorkDataTypeSelect                          &lt;chr&gt; "Text data,Relational data…
+## $ WorkProductionFrequency                     &lt;chr&gt; "Rarely", NA, NA, "Always"…
+## $ WorkDatasetSize                             &lt;chr&gt; "10GB", NA, NA, "1GB", "10…
+## $ WorkAlgorithmsSelect                        &lt;chr&gt; "Neural Networks,Random Fo…
+## $ WorkToolsSelect                             &lt;chr&gt; "Amazon Web services,Oracl…
+## $ WorkToolsFrequencyAmazonML                  &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyAWS                       &lt;chr&gt; "Rarely", NA, NA, "Often",…
+## $ WorkToolsFrequencyAngoss                    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyC                         &lt;chr&gt; NA, NA, NA, NA, "Most of t…
+## $ WorkToolsFrequencyCloudera                  &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyDataRobot                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyFlume                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyGCP                       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyHadoop                    &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyIBMCognos                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyIBMSPSSModeler            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyIBMSPSSStatistics         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyIBMWatson                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyImpala                    &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyJava                      &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyJulia                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyJupyter                   &lt;chr&gt; NA, NA, NA, NA, "Sometimes…
+## $ WorkToolsFrequencyKNIMECommercial           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyKNIMEFree                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyMathematica               &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyMATLAB                    &lt;chr&gt; NA, NA, NA, "Rarely", "Oft…
+## $ WorkToolsFrequencyAzure                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyExcel                     &lt;chr&gt; NA, NA, NA, "Sometimes", N…
+## $ WorkToolsFrequencyMicrosoftRServer          &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyMicrosoftSQL              &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyMinitab                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyNoSQL                     &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyOracle                    &lt;chr&gt; "Sometimes", NA, NA, NA, N…
+## $ WorkToolsFrequencyOrange                    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyPerl                      &lt;chr&gt; "Most of the time", NA, NA…
+## $ WorkToolsFrequencyPython                    &lt;chr&gt; NA, NA, NA, "Rarely", "Som…
+## $ WorkToolsFrequencyQlik                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyR                         &lt;chr&gt; NA, NA, NA, "Rarely", "Som…
+## $ WorkToolsFrequencyRapidMinerCommercial      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyRapidMinerFree            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySalfrod                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySAPBusinessObjects        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySASBase                   &lt;chr&gt; NA, NA, NA, "Sometimes", N…
+## $ WorkToolsFrequencySASEnterprise             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySASJMP                    &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencySpark                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySQL                       &lt;chr&gt; NA, NA, NA, "Often", NA, "…
+## $ WorkToolsFrequencyStan                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyStatistica                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyTableau                   &lt;chr&gt; NA, NA, NA, "Rarely", NA, …
+## $ WorkToolsFrequencyTensorFlow                &lt;chr&gt; NA, NA, NA, NA, "Sometimes…
+## $ WorkToolsFrequencyTIBCO                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencyUnix                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, "M…
+## $ WorkToolsFrequencySelect1                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkToolsFrequencySelect2                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkFrequencySelect3                        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsSelect                           &lt;chr&gt; "Association Rules,Collabo…
+## $ `WorkMethodsFrequencyA/B`                   &lt;chr&gt; NA, NA, NA, "Sometimes", N…
+## $ WorkMethodsFrequencyAssociationRules        &lt;chr&gt; "Rarely", NA, NA, NA, "Som…
+## $ WorkMethodsFrequencyBayesian                &lt;chr&gt; NA, NA, NA, "Sometimes", "…
+## $ WorkMethodsFrequencyCNNs                    &lt;chr&gt; NA, NA, NA, NA, "Most of t…
+## $ WorkMethodsFrequencyCollaborativeFiltering  &lt;chr&gt; "Often", NA, NA, NA, "Some…
+## $ `WorkMethodsFrequencyCross-Validation`      &lt;chr&gt; NA, NA, NA, NA, NA, NA, "S…
+## $ WorkMethodsFrequencyDataVisualization       &lt;chr&gt; NA, NA, NA, "Sometimes", "…
+## $ WorkMethodsFrequencyDecisionTrees           &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkMethodsFrequencyEnsembleMethods         &lt;chr&gt; NA, NA, NA, "Sometimes", "…
+## $ WorkMethodsFrequencyEvolutionaryApproaches  &lt;chr&gt; NA, NA, NA, NA, "Sometimes…
+## $ WorkMethodsFrequencyGANs                    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyGBM                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyHMMs                    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyKNN                     &lt;chr&gt; NA, NA, NA, NA, "Most of t…
+## $ WorkMethodsFrequencyLiftAnalysis            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyLogisticRegression      &lt;chr&gt; NA, NA, NA, "Sometimes", "…
+## $ WorkMethodsFrequencyMLN                     &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkMethodsFrequencyNaiveBayes              &lt;chr&gt; NA, NA, NA, "Sometimes", "…
+## $ WorkMethodsFrequencyNLP                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, "M…
+## $ WorkMethodsFrequencyNeuralNetworks          &lt;chr&gt; "Sometimes", NA, NA, "Some…
+## $ WorkMethodsFrequencyPCA                     &lt;chr&gt; "Often", NA, NA, NA, "Some…
+## $ WorkMethodsFrequencyPrescriptiveModeling    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyRandomForests           &lt;chr&gt; "Most of the time", NA, NA…
+## $ WorkMethodsFrequencyRecommenderSystems      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencyRNNs                    &lt;chr&gt; NA, NA, NA, NA, "Sometimes…
+## $ WorkMethodsFrequencySegmentation            &lt;chr&gt; NA, NA, NA, NA, "Often", N…
+## $ WorkMethodsFrequencySimulation              &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkMethodsFrequencySVMs                    &lt;chr&gt; NA, NA, NA, NA, "Most of t…
+## $ WorkMethodsFrequencyTextAnalysis            &lt;chr&gt; NA, NA, NA, NA, NA, NA, "M…
+## $ WorkMethodsFrequencyTimeSeriesAnalysis      &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkMethodsFrequencySelect1                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencySelect2                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkMethodsFrequencySelect3                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ TimeGatheringData                           &lt;dbl&gt; 0, NA, NA, 50, 30, 60, 30,…
+## $ TimeModelBuilding                           &lt;dbl&gt; 100, NA, NA, 20, 20, 20, 1…
+## $ TimeProduction                              &lt;dbl&gt; 0, NA, NA, 0, 15, 10, 30, …
+## $ TimeVisualizing                             &lt;dbl&gt; 0, NA, NA, 10, 15, 10, 20,…
+## $ TimeFindingInsights                         &lt;dbl&gt; 0, NA, NA, 20, 20, 0, 10, …
+## $ TimeOtherSelect                             &lt;dbl&gt; 0, NA, NA, 0, 0, 0, 0, NA,…
+## $ AlgorithmUnderstandingLevel                 &lt;chr&gt; "Enough to explain the alg…
+## $ WorkChallengesSelect                        &lt;chr&gt; "Company politics / Lack o…
+## $ WorkChallengeFrequencyPolitics              &lt;chr&gt; "Rarely", NA, NA, "Often",…
+## $ WorkChallengeFrequencyUnusedResults         &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkChallengeFrequencyUnusefulInstrumenting &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyDeployment            &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyDirtyData             &lt;chr&gt; NA, NA, NA, "Often", NA, "…
+## $ WorkChallengeFrequencyExplaining            &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyPass                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkChallengeFrequencyIntegration           &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyTalent                &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkChallengeFrequencyDataFunds             &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkChallengeFrequencyDomainExpertise       &lt;chr&gt; NA, NA, NA, "Most of the t…
+## $ WorkChallengeFrequencyML                    &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyTools                 &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyExpectations          &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyITCoordination        &lt;chr&gt; NA, NA, NA, NA, "Sometimes…
+## $ WorkChallengeFrequencyHiringFunds           &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyPrivacy               &lt;chr&gt; "Often", NA, NA, "Often", …
+## $ WorkChallengeFrequencyScaling               &lt;chr&gt; "Most of the time", NA, NA…
+## $ WorkChallengeFrequencyEnvironments          &lt;chr&gt; NA, NA, NA, "Often", "Some…
+## $ WorkChallengeFrequencyClarity               &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyDataAccess            &lt;chr&gt; NA, NA, NA, "Often", NA, N…
+## $ WorkChallengeFrequencyOtherSelect           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkDataVisualizations                      &lt;chr&gt; "26-50% of projects", NA, …
+## $ WorkInternalVsExternalTools                 &lt;chr&gt; "Do not know", NA, NA, "En…
+## $ WorkMLTeamSeatSelect                        &lt;chr&gt; "Standalone Team", NA, NA,…
+## $ WorkDatasets                                &lt;chr&gt; NA, NA, NA, "Electricity d…
+## $ WorkDatasetsChallenge                       &lt;chr&gt; NA, NA, NA, "Everything is…
+## $ WorkDataStorage                             &lt;chr&gt; "Document-oriented (e.g. M…
+## $ WorkDataSharing                             &lt;chr&gt; "Company Developed Platfor…
+## $ WorkDataSourcing                            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA…
+## $ WorkCodeSharing                             &lt;chr&gt; "Mercurial,Subversion,Othe…
+## $ RemoteWork                                  &lt;chr&gt; "Always", NA, NA, NA, "Rar…
+## $ CompensationAmount                          &lt;dbl&gt; NA, NA, NA, 250000, NA, NA…
+## $ CompensationCurrency                        &lt;chr&gt; NA, NA, NA, "USD", NA, NA,…
+## $ SalaryChange                                &lt;chr&gt; "I am not currently employ…
+## $ JobSatisfaction                             &lt;chr&gt; "5", NA, NA, "10 - Highly …
+## $ JobSearchResource                           &lt;chr&gt; NA, NA, "Asking friends, f…
+## $ JobHuntTime                                 &lt;chr&gt; NA, NA, "1-2", NA, NA, NA,…
+## $ JobFactorLearning                           &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorSalary                             &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorOffice                             &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorLanguages                          &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorCommute                            &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorManagement                         &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorExperienceLevel                    &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorDepartment                         &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorTitle                              &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorCompanyFunding                     &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorImpact                             &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorRemote                             &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorIndustry                           &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorLeaderReputation                   &lt;chr&gt; NA, "Somewhat important", …
+## $ JobFactorDiversity                          &lt;chr&gt; NA, NA, "Very Important", …
+## $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Important", …
+```
+]
+
+Lots of data problems we'll set aside for later...
+
+---
+# First, inspect your factor  
+
+&lt;img src="figures/inspect_factors.png" width="1755" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Inspecting the Country Variable
+
+.scroll-box-20[
+
+```r
+# First, convert to a factor, letting R choose levels:  
+ks_data &lt;-  ks_data %&gt;% 
+  mutate(Country = factor(Country)) 
+# Show unique levels
+fct_unique(ks_data$Country)
+```
+
+```
+##  [1] Argentina                   Australia                  
+##  [3] Belarus                     Belgium                    
+##  [5] Brazil                      Canada                     
+##  [7] Chile                       Colombia                   
+##  [9] Czech Republic              Denmark                    
+## [11] Egypt                       Finland                    
+## [13] France                      Germany                    
+## [15] Greece                      Hong Kong                  
+## [17] Hungary                     India                      
+## [19] Indonesia                   Iran                       
+## [21] Ireland                     Israel                     
+## [23] Italy                       Japan                      
+## [25] Kenya                       Malaysia                   
+## [27] Mexico                      Netherlands                
+## [29] New Zealand                 Nigeria                    
+## [31] Norway                      Other                      
+## [33] Pakistan                    People 's Republic of China
+## [35] Philippines                 Poland                     
+## [37] Portugal                    Republic of China          
+## [39] Romania                     Russia                     
+## [41] Singapore                   South Africa               
+## [43] South Korea                 Spain                      
+## [45] Sweden                      Switzerland                
+## [47] Taiwan                      Turkey                     
+## [49] Ukraine                     United Kingdom             
+## [51] United States               Vietnam                    
+## 52 Levels: Argentina Australia Belarus Belgium Brazil Canada Chile ... Vietnam
+```
+]
+---
+# Get frequencies of categories
+
+
+```r
+# Note that we don't need a special command for this
+ks_data %&gt;% count(Country)
+```
+
+```
+## # A tibble: 53 × 2
+##    Country            n
+##    &lt;fct&gt;          &lt;int&gt;
+##  1 Argentina         92
+##  2 Australia        421
+##  3 Belarus           54
+##  4 Belgium           91
+##  5 Brazil           465
+##  6 Canada           440
+##  7 Chile             51
+##  8 Colombia         113
+##  9 Czech Republic    53
+## 10 Denmark           78
+## # … with 43 more rows
+```
+
+---
+## Let's get  a quick graph  
+
+
+```r
+ggplot(ks_data, aes(x = Country)) +
+  geom_bar() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+## Forcats commands for reordering levels  
+
+* Reorder by frequency of categories:
+
+&lt;img src="figures/fct_infreq.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+* Reorder by level of another variable:
+
+&lt;img src="figures/fct_reorder.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+## Let's reorder by frequency 
+
+
+```r
+ggplot(ks_data, aes(x = fct_infreq(Country))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+## Reversing the Order of the Levels of a Factor
+
+&lt;img src="figures/fct_rev.png" width="1709" height="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Put bars in order from highest to lowest
+
+
+```r
+ggplot(ks_data, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip() 
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+## Remove the NA values for now 
+
+
+
+```r
+ks_data2 &lt;- ks_data %&gt;% drop_na(Country)
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+## Recoding Levels  
+
+&lt;img src="figures/fct_recode.png" width="1892" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+## Clean Up and Shorten a Few Labels
+
+* The name for China has an extra space and an apostrophe 
+
+* Put in common abbreviations for UK and USA
+
+* Combine "Taiwan" with "Republic of China":
+
+
+```r
+ks_data2 &lt;- ks_data2 %&gt;% mutate(Country =
+  fct_recode(Country, 
+      "China" =  "People 's Republic of China",
+      "USA" = "United States", 
+      "UK" = "United Kingdom", 
+      "Taiwan" = "Republic of China"
+))
+```
+
+---
+## Clean Up and Shorten a Few Labels: Redraw the Plot 
+
+
+```r
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+## Factors for aggregating levels  
+
+&lt;img src="figures/fct_lump.png" width="1852" height="100%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="figures/fct_collapse.png" width="1852" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+## Factors for aggregating levels (cont'd)
+
+&lt;img src="figures/fct_other.png" width="1888" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+## Lump smaller countries together to focus on the largest 
+
+
+```r
+ks_data2 &lt;- mutate(ks_data2, top_country = fct_lump(Country, prop = .01))
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_country)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents",
+       title = "Largest responding")
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+## Group together by continent 
+
+
+```r
+ks_data2 &lt;- ks_data2 %&gt;% mutate(top_continents =
+  fct_collapse(top_country, 
+      Oceania = c("Australia"), 
+      South_America = c("Brazil"),
+      Europe = c("France", "Germany", "Italy", "Netherlands",
+                  "Poland", "Spain", "UK", "Ukraine"),
+      North_America = c("Canada", "USA"), 
+      Asia = c("India", "Japan", "China",
+               "Singapore", "South Korea", "Taiwan")))
+```
+
+---
+### Graph counts for top continents after collapsing
+
+
+```r
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_continents)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents", 
+       title = "Largest responding")
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+
+---
+## Challenge: Graph average age for top countries
+
+
+```r
+ks_data2 %&gt;% group_by(top_country) %&gt;% 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) %&gt;%
+ggplot(aes(x = top_country, y = mean_age)) + 
+geom_point() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+## Order Factor by another variable
+
+&lt;img src="figures/fct_reorder.png" width="1853" height="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Challenge: Graph average age for top countries
+
+
+```r
+ks_data2 %&gt;% group_by(top_country) %&gt;% 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) %&gt;%
+ggplot(aes(x = fct_reorder(top_country, mean_age), y = mean_age)) + 
+geom_point() + 
+  coord_flip()
+```
+
+![](Factors_slides_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+* Oldest respondents in Europe and youngest in Asia? 
+
+---
+class:inverse, center, middle
+
+# Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,338 @@
+---
+title: "Data Transformation Part II"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+
+# Review from Last Time
+
+1. Compare `filter()` and `select()`?
+
+    + `filter(df, condition1, condition2)`
+    
+    + `select(df, condition1, condition2)`
+    
+--
+
+2. Compare `arrange()` and `select()`   
+
+    + How are they different? similar?
+    
+--
+
+3. Compare `arrange()` and `filter()`
+
+    + How are they different? similar?
+
+---
+
+## Review: A Grammar for Data Wrangling  
+
+While the object is always *data*, R4DS identifies a grammar for data wrangling that uses five *verbs*  :  
+
+* `filter()`: picks observations by their values  
+
+* `select()`: picks variables by their names  
+
+* `arrange()`: reorders rows 
+
+* `mutate()`: creates new variables from existing variables  
+
+* `summarise()`: collapses many values down to a single summary   
+
+$\Rightarrow$ used with the `group_by()` function to operate group-by-group
+
+
+
+---
+
+## Connect data wrangling commands  with the Pipe
+
+.pull-left[
+* The `%>%` operator in Tidyverse functions is called the pipe operator.   
+
+* "Pipe" the output of the previous line to the next line  
+
+* Pronounce the pipe `%>%` as: "and then"
+
+* When combined with **ggplot** functions, be sure to use `+` for  layers of plots.
+]
+.pull-right[
+
+```{r, out.width ="50%", fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://magrittr.tidyverse.org/logo.png')
+```
+]
+
+
+
+---
+
+
+## Review: How does a pipe work?
+
+* Think of code using the pipe as a sequence of actions:
+    + Find key, unlock car, start car, drive to school, park.  
+--
+
+* *Expressed* as a set of nested functions:
+
+```{r eval=FALSE}
+park(drive(start_car(find("keys")), to = "campus"))
+```
+
+--
+
+* Written code using pipes is easier to read:
+
+```{r eval=FALSE}
+find("keys") %>%
+  start_car() %>%
+  drive(to = "campus") %>%
+  park()
+```
+
+.footnote[
+Source: datasciencebox.org
+]
+
+---
+
+# Fuel Economy Data: `vehicles`  
+
+`vehicles` data is included in the **fueleconomy** R package:  
+
+* Fuel economy data from the EPA, 1985-2015.
+
+* 33,442 observations and 12 variables  
+
+* Includes common and uncommon vehicles
+
+---
+
+## The Data Set
+
+```{r}
+library(fueleconomy)
+vehicles
+```
+
+
+---
+
+##  Variables 
+
+```{r"}
+glimpse(vehicles)
+```
+
+
+
+---
+
+## Filter for multiple conditions
+
+```{r}
+filter(vehicles, make == "Ford", model == "Mustang", year == 2013)
+```
+
+
+
+---
+
+## Use Pipe to String Commands to Select Variables 
+
+* Note that the data set is passed as the  implied first argument to `filter()` and `select`
+
+```{r}
+vehicles %>%
+  filter(make == "Ford", model == "Mustang", year == 2013) %>%
+  select(trans, cty, hwy) #<<
+```
+
+
+
+---
+
+## Combine the pipe with `distinct()` to filter for unique rows 
+
+```{r}
+vehicles %>% 
+  select(make, model) %>% 
+  distinct() %>% #<<
+  arrange(make, model)
+```
+
+
+
+---
+
+# `summarise()` 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/summarise.png')
+```
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+]
+
+---
+
+# Summarise the whole dataset  
+
+```{r}
+vehicles %>% 
+  summarise(mean_cty = mean(cty), med_cty = median(cty))
+```
+
+* Sometimes useful but other times could be very misleading  
+
+* Subgroup analysis is more common
+
+
+---
+
+## `summarise()` and `group_by()`  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/group_by.png')
+```
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+]
+
+
+---
+
+## Use `group_by()` to use  `summarise()` with subgroups
+
+.scroll-box-12[
+
+```{r}
+vehicles %>% 
+  group_by(make) %>% 
+  summarise(med_cty = median(cty), ncases = n()) #<<
+```
+]
+
+.footnote[
+Source: Data Transformation with **dplyr**: CHEAT SHEET
+]
+---
+
+## But notice `group_by()` does little by itself
+.scroll-box-16[
+```{r}
+vehicles %>% 
+  group_by(make)
+```
+
+]
+
+---
+
+## Facts about `summarise()` 
+
+* Displays results for `group_by()` groups in ascending order  
+
+* Can be used with many functions and variations (see the Data Transformations Cheat sheet)  
+
+    + Functions: `mean()`, `median()`, `n()`, `n_distinct()`, `sd()`, `IQR()`, etc.
+
+    + Variations: `count()`, `tally()`, `summarise_all()`  
+    
+
+---
+
+## Can be combined with other verbs using the pipe operator
+
+.scroll-box-16[
+```{r}
+vehicles %>%
+  filter(year == 2010) %>%
+  group_by(make, model) %>% 
+  summarise(avg_hwy = mean(hwy)) %>%
+  arrange(desc(avg_hwy)) %>% 
+  ungroup() #<<
+```
+]
+
+* Note use of `ungroup()`; try taking it out and see what happens? What do you think it's doing?
+
+
+---
+
+## Combine with `ggplot()`: Example 1 
+
+```{r fig.height=4,fig.width=9}
+vehicles %>%
+  filter(make %in% c("Chevrolet", "Ford", "Toyota")) %>%
+  group_by(make, year) %>% 
+  summarise(avg_hwy = mean(hwy)) %>%
+  ggplot(aes(x = year, y = avg_hwy, color = make)) +
+  geom_line() +
+  labs(title = "Trend in Highway Mileage for Three Makes of Vehicles")
+```
+
+---
+
+## Combine with `ggplot()`: Example 2 
+
+```{r, fig.height = 4, fig.width=9, tidy = TRUE}
+vehicles %>%
+  filter(make %in% c("Chevrolet", "Ford", "Toyota"), year %in% c(2000, 2005, 2010)) %>%
+  group_by(make, year) %>% 
+  summarise(avg_hwy = mean(hwy)) %>%
+  ggplot(aes(x = make, y = avg_hwy, fill = factor(year))) +
+  geom_col(position = position_dodge()) + 
+  labs(title = "Average Highway Mileage by Make and Year", x = "", y = "MPG")
+```
+
+
+---
+
+### Combine with `ggplot()`: Example 3 
+
+```{r,  fig.height = 3, fig.width=9}
+# A peak ahead introducing boxplots  
+vehicles %>%
+  group_by(make, year) %>% 
+  summarise(avg_hwy = mean(hwy), n = n()) %>% 
+  filter(n >= 5) %>% 
+  ggplot(aes(x = factor(year), y = avg_hwy, fill= factor(year))) + 
+  geom_boxplot() + 
+  scale_x_discrete(breaks = seq(1985, 2015, 5)) +
+  scale_fill_discrete(guide = FALSE) + # suppress the legend 
+  labs(x = "", y = "MPG", title = "Average Highway Mileage Variation Across Models and Time")
+```
+
+
+---
+class:inverse, center, middle
+
+# Now it's your turn  
+
+
+

@@ -1,0 +1,296 @@
+---
+title: "Chapter 13 Relational Data"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+# Outline  
+
+* Tables 
+
+* Keys  
+
+* Mutating Joins
+
+* Filtering Joins  
+
+---
+
+# Keys
+
+* A variable or set of variables used to connect each pair of tables are called **keys**  
+
+* Examples of potential keys  
+    + Academic records: Student ID 
+    + Employee database: Social security number  
+    + Medical records: Date of birth AND name
+    + Roster: First and Last name
+    + Public health data: Country code  
+    
+* Think of two or three tables that could be joined using these keys.  
+
+---
+
+# Key Facts  
+
+Two main types:  
+
+* **Primary key:** uniquely identifies an observation in its own table  
+
+* **Foreign key:** uniquely identifies an observation in another table  
+    + Could be the same variable(s) OR 
+    + Could have a different name in the foreign table
+
+* **Surrogate keys:** somtimes added when there is no primary key (an arbitrary case id or row number)
+
+---
+
+## Linking Student Data Tables 
+
+```{r, out.width = "75%", fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("figures/linked_student_tabes_graph.png")
+```
+
+---
+## Airline Flights Data 
+
+Consists of 5 tables:  
+
+* `flights`: on-time data for all flights departing NYC area in 2013
+
+* `airlines`: contains airline code and name  
+
+* `airports`: gives static information about each airport by 3-character code
+
+* `planes`: gives static information about each plane by `tailnum`
+
+* `weather`: gives dynamic hourly weather info near each NYC airport
+
+---
+
+## Linking Airline Flights Tables  
+
+```{r, out.height = "50%", fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/245292d1ea724f6c3fd8a92063dcd7bfb9758d02/5751b/diagrams/relational-nycflights.png")
+```
+
+---
+
+## From the Data Transformation Cheatsheet  
+
+```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/relational_cheatsheet.png')
+```
+
+---
+
+## Mutating Joins  
+
+Use a "Mutating Join" to join one table to columns from another  
+
+* Matching values with the rows they correspond to.   
+
+* Each type of join retains a different combination of values from the tables.  
+
+---
+
+## Kinds of Mutating Joins  
+
+* Four ways to join these two tables
+
+```{r, out.width = '75%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/tables_x_and_y.png')
+```
+
+---
+
+## Kinds of Mutating Joins  (cont'd)
+
+```{r, out.width = '75%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/mutating_joins.png')
+```
+
+---
+
+## Visualizing Joins  
+
+* Consider two simple tibbles:  
+
+```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://www.garrickadenbuie.com/project/tidyexplain/images/static/png/original-dfs.png')
+```
+
+
+* An excellent set of [animations](https://www.garrickadenbuie.com/project/tidyexplain/) have been developed by Garrick Aden-Buie to help visualize how each type of join works. 
+
+---
+
+## Mutating Joins: Outer Joins
+
+* Outer joins keeps observations that appear in at least one of the tables. 
+
+* These joins add  additional "virtual" observations to each table.   
+
+* Missing variable information are filled in with NAs.
+
+---
+
+## Outer Join Examples: Full Join  
+
+* A full join keeps all observations in x and y.
+* Code example:  
+```{r, eval = FALSE}
+full_join(x, y, by = "key")
+```
+
+```{r, out.height = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("https://www.garrickadenbuie.com/project/tidyexplain/images/full-join.gif")
+```
+
+---
+
+### Outer Join Examples: Left Join  
+* A left join keeps all observations in x.  
+* Similar to using a lookup table.
+* Code example:  
+```{r, eval = FALSE}
+left_join(x, y, by = "key")
+```
+
+
+```{r, out.height = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("https://www.garrickadenbuie.com/project/tidyexplain/images/left-join.gif")
+```
+
+---
+
+### Outer Join Examples: Right Join  
+
+* A right join keeps all observations in y.  
+* Equivalent to doing a Left Join swapping x and y.  
+* Code example:  
+```{r, eval = FALSE}
+right_join(x, y, by = "key")
+```
+
+
+```{r, out.height = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("https://www.garrickadenbuie.com/project/tidyexplain/images/right-join.gif")
+```
+
+---
+
+
+### Mutating Joins: Inner Join  
+
+* An inner join matches pairs of observations whenever their keys are equal.
+* Code example:  
+```{r, eval = FALSE}
+inner_join(x, y, by = "key")
+```
+
+```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://www.garrickadenbuie.com/project/tidyexplain/images/inner-join.gif')
+```
+
+---
+
+
+
+
+### The Perils of Duplicate Keys  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/duplicate_keys.png')
+```
+
+**Note**: When you join duplicated keys, you get all possible combinations!
+
+$\Rightarrow$  Remove duplicates with `distinct()`
+
+
+---
+
+## Filtering Joins  
+
+Use a "Filtering Join" to filter one table against the rows of another.  
+* Useful for determining which rows in a table 
+
+    + *Have* a match (`semi_join()`)  
+
+    + Do *not* have a match (`anti_join()`)
+
+---
+
+## Kinds of Filtering Joins  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/filtering_joins.png')
+```
+
+---
+
+## Kinds of Filtering Joins: Semi Join
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://www.garrickadenbuie.com/project/tidyexplain/images/semi-join.gif')
+```
+
+---
+## Kinds of Filtering Joins: Anti Join
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://www.garrickadenbuie.com/project/tidyexplain/images/anti-join.gif')
+```
+
+
+---
+
+## Visualizing Joins in Soccer Data  
+
+
+```{r, out.width = '150%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/soccer_players_join_image.png')
+```
+
+
+---
+
+## Questions for Soccer Joins  
+
+Thought experiment: For these two tables, think about what tibble would be produced by each of the 6 joins.  Draw the tible you expect to be produced and answer the following?  
+
+1) How many rows and columns? 
+
+2) Which rows are included/excluded?  
+
+3) Are NA values produced by join? Where?
+
+4) Which columns are included/excluded?
+
+---
+
+## Reflection Questions
+
+1) Compare/contrast the joins. Think of situations where you might prefer one over the other.    
+
+2) The filtering join `semi_join()` is most similar to which of the mutating joins? Why?   

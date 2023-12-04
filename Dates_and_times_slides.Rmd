@@ -1,0 +1,223 @@
+---
+title: "Chapter 16 Dates and Times"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(forcats)
+library(lubridate)
+```
+
+
+# Outline
+
+* Problems with dates and times  
+
+* Parsing functions
+
+* Intervals, periods, and durations  
+
+---
+
+# Factors Review
+
+* Be careful about piping with factors. Why?
+
+--
+
+* What is the difference between `fct_count()` and `fct_unique()`?
+
+--
+
+* Compare and contrast `fct_infreq()` and `fct_reorder()`?
+
+--
+
+* Income is recorded in 20 narrow categories but I want to regroup to have just 4 categories. 
+What `fct_xxx()` function should I use?
+
+--
+
+* How do you tell R to drop empty factor levels that do not occur in the data?   
+    + How could this happen?
+
+---
+
+.pull-left[
+# Dates and
+![Dates Image](figures/dates.jpeg)
+]
+
+.pull-right[
+# Thyme?
+![Thyme Image](figures/thyme.jpeg)
+
+]
+
+---
+
+# Dates and Times are Challenging! 
+
+* Many formats for writing times
+
+* Leap years (and leap seconds!)
+
+* Irregular months
+
+* Time zones
+
+* Daylight savings time (when is a day not a day?)
+
+
+
+---
+
+## Those tricky dates...
+
+```{r}
+parse_date("March 21st, 1992")
+parse_date("12th of Jan, 2016")
+```
+
+---
+## Those tricky dates...
+
+```{r}
+parse_date("1942Jan03")
+parse_date("July041776 0930")
+```
+
+---
+class: inverse, center, top
+
+background-image: url(figures/data_sci_superhero.png)
+background-position: 50% 75%
+background-size: 65% 65%
+
+## **lubridate** to the rescue
+
+
+---
+
+## **lubridate** parsing functions  
+
+```{r}
+mdy("March 21st, 1992")
+dmy("12th of Jan, 2016")
+ymd("1942Jan03")
+mdy_hm("July041776 0930")
+```
+
+---
+
+## Parsing functions
+
+**lubridate** has a series of smart functions for parsing dates that do better than "parse_date()":
+
+* Dates only:  
+    + `ymd()`, `dmy()`, ...   
+  
+* Dates and times:  
+    + `ymd_hms()`, `dmy_hms()`, `dmy_h()`, `ydm_h()`  
+    
+* See the Cheat Sheet and help files for more functions and details  
+
+---
+# Difficult Questions about Dates and Times
+
+
+* What day is one year after January 1, 2019?  
+
+* What day is one month after February 15, 2019?  
+
+* What time is 60 minutes after 1:30 am on March 10, 2019?
+
+    + What is the last day of February?  
+
+### Why are these question difficult?
+
+---
+## **lubridate** has several ways of dealing with these problems
+
+* Answers depend on the starting point
+
+```{r}
+dmy("01-Jan-2019") + years(1)
+dmy("01-Jan-2019") + days(365)
+```
+
+---
+## **lubridate** has several ways of dealing with these problems
+
+* Leap year gives different results
+```{r}
+dmy("01-Jan-2020") + years(1)
+dmy("01-Jan-2020") + days(365)
+```
+
+---
+
+## **lubridate** has several ways of dealing with these problems
+
+```{r}
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") 
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + minutes(60)
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + dminutes(60)
+```
+
+---
+
+## Timespans in **lubridate**  
+
+* **Periods**: track changes in clock times ignoring irregularities
+    + `minutes()`, `years()`, etc.
+    + No `months()` because they're too irregular
+--
+
+* **Durations**: track the passage of physical time
+    + `dminutes()`, `dhours()`, `dweeks()`, etc.
+    + Underlying object stored in seconds
+
+--
+
+* **Intervals**: represent specific intervals of the timeline, 
+bounded by start and end date-times
+
+* Can be confusing $\Rightarrow$ see **lubridate** Cheat Sheet for helpful examples
+
+---
+
+## Other useful functions: Rounding date-times  
+
+
+```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/rounding_dates.png')
+```
+
+---
+class: inverse, center, middle
+
+# Your turn: Complete the tutorial on rstudio.kzoo.edu
+
+
+
+
+
+

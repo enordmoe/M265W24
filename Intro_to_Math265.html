@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to Data Science</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introduction to Data Science
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+# What is Data Science? 
+
+## A Picture is Worth 1000 Words
+
+
+&lt;img src="figs/Intro_to_Math265/r4ds_diagram.png" width="100%" style="display: block; margin: auto;" /&gt;
+---
+
+
+## What you will learn about in this class
+
+* Importing data
+--
+
+* Wrangling data  
+    - Tidying
+--
+    - Transforming
+--
+
+* Visualization (using **ggplot2**)
+--
+
+* Modeling
+--
+
+* Communication
+    - Reproducible project sharing using GitHub   
+    - Reproducible documents using R Markdown reports
+--
+
+* ...and some R programming  
+---
+
+class: center, middle
+background-image: url(figs/Intro_to_Math265/r4ds_diagram_overlay.png)
+background-size: contain
+
+???
+* Programming skills you may or may not have seen before such as creating new functions, working with vectors and arrays, and using loops and conditionals will be helpful in most of the steps of a serious data science project.   
+* Once we get into the course a bit, we'll spend a few classes focusing on these techniques.
+
+---
+class: center, middle
+background-image: url(figs/Intro_to_Math265/data_wrangler.png)
+background-size: contain
+
+???
+
+By the end of this class, you should be a data wrangler.
+
+
+---
+# R and RStudio 
+
+![:scale 10%](figs/Intro_to_Math265/stickers/R_logo.svg.png) is the statistical programming language.
+
+
+--
+
+
+![:scale 10%](figs/Intro_to_Math265/stickers/RStudio.png) is the IDE (Integrated Development Environment). 
+
+--
+
+.center[![:scale 75%](figs/Intro_to_Math265/engine-dashboard.png)]
+
+Source: moderndive.com
+
+
+---
+
+# And a little help from their friends  
+![:scale 10%](figs/Intro_to_Math265/stickers/forcats.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/ggplot2.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/knitr.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/lubridate.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/pipe.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/purrr.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/readr.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/rmarkdown.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/rvest.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/shiny.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/stringr.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/tibble.png)
+![:scale 10%](figs/Intro_to_Math265/stickers/tidyr.png)
+
+* Many fall under the umbrella of the 
+
+.center[![:scale 10%](figs/Intro_to_Math265/stickers/tidyverse.png)]
+
+
+???
+
+* R is the engine, RStudio is the car body  
+* Packages are customizations  
+
+---
+
+# What you will not learn in this class
+
+&gt; - Python and other languages      
+&gt; - Techniques for Big Data  
+&gt; - Machine Learning  
+&gt; - Statistical inference (confidence intervals and tests of significance) 
+
+???
+
+* Focus on use of R; might not always be the best tool available, but this approach will let us go deep rather than flitting from one language to another. R allows for "tailored grammars" for the data science processes.
+* Why no big data? Develop tools that can be applied to bigger problems.   
+* Machine learning? It's a different course, one that Prof Erdi has taught.  
+* Stat inference: no emphasis on hypothesis testing. Two areas of statistics: Descriptive Statistics and Inferential Statistics.  
+    - Mention 80/20 rule for stats anaylses
+
+---
+
+# What you also will not learn in this class  
+
+
+* Base graphics in R (only used a little here)
+
+* The **mosaic** package
+
+* **ggformula** syntax for graphics (as used in MATH 260)
+
+???
+
+Especially relevant for those who have taken other courses with me.
+
+
+---
+class: inverse, center, middle
+
+# Version Control and Collaboration
+
+---
+## You already know a little about version control if you've used ...
+
+- Google drive
+
+- Dropbox
+
+- Microsoft Word with Track Changes
+
+- Other services with "version history"
+
+
+---
+
+# Git and GitHub
+
+.pull-left[
+&lt;img src="img/git-logo.png" width="25%" /&gt;
+- Git is a version control system -- like “Track Changes” features from Microsoft Word, on steroids
+
+- It's not the only version control system, but it's a very popular one
+
+- Was created by Linus Torvalds in 2005
+]
+.pull-right[
+&lt;img src="img/GitHub_Logo.png" width="25%" /&gt;
+- GitHub is the home for your Git-based projects on the internet -- like Dropbox but much, much better
+
+- We will use GitHub as a platform for submitting homework and collaboration on projects
+]
+
+---
+class: top, center
+background-image: url("https://devmountain.com/wp-content/uploads/2022/01/Gitvs_Github-1a-1.jpg")
+background-size: 70%
+
+.left[.footnote[Source: https://blog.devmountain.com/git-vs-github-whats-the-difference/]]
+
+---
+
+## Versioning
+
+&lt;img src="img/lego-steps.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+Source: [Data Science in a Box](https://datasciencebox.org/)
+???
+
+Note that in a real construction project, progress is not so linear. There may be work going on in several parts of the building.
+---
+
+## Versioning
+### with human readable commit messages
+
+&lt;img src="img/lego-steps-commit-messages.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+???
+
+
+---
+
+## Why do we need version control?
+
+&lt;img src="img/phd_comics_vc.gif" width="25%" style="display: block; margin: auto;" /&gt;
+
+* Document project
+* Facilitate team collaboration
+* Share work
+
+
+---
+
+## How will we use Git and GitHub?
+
+&lt;img src="img/whole-game-01_265.png" width="100%" /&gt;
+
+---
+
+## How will we use Git and GitHub?
+
+&lt;img src="img/whole-game-02_265.png" width="100%" /&gt;
+
+---
+
+## How will we use Git and GitHub?
+
+&lt;img src="img/whole-game-03_265.png" width="100%" /&gt;
+
+---
+
+## How will we use Git and GitHub?
+
+&lt;img src="img/whole-game-04_265.png" width="100%" /&gt;
+
+---
+
+# Git and GitHub tips
+
+- Becoming Git masters is beyond the scope of the course.
+
+- Using the RStudio server to interface with GitHub will allow us to focus on just a few commands and avoid command line complications.
+
+--
+- For much more on working with git and R, consult  [happygitwithr.com](http://happygitwithr.com/). 
+
+---
+
+## In-Class Activity
+
+* Creating your first repository
+
+* Your first commit
+
+* Finding your way around on the GitHub site
+
+
+
+&lt;br&gt;
+
+*Next time...*
+
+*We get RStudio and GitHub to exchange credentials...*
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+---
+title: "Chapter 22-23 Model Intro and Basics"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache = TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rvest)
+library(modelr)
+library(purrr)
+```
+
+
+## Outline
+
+* Models  
+
+* Distance Functions   
+
+* Predictions    
+
+* Residuals  
+
+* Optimization  
+
+---
+
+## Our Framework 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/r4ds_diagram.png')
+```
+
+---
+## Models  
+
+* The goal of modeling is to provide a simple low-dimensional summary of a dataset.  
+
+    + Approximates reality 
+    
+    + Always wrong  
+    
+    + Make predictions
+    
+> "All models are wrong, but some are useful."
+>
+> --- John Tukey 
+
+---
+
+## Approaches to Modeling  
+
+* Exploratory analysis  
+
+    + Natural extension of Exploratory Data Analysis (EDA)   
+    
+* Confirmatory analysis  
+
+    + Statistical inference  
+    
+    + Split data into: training, query, and test sets  
+  
+---
+
+## Model Basics  
+
+1. The model family  
+
+    + Linear: $y = a_0 + a_1 x$   
+    
+    + Exponential: $y = a_0 \cdot a_1^ x$  
+    
+    + Semi-log: $y = a_0 + a_1 \log (x)$
+    
+2. Fitted models  
+
+    + Use data to estimate the family member that "best" describes the data 
+    
+    + Fitted linear model: $\hat y = \hat a_0 + \hat a_1 x$
+
+---
+
+## Model Exploration  
+
+* See `rstudio.kzoo.edu` exercise  
+
+  + Estimate  
+      - Coefficients 
+  
+  + Visualize
+      - Predictions
+  
+  + Assess fit 
+      - Residuals
+

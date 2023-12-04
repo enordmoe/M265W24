@@ -1,0 +1,172 @@
+---
+title: "Chapter 10 Tibbles"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+
+```{r packages, echo=FALSE}
+library(tidyverse)
+```
+
+
+
+# Characteristics of Data Sets
+
+![](figs/data_set_notate.png)
+---
+
+# Tibble
+
+Not this!
+
+```{r, out.width ="50%", fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics("figs/nokibbles.png")
+```
+
+---
+
+# Tibble 
+Not this  
+
+.scroll-box-16[
+```{r}
+mtcars
+```
+]
+---
+
+# Tibble  
+
+But this is now a tibble:
+```{r}
+as_tibble(mtcars)
+```
+
+---
+
+## Tibbles  
+
+* Better methods for handling data frames 
+
+--
+
+* Printing defaults:  
+    + First 10 rows 
+    + All columns that fit on the screen  
+    + Shows all data types
+--
+
+* `tibble.print` behavior can be modified using `options()`  
+
+---
+
+## Creating Tibbles
+
+* Tibbles are created automatically when importing data using **readr** from the **tidyverse**
+
+* Quick tibbles can be created interactively by columns:  
+
+.pull-left[
+```{r}
+tibble(
+x = 1:5,
+y = 1,
+z=x^2+y )
+```
+]
+
+--
+
+.pull-right[
+* `tibble()` command:  
+    + Uses recycling of shorter columns (`y` above)  
+    + Allows accessing earlier column names (`z` above)
+]
+---
+
+# Creating tibbles
+
+* Tibbles can also be created interactively by row using the `tribble()` command:  
+
+.pull-left[
+```{r}
+agents <- tribble(
+~ID, ~Name, ~Height, 
+#--|--|---- 
+"007", "Bond", 1.83, 
+"86", "Smart", 1.75
+)
+agents
+```
+]
+--
+.pull-right[
+* `tribble()` command
+  + Use `#` to show header  
+  + Commas to separate values 
+  + Put character variables in quotes
+]
+
+---
+
+# Subsetting 
+
+Various ways to access parts of the `tibble()` 
+
+```{r, eval = FALSE}
+# Extract by name
+agents$Name
+## [1] "Bond"  "Smart"
+
+# OR
+agents["Name"]
+## # A tibble: 2 x 1
+##   Name 
+##   <chr>
+## 1 Bond 
+## 2 Smart
+
+# By position 
+agents[[3]]
+## [1] 1.83 1.75
+```
+
+* Avoid use of 2-dimensional bracket indexing where possible  
+    + Always produces a *tibble*
+
+---
+
+# Tibbles and Special Names
+
+* Tibbles can use backticks to store  otherwise illegal names 
+  + Called non-syntactic names
+
+```{r}
+tb <- tibble(
+`:)` = "smile", ` ` = "space", `2000` = "number"
+)
+tb
+```
+
+* Helpful when cleaning up messy data
+
+```{r}
+tb$`:)`
+```
+

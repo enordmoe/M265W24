@@ -1,0 +1,283 @@
+---
+title: "Data visualisation Part III"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache = TRUE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+# Review from Last Time
+
+* How would you decide between `facet_wrap()` and `facet_grid()`?
+
+--
+
+* Name two types of smoothers that R can add to a scatterplot.
+
+--
+
+* What is the default `stat` for `geom_bar`?
+
+---
+
+# Warm-up Question  
+
+Question: What will this code chunk produce?
+
+```{r, message = FALSE, fig.height = 3, eval=FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~drv) 
+```
+
+
+---
+
+# Topics for Today
+
+* Position  adjustments
+
+* Coordinate systems
+
+* The Layered Grammar of Graphics
+
+---
+
+# Position Adjustments
+
+* Position adjustments apply tweaks to the position of elements within a layer.
+
+--
+
+* For Bar Charts:  
+    * `position_stack()`: stack overlapping bars on top of each other.
+    * `position_fill()`: stack overlapping bars, scaling so the heights sum to 1.
+    * `position_dodge()`: place overlapping bars side-by-side.
+
+---
+
+# Bar chart position examples
+## Example 1 Default Position  
+
+```{r, fig.height=4}
+# To illustrate, save the base layer as the object and add adjustments
+p <- ggplot(mpg, aes(class, fill = drv)) 
+p + geom_bar()
+```
+
+---
+
+# Bar chart position examples 
+## Example 2 Stacked Bar chart
+
+```{r, fig.height = 3}
+p + geom_bar(position = position_stack())
+# OR use
+# p + geom_bar(position = "stack")
+```
+
+---
+
+# Bar chart position examples
+## Example 3 Stacked Showing Proportions  
+
+```{r, fig.height = 3}
+p + geom_bar(position = position_fill())
+# OR use
+# p + geom_bar(position = "fill")
+```
+
+---
+
+# Bar chart position examples
+## Example 4 Side-by-side Bar Charts
+
+```{r, fig.height=3}
+p + geom_bar(position = position_dodge())
+# OR use
+# p + geom_bar(position = "dodge")
+```
+
+---
+
+# Position Adjustments  (cont'd)
+
+Other commonly used position adjustments
+
+* For point plots such as scatterplots (or other situations with overlapping)
+
+    + `position_jitter()`: add a little random noise to every position.
+    
+        - Amount of jittering can be controlled using `width` and `height` arguments
+        
+    + `position_nudge()`: move points by a fixed offset  (say, for placing labels)  
+
+---
+
+# Other position examples
+## Example 1a Standard Scatterplot
+
+```{r, fig.height = 4}
+p2 <- ggplot(mpg, aes(cty, hwy))
+p2 + geom_point()
+```
+
+---
+
+# Other position examples
+## Example 1b Scatterplot with Jittering
+
+```{r, fig.height = 3}
+p2 + 
+  geom_point(position = position_jitter())  #<<
+```
+
+**Note:** Using the function form `position_jitter()` allows you to add arguments inside to control the amount of jittering.
+
+---
+
+# Other position examples
+## Example 2a Point plot before `jitter`
+
+```{r, fig.height = 3}
+p3 <- ggplot(mpg, aes(class, hwy)) 
+p3 + geom_point()
+```
+
+---
+
+# Other position examples
+## Example 2b Point plot after horizontal jittering
+
+```{r, fig.height = 3}
+p3 + 
+  geom_point(position = position_jitter(width = 0.1)) #<<
+```
+
+---
+
+# Recommendations
+
+* Experiment with combinations of adjustments and parameter settings to see what works.
+
+--
+
+* Trial and error but reproducible
+
+--
+
+* Can use the `seed` argument of `position_jitter()` to make the jitter reproducible
+
+---
+
+# Coordinate Systems  
+
+* A coordinate system (**coord**)  maps the position of objects onto the plane of the plot. 
+
+* Complicated part of **ggplot2**
+
+* A few useful cases:  
+    + `coord_cartesian()` - useful for zooming in without clipping points
+    + `coord_flip()` - interchange x and y, often useful for legibility or convention
+    + `coord_polar()` -  good to know when you need polar coordinates:)
+    
+---
+    
+# Example 1a 
+## Interchanging x and y for a bar chart (before)
+
+```{r, fig.height = 4}
+p4 <- ggplot(mpg, aes(x=manufacturer))
+p4 + geom_bar()
+```
+
+---
+
+# Example 1b: Interchanging x and y for a bar chart (after)
+
+```{r, fig.height = 4}
+p4 + geom_bar() + 
+  coord_flip() #<<
+```    
+
+---
+
+# Example 2a
+## Using `coord_cartesian()` to Zoom in (before)
+
+```{r, fig.height = 4}
+p5 <- ggplot(mpg, aes(x = displ, y = hwy))
+p5 + geom_point()
+```
+
+---
+
+# Example 2b
+## Using `coord_cartesian()` to Zoom in (after)  
+
+```{r, fig.height = 4}
+p5 + geom_point() + 
+  coord_cartesian(xlim = c(2, 3), ylim = c(20, 35)) #<<
+```
+
+
+---
+
+# The Layered Grammar of Graphics  
+
+The **ggplot2** code template:  
+
+```{r, eval = FALSE}
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>,
+     position = <POSITION>
+)+ 
+  <COORDINATE_FUNCTION> + 
+  <FACET_FUNCTION>
+```
+
+---
+
+# The Layered Grammar of Graphics Summary
+
+* Flexible format
+
+--
+
+* Not all layers need be specified
+
+--
+
+* Often have alternate equivalent formulations for the same graph  
+    + `geom_bar()` $\Leftrightarrow$ `stat_count()`  
+    + `position = position.jitter` $\Leftrightarrow$ `geom_jitter()`
+
+---
+
+class: inverse
+
+# Minilab Group Investigation  
+
+* Carry out a group investigation of the Superheroes data set.   
+
+* The description/template is provided in the Superheroes Data Viz Minilab project distributed to you via GitHub repository.
+

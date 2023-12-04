@@ -1,0 +1,269 @@
+---
+title: "Data Transformation Part I"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, fig.retina = 3)
+```
+
+
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(nycflights13)
+heroes <- read_csv(file = "data/heroes.csv", 
+                   col_types = cols(
+                     name = col_character(),
+                     gender = col_factor(),
+                     hair_color = col_factor(),
+                     height = col_double(),
+                     publisher = col_factor(),
+                     alignment = col_factor(),
+                     weight = col_double()
+)
+)
+```
+
+# Review from Last Time
+
+* What `position` is used to create side-by-side bar charts?
+
+--
+
+* What layer command will interchange the x and y axes of an existing graph?
+
+--
+
+* What problem does `position_jitter()` solve?
+
+---
+
+## Last Time: Layered Grammar of Graphics  
+
+The **ggplot2** code template:
+
+```{r, eval = FALSE}
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>,
+     position = <POSITION>
+)+ 
+  <COORDINATE_FUNCTION> + 
+  <FACET_FUNCTION>
+```
+
+---
+
+# Data Set Examples: **mpg**  
+
+```{r}
+mpg
+```
+
+---
+
+# Data Set Examples: **flights**
+
+```{r}
+flights
+```
+
+---
+
+# Data Set Examples: **heroes**
+
+```{r}
+heroes
+```
+
+---
+
+# Variable Types
+
+Seven data types in R:
+
+* `int` : integer
+--
+
+* `dbl`: for double-precision, or real numbers
+
+--
+
+* `chr`:  character vectors, or strings
+
+--
+
+* `dttm`: date-times (a date + a time)
+
+--
+
+* `lgl`: logical contains only TRUE or FALSE values
+
+--
+
+* `fctr`: factors used to represent categorical variables
+
+--
+
+* `date`: dates
+
+---
+
+## Today: A Grammar for Data Wrangling  
+
+While the object is always *data*, R4DS identifies a grammar for data wrangling that uses five *verbs*:
+
+* `filter()`: picks observations by their values
+
+--
+
+* `select()`: picks variables by their names
+
+--
+
+* `arrange()`: reorders rows
+
+--
+
+
+* `mutate()`: creates new variables from existing variables
+
+--
+
+* `summarise()`: collapses many values down to a single summary
+
+--
+
+$\Rightarrow$ Used with the `group_by()` function to operate group-by-group
+
+---
+
+# filter() 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/filter.png')
+```
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+# Operators: Tools of the Trade
+
+* Comparison  
+
+    + Equality: `==`
+    
+    + Inequality:  `>`, `>=`, `<`, `<=`,  `!=`
+
+--
+
+* Logical  
+
+    + AND: `&` 
+     
+    + OR: `|` 
+    
+    + NOT: `!`  
+    
+---
+
+## `select()`
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/select.png')
+```
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+# `select()` Helper Functions 
+
+For selecting specific variables or groups of variables with similar names or distinguishing strings: 
+
+* `starts_with("abc")`: matches names that begin with "abc"
+
+--
+
+* `ends_with("xyz")`: matches names that end with "xyz"
+
+--
+
+* `contains("ijk")`: matches names that contain "ijk"
+
+--
+
+* `matches("(.)\\1")`: selects variables that match a "regular expression" ( more about these later)
+
+--
+
+* `num_range("x", 1:3)`: matches x1, x2 and x3.
+
+---
+
+# Connect `filter()` and `select()` with the Pipe 
+
+
+![](https://magrittr.tidyverse.org/logo.png)
+
+
+---
+
+## `arrange()` 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/arrange.png')
+```
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+## `mutate()` 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/mutate.png')
+```
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]>
+
+
+---
+# `mutate()` Commands  
+
+* `mutate()`: computes and adds new columns to the end of your dataset   
+
+* `transmute()`: compute and keep only the newly computed variables  
+
+---
+# summarise() 
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/summarise.png')
+```
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+
+
+
+
+
+
+
+

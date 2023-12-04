@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Transformation Part II</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Data Transformation Part II
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+
+# Review from Last Time
+
+1. Compare `filter()` and `select()`?
+
+    + `filter(df, condition1, condition2)`
+    
+    + `select(df, condition1, condition2)`
+    
+--
+
+2. Compare `arrange()` and `select()`   
+
+    + How are they different? similar?
+    
+--
+
+3. Compare `arrange()` and `filter()`
+
+    + How are they different? similar?
+
+---
+
+## Review: A Grammar for Data Wrangling  
+
+While the object is always *data*, R4DS identifies a grammar for data wrangling that uses five *verbs*  :  
+
+* `filter()`: picks observations by their values  
+
+* `select()`: picks variables by their names  
+
+* `arrange()`: reorders rows 
+
+* `mutate()`: creates new variables from existing variables  
+
+* `summarise()`: collapses many values down to a single summary   
+
+`\(\Rightarrow\)` used with the `group_by()` function to operate group-by-group
+
+
+
+---
+
+## Connect data wrangling commands  with the Pipe
+
+.pull-left[
+* The `%&gt;%` operator in Tidyverse functions is called the pipe operator.   
+
+* "Pipe" the output of the previous line to the next line  
+
+* Pronounce the pipe `%&gt;%` as: "and then"
+
+* When combined with **ggplot** functions, be sure to use `+` for  layers of plots.
+]
+.pull-right[
+
+&lt;img src="https://magrittr.tidyverse.org/logo.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+
+
+## Review: How does a pipe work?
+
+* Think of code using the pipe as a sequence of actions:
+    + Find key, unlock car, start car, drive to school, park.  
+--
+
+* *Expressed* as a set of nested functions:
+
+
+```r
+park(drive(start_car(find("keys")), to = "campus"))
+```
+
+--
+
+* Written code using pipes is easier to read:
+
+
+```r
+find("keys") %&gt;%
+  start_car() %&gt;%
+  drive(to = "campus") %&gt;%
+  park()
+```
+
+.footnote[
+Source: datasciencebox.org
+]
+
+---
+
+# Fuel Economy Data: `vehicles`  
+
+`vehicles` data is included in the **fueleconomy** R package:  
+
+* Fuel economy data from the EPA, 1985-2015.
+
+* 33,442 observations and 12 variables  
+
+* Includes common and uncommon vehicles
+
+---
+
+## The Data Set
+
+
+```r
+library(fueleconomy)
+vehicles
+```
+
+```
+## # A tibble: 33,442 × 12
+##       id make  model        year class trans drive   cyl displ fuel    hwy   cty
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 13309 Acura 2.2CL/3.0CL  1997 Subc… Auto… Fron…     4   2.2 Regu…    26    20
+##  2 13310 Acura 2.2CL/3.0CL  1997 Subc… Manu… Fron…     4   2.2 Regu…    28    22
+##  3 13311 Acura 2.2CL/3.0CL  1997 Subc… Auto… Fron…     6   3   Regu…    26    18
+##  4 14038 Acura 2.3CL/3.0CL  1998 Subc… Auto… Fron…     4   2.3 Regu…    27    19
+##  5 14039 Acura 2.3CL/3.0CL  1998 Subc… Manu… Fron…     4   2.3 Regu…    29    21
+##  6 14040 Acura 2.3CL/3.0CL  1998 Subc… Auto… Fron…     6   3   Regu…    26    17
+##  7 14834 Acura 2.3CL/3.0CL  1999 Subc… Auto… Fron…     4   2.3 Regu…    27    20
+##  8 14835 Acura 2.3CL/3.0CL  1999 Subc… Manu… Fron…     4   2.3 Regu…    29    21
+##  9 14836 Acura 2.3CL/3.0CL  1999 Subc… Auto… Fron…     6   3   Regu…    26    17
+## 10 11789 Acura 2.5TL        1995 Comp… Auto… Fron…     5   2.5 Prem…    23    18
+## # … with 33,432 more rows
+```
+
+
+---
+
+##  Variables 
+
+```{r"}
+glimpse(vehicles)
+```
+
+
+
+---
+
+## Filter for multiple conditions
+
+
+```r
+filter(vehicles, make == "Ford", model == "Mustang", year == 2013)
+```
+
+```
+## # A tibble: 5 × 12
+##      id make  model    year class      trans drive   cyl displ fuel    hwy   cty
+##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 32244 Ford  Mustang  2013 Subcompac… Auto… Rear…     6   3.7 Regu…    31    19
+## 2 32245 Ford  Mustang  2013 Subcompac… Manu… Rear…     6   3.7 Regu…    29    19
+## 3 32246 Ford  Mustang  2013 Subcompac… Auto… Rear…     8   5   Regu…    25    18
+## 4 32247 Ford  Mustang  2013 Subcompac… Manu… Rear…     8   5   Regu…    26    15
+## 5 32391 Ford  Mustang  2013 Subcompac… Manu… Rear…     8   5.8 Prem…    24    15
+```
+
+
+
+---
+
+## Use Pipe to String Commands to Select Variables 
+
+* Note that the data set is passed as the  implied first argument to `filter()` and `select`
+
+
+```r
+vehicles %&gt;%
+  filter(make == "Ford", model == "Mustang", year == 2013) %&gt;%
+* select(trans, cty, hwy)
+```
+
+```
+## # A tibble: 5 × 3
+##   trans             cty   hwy
+##   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
+## 1 Automatic 6-spd    19    31
+## 2 Manual 6-spd       19    29
+## 3 Automatic 6-spd    18    25
+## 4 Manual 6-spd       15    26
+## 5 Manual 6-spd       15    24
+```
+
+
+
+---
+
+## Combine the pipe with `distinct()` to filter for unique rows 
+
+
+```r
+vehicles %&gt;% 
+  select(make, model) %&gt;% 
+* distinct() %&gt;%
+  arrange(make, model)
+```
+
+```
+## # A tibble: 3,264 × 2
+##    make  model      
+##    &lt;chr&gt; &lt;chr&gt;      
+##  1 Acura 2.2CL/3.0CL
+##  2 Acura 2.3CL/3.0CL
+##  3 Acura 2.5TL      
+##  4 Acura 2.5TL/3.2TL
+##  5 Acura 3.2CL      
+##  6 Acura 3.2TL      
+##  7 Acura 3.5RL      
+##  8 Acura ILX        
+##  9 Acura ILX Hybrid 
+## 10 Acura Integra    
+## # … with 3,254 more rows
+```
+
+
+
+---
+
+# `summarise()` 
+
+&lt;img src="figures/summarise.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+]
+
+---
+
+# Summarise the whole dataset  
+
+
+```r
+vehicles %&gt;% 
+  summarise(mean_cty = mean(cty), med_cty = median(cty))
+```
+
+```
+## # A tibble: 1 × 2
+##   mean_cty med_cty
+##      &lt;dbl&gt;   &lt;dbl&gt;
+## 1     17.5      17
+```
+
+* Sometimes useful but other times could be very misleading  
+
+* Subgroup analysis is more common
+
+
+---
+
+## `summarise()` and `group_by()`  
+
+&lt;img src="figures/group_by.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+]
+
+
+---
+
+## Use `group_by()` to use  `summarise()` with subgroups
+
+.scroll-box-12[
+
+
+```r
+vehicles %&gt;% 
+  group_by(make) %&gt;% 
+* summarise(med_cty = median(cty), ncases = n())
+```
+
+```
+## # A tibble: 128 × 3
+##    make                        med_cty ncases
+##    &lt;chr&gt;                         &lt;dbl&gt;  &lt;int&gt;
+##  1 Acura                          18      269
+##  2 Alfa Romeo                     16       39
+##  3 AM General                     14.5      6
+##  4 American Motors Corporation    16       27
+##  5 ASC Incorporated               14        1
+##  6 Aston Martin                   11      112
+##  7 Audi                           17      772
+##  8 Aurora Cars Ltd                12        1
+##  9 Autokraft Limited              14        4
+## 10 Azure Dynamics                 62        2
+## # … with 118 more rows
+```
+]
+
+.footnote[
+Source: Data Transformation with **dplyr**: CHEAT SHEET
+]
+---
+
+## But notice `group_by()` does little by itself
+.scroll-box-16[
+
+```r
+vehicles %&gt;% 
+  group_by(make)
+```
+
+```
+## # A tibble: 33,442 × 12
+## # Groups:   make [128]
+##       id make  model        year class trans drive   cyl displ fuel    hwy   cty
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 13309 Acura 2.2CL/3.0CL  1997 Subc… Auto… Fron…     4   2.2 Regu…    26    20
+##  2 13310 Acura 2.2CL/3.0CL  1997 Subc… Manu… Fron…     4   2.2 Regu…    28    22
+##  3 13311 Acura 2.2CL/3.0CL  1997 Subc… Auto… Fron…     6   3   Regu…    26    18
+##  4 14038 Acura 2.3CL/3.0CL  1998 Subc… Auto… Fron…     4   2.3 Regu…    27    19
+##  5 14039 Acura 2.3CL/3.0CL  1998 Subc… Manu… Fron…     4   2.3 Regu…    29    21
+##  6 14040 Acura 2.3CL/3.0CL  1998 Subc… Auto… Fron…     6   3   Regu…    26    17
+##  7 14834 Acura 2.3CL/3.0CL  1999 Subc… Auto… Fron…     4   2.3 Regu…    27    20
+##  8 14835 Acura 2.3CL/3.0CL  1999 Subc… Manu… Fron…     4   2.3 Regu…    29    21
+##  9 14836 Acura 2.3CL/3.0CL  1999 Subc… Auto… Fron…     6   3   Regu…    26    17
+## 10 11789 Acura 2.5TL        1995 Comp… Auto… Fron…     5   2.5 Prem…    23    18
+## # … with 33,432 more rows
+```
+
+]
+
+---
+
+## Facts about `summarise()` 
+
+* Displays results for `group_by()` groups in ascending order  
+
+* Can be used with many functions and variations (see the Data Transformations Cheat sheet)  
+
+    + Functions: `mean()`, `median()`, `n()`, `n_distinct()`, `sd()`, `IQR()`, etc.
+
+    + Variations: `count()`, `tally()`, `summarise_all()`  
+    
+
+---
+
+## Can be combined with other verbs using the pipe operator
+
+.scroll-box-16[
+
+```r
+vehicles %&gt;%
+  filter(year == 2010) %&gt;%
+  group_by(make, model) %&gt;% 
+  summarise(avg_hwy = mean(hwy)) %&gt;%
+  arrange(desc(avg_hwy)) %&gt;% 
+* ungroup()
+```
+
+```
+## # A tibble: 628 × 3
+##    make      model             avg_hwy
+##    &lt;chr&gt;     &lt;chr&gt;               &lt;dbl&gt;
+##  1 Toyota    Prius                  48
+##  2 Honda     Civic Hybrid           45
+##  3 Honda     Insight                43
+##  4 smart     fortwo cabriolet       41
+##  5 smart     fortwo coupe           41
+##  6 Chevrolet Cobalt XFE Coupe       37
+##  7 Chevrolet Cobalt XFE Sedan       37
+##  8 Pontiac   G5 XFE                 37
+##  9 BMW       335d                   36
+## 10 Ford      Fusion Hybrid FWD      36
+## # … with 618 more rows
+```
+]
+
+* Note use of `ungroup()`; try taking it out and see what happens? What do you think it's doing?
+
+
+---
+
+## Combine with `ggplot()`: Example 1 
+
+
+```r
+vehicles %&gt;%
+  filter(make %in% c("Chevrolet", "Ford", "Toyota")) %&gt;%
+  group_by(make, year) %&gt;% 
+  summarise(avg_hwy = mean(hwy)) %&gt;%
+  ggplot(aes(x = year, y = avg_hwy, color = make)) +
+  geom_line() +
+  labs(title = "Trend in Highway Mileage for Three Makes of Vehicles")
+```
+
+![](Data_transf_part2_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+
+## Combine with `ggplot()`: Example 2 
+
+
+```r
+vehicles %&gt;%
+  filter(make %in% c("Chevrolet", "Ford", "Toyota"), year %in% c(2000, 2005, 2010)) %&gt;%
+  group_by(make, year) %&gt;% 
+  summarise(avg_hwy = mean(hwy)) %&gt;%
+  ggplot(aes(x = make, y = avg_hwy, fill = factor(year))) +
+  geom_col(position = position_dodge()) + 
+  labs(title = "Average Highway Mileage by Make and Year", x = "", y = "MPG")
+```
+
+![](Data_transf_part2_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+---
+
+### Combine with `ggplot()`: Example 3 
+
+
+```r
+# A peak ahead introducing boxplots  
+vehicles %&gt;%
+  group_by(make, year) %&gt;% 
+  summarise(avg_hwy = mean(hwy), n = n()) %&gt;% 
+  filter(n &gt;= 5) %&gt;% 
+  ggplot(aes(x = factor(year), y = avg_hwy, fill= factor(year))) + 
+  geom_boxplot() + 
+  scale_x_discrete(breaks = seq(1985, 2015, 5)) +
+  scale_fill_discrete(guide = FALSE) + # suppress the legend 
+  labs(x = "", y = "MPG", title = "Average Highway Mileage Variation Across Models and Time")
+```
+
+![](Data_transf_part2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+---
+class:inverse, center, middle
+
+# Now it's your turn  
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

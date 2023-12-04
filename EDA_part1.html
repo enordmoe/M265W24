@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Exploratory Data Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Exploratory Data Analysis
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Review from Last Time
+
+1. Compare and contrast `mutate()` and `summarise()`?
+
+--
+
+2. What do the commands `count()` and `tally()` do? How are they related to `summarise()`?
+
+--
+
+3. What does the `group_by()` command do?
+
+
+---
+
+# Characteristics of Data Sets
+
+![](figs/data_set_notate.png)
+
+---
+
+# EDA Cycle 
+
+
+![](figs/EDA_cycle.png)
+
+.footnote[Source: R4DS]
+
+---
+
+#  Two Key Goals
+
+Understand: 
+
+* Variation within variables
+    + Center, spread, shape, unusual observations
+    + Overall and within groups
+
+--
+
+* Covariation among variables
+    + Form, direction, and strength of relationships
+
+---
+
+# Graphical Methods for Exploring Variation
+
+* Categorical variables
+    + Bar charts `geom_bar()` and `geom_col()`
+    
+--
+    
+* Continuous variables
+    + Histograms: `geom_histogram()`
+    + Frequency polygons: `geom_freqpoly()`
+    
+---
+
+# Exploring the Vehicles Data with Bar Charts
+
+
+```r
+ggplot(vehicles) + 
+  geom_bar(aes(x = make))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+* Consider only the common makes?
+
+---
+
+#  Use the common makes data
+
+
+```r
+cardata &lt;- left_join(common, vehicles)
+ggplot(cardata) + 
+  geom_bar(aes(x = make)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+#  Reorder bars and graph proportions
+
+* The code to pre-process to get the names in order:
+
+.scroll-box-14[
+
+```r
+ordered_carnames &lt;- cardata %&gt;% 
+  count(make, sort = TRUE) %&gt;%
+  pull(make)
+ordered_carnames
+```
+
+```
+##  [1] "Ford"              "Chevrolet"         "Dodge"            
+##  [4] "Toyota"            "GMC"               "Nissan"           
+##  [7] "Mitsubishi"        "Volkswagen"        "Honda"            
+## [10] "Audi"              "Hyundai"           "Pontiac"          
+## [13] "Mercury"           "Mazda"             "Jeep"             
+## [16] "Subaru"            "Buick"             "Chrysler"         
+## [19] "Kia"               "Volvo"             "Isuzu"            
+## [22] "BMW"               "Saab"              "Cadillac"         
+## [25] "Plymouth"          "Porsche"           "Oldsmobile"       
+## [28] "Acura"             "Saturn"            "Mercedes-Benz"    
+## [31] "MINI"              "Suzuki"            "Infiniti"         
+## [34] "Lincoln"           "Jaguar"            "Scion"            
+## [37] "Land Rover"        "Lexus"             "Bentley"          
+## [40] "Roush Performance" "Maserati"          "Rolls-Royce"
+```
+]
+---
+
+# The Resulting Graph
+
+
+```r
+ggplot(cardata) + 
+  geom_bar(aes(x = make, y = after_stat(prop), group = 1)) +
+  theme(axis.text.x=element_text(angle=90, hjust=1)) + 
+  scale_x_discrete(limits = ordered_carnames) + 
+  labs(x = "Car Makes", y = "Proportion of All\n  Models Tested")
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+# Frequency table of makes with the most models tested
+
+
+```r
+cardata %&gt;% 
+  count(make, sort = TRUE)
+```
+
+```
+## # A tibble: 42 × 2
+##    make           n
+##    &lt;chr&gt;      &lt;int&gt;
+##  1 Ford        1923
+##  2 Chevrolet   1621
+##  3 Dodge       1334
+##  4 Toyota      1307
+##  5 GMC          741
+##  6 Nissan       700
+##  7 Mitsubishi   617
+##  8 Volkswagen   507
+##  9 Honda        489
+## 10 Audi         364
+## # … with 32 more rows
+```
+
+---
+
+##  Exploring Variability with Histograms
+### The `diamonds` data
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_histogram(aes(x = carat))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+##  Exploring Variability with Histograms
+###  Considerations
+
+* Height represents count for corresponding interval
+
+* Interpret center, spread, shape, unusual observations
+
+* Modify the binwidth to generate more hypotheses
+
+---
+
+class: inverse, center, middle
+
+# Shiny Apps on RStudio
+
+
+### [Diamond data](https://kjytay.shinyapps.io/datasetexplorer1/)
+
+###  [Movie explorer](https://shiny.rstudio.com/gallery/movie-explorer.html)
+
+---
+
+# Histograms with Proportions
+
+To show the  proportions (relative frequency) in each interval, try the following:
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_histogram(aes(x = carat, y = after_stat(count / sum(count))))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+# Frequency Polygons: `geom_freqpoly()`
+
+* An alternative to histograms that is especially useful for comparing groups
+
+* Replace bars with lines whose vertices represent the count for the corresponding interval
+
+---
+
+# Diamonds data frequency polygon  
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_freqpoly(aes(x = carat))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## Frequency polygon with subgroups 
+### Diamonds Data
+
+
+```r
+ggplot(data = diamonds) + 
+  geom_freqpoly(aes(x = carat, color = clarity))
+```
+
+![](EDA_part1_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+**Note:** Heights are NOT additive
+
+---
+
+# Missing data
+
+* Use `is.na()` to check for NA values
+
+* Avoid simply omitting cases with missing/NA values
+
+* Use EDA to compare cases with missing vs non-missing data.
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

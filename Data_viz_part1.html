@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Visualisation Part I</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Data Visualisation Part I
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Topics for Today
+
+* A Brief History of Visualisation
+
+* How to construct a graph (paper and pencil)
+
+* Introduction to the Grammar of Graphics
+
+* Getting started with **ggplot2**
+
+* Visualising a famous data set
+
+* Aesthetics!
+
+---
+
+# Learning Outcomes for Today
+
+* Be able to describe the main ideas of the grammar of graphics.
+
+* Be able to construct a labeled **ggplot2** graph with 3 aesthetics.
+
+* Be able to explain the role of aesthetics in constructing **ggplot2** graphs.
+
+
+---
+
+# Make a Hand-Drawn Graph
+
+*Consider the following data
+
+
+```
+## # A tibble: 10 × 5
+##    manufacturer model                  displ drv     hwy
+##    &lt;chr&gt;        &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1 pontiac      grand prix               3.8 f        28
+##  2 subaru       forester awd             2.5 4        27
+##  3 dodge        caravan 2wd              3.8 f        23
+##  4 volkswagen   gti                      2   f        29
+##  5 dodge        caravan 2wd              3.3 f        24
+##  6 dodge        durango 4wd              4.7 4        12
+##  7 dodge        durango 4wd              5.7 4        18
+##  8 jeep         grand cherokee 4wd       4.7 4        12
+##  9 toyota       land cruiser wagon 4wd   5.7 4        18
+## 10 chevrolet    malibu                   3.6 f        26
+```
+
+**Task:**  Make a hand-drawn graph that shows the relationship between engine displacement (`displ`) and highway mileage (`hwy`). For each point in your graph, identify  the  drivetrain (`drv`) of the vehicle. 
+
+---
+
+## Discussion
+
+&gt;*  What were the steps in your process? 
+
+--
+
+&gt;*  What choices did you need to make?
+
+--
+
+&gt;*  Suppose you had total sales for the model year available for each car. How could you show that on your graph?
+
+
+---
+
+class: center, middle
+
+## "The simple graph has brought more information to the data analyst’s mind than any other device."
+
+
+### --- John Tukey 
+
+![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/John_Tukey.jpg/119px-John_Tukey.jpg)
+
+
+.left[.footnote[Source: https://en.wikipedia.org/w/index.php?curid=17099473]]
+
+---
+
+##  Brief History of Visualization: Leland Wilkinson
+
+![Grammar of Graphics](https://images-na.ssl-images-amazon.com/images/I/41ZIHtc9TJL._SX327_BO1,204,203,200_.jpg) 1999, 2005  
+
+
+---
+
+## The Grammar of Graphics  - Leland Wilkinson
+
+&lt;img src="https://cdn-images-1.medium.com/max/2600/1*MMZuYgeC_YjXNC1r4D4sog.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+&lt;span class = "footnote"&gt; 
+Source: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18]
+&lt;/span&gt;
+
+---
+
+
+## The Grammar of Graphics  - Leland Wilkinson
+
+&lt;img src="figures/1_w1RnmuE7VRK9aCAbtW9KAQ.gif" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+&lt;div class = "footnote"&gt;
+Source: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18
+&lt;/div&gt;
+
+
+---
+
+
+
+##  Brief History of Visualization (cont'd): Hadley Wickham
+
+.pull-left[
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Hadley-wickham2016-02-04.jpg/200px-Hadley-wickham2016-02-04.jpg" width="75%" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+&lt;img src="https://images-na.ssl-images-amazon.com/images/I/31uXd9st7ZL._SX329_BO1,204,203,200_.jpg" width="75%" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+---
+class: top, left, inverse
+background-image: url(img/r-ladies.png)
+background-size: 70% 70%
+
+### But the R community is becoming more diverse
+
+
+---
+
+
+# Introduction to ggplot2
+
+* **ggplot2** implements the grammar of graphics 
+
+*  Basic graphing template 
+
+
+```r
+ ggplot(data = &lt;DATA&gt;) + 
+  &lt;GEOM_FUNCTION&gt;(mapping = aes(&lt;MAPPINGS&gt;)) +
+  other options
+```
+
+1. Begin with the `ggplot()` function  
+    + Construct base coordinate system
+
+1. Add layers 
+
+1. Map variables to aesthetics (visual properties)  
+
+1. Use the `+` sign to connect lines
+
+---
+
+# ggplot2 Example  
+
+Why does this work?
+
+
+```r
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+![](Data_viz_part1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+... but this does not?  
+
+```r
+ggplot(data = mpg) 
+  + geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+---
+class: center, top
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/2560px-Star_Wars_Logo.svg.png)
+background-size: contain
+
+---
+class: center, middle, inverse
+
+# Star Wars Character Analysis Using **ggplot2**
+---
+class: inverse, center, middle
+
+# Aesthetics 
+
+---
+
+# Aesthetics
+
+We can map specific variables in the data to various features of the plot:
+
+* Aesthetics  (`aes`)
+    + shape  
+    + color  
+    + size  
+    + alpha (transparency)  
+    
+* Faceting: use categorical variables to view cross sections of the data     
+
+**Note:**  Not all aesthetics can be used with all types of graphs. More to come on this.
+
+---
+
+# Aesthetics summary  
+
+* Behavior of aesthetics depends on the nature of the variable:
+
+    + Factor and discrete quantiative variables are measured (or often counted) on a
+    discrete scale or by categories
+
+    + Continuous variable are measured on a continuous scale
+
+
+| Aesthetics |             Discrete/Factor             |                Continuous               |
+|:----------:|:---------------------------------------:|:---------------------------------------:|
+| color      |            palette of colors            |   gradient  (e.g, dark blue to light)   |
+| size       |              discrete steps             | linear mapping between radius and value |
+| shape      | different shape for each level/category |       shouldn't (and doesn't) work      |
+
+---
+
+### Aesthetics summary: Mapping vs Customization
+
+*  Use aesthetics for mapping features of a plot to a variable   
+
+
+```r
+ggplot(data = mpg) +
+   geom_point(mapping = aes(x = displ, y = hwy, size = cyl))
+```
+
+![](Data_viz_part1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+### Aesthetics summary: Mapping vs Customization (cont'd)  
+
+* Define the features in the `geom` outside the `aes()` function for aesthetic 
+customizations **not** mapped to a variable  
+
+
+```r
+ggplot(data = mpg) +
+   geom_point(mapping = aes(x = displ, y = hwy),  size = 0.5)
+```
+
+![](Data_viz_part1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, center, middle, 
+
+# Comic Heroes Investigation  
+
+???
+
+# Comic Heroes Investigation   
+
+* Find the `superheroes.Rmd` in today's project folder.  
+
+* Complete the analysis for more practice with `ggplot2`  
+
+* Ask questions.  
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

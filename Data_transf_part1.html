@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Transformation Part I</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Data Transformation Part I
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+
+# Review from Last Time
+
+* What `position` is used to create side-by-side bar charts?
+
+--
+
+* What layer command will interchange the x and y axes of an existing graph?
+
+--
+
+* What problem does `position_jitter()` solve?
+
+---
+
+## Last Time: Layered Grammar of Graphics  
+
+The **ggplot2** code template:
+
+
+```r
+ggplot(data = &lt;DATA&gt;) +
+  &lt;GEOM_FUNCTION&gt;(
+     mapping = aes(&lt;MAPPINGS&gt;),
+     stat = &lt;STAT&gt;,
+     position = &lt;POSITION&gt;
+)+ 
+  &lt;COORDINATE_FUNCTION&gt; + 
+  &lt;FACET_FUNCTION&gt;
+```
+
+---
+
+# Data Set Examples: **mpg**  
+
+
+```r
+mpg
+```
+
+```
+## # A tibble: 234 × 11
+##    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
+##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 audi         a4           1.8  1999     4 auto… f        18    29 p     comp…
+##  2 audi         a4           1.8  1999     4 manu… f        21    29 p     comp…
+##  3 audi         a4           2    2008     4 manu… f        20    31 p     comp…
+##  4 audi         a4           2    2008     4 auto… f        21    30 p     comp…
+##  5 audi         a4           2.8  1999     6 auto… f        16    26 p     comp…
+##  6 audi         a4           2.8  1999     6 manu… f        18    26 p     comp…
+##  7 audi         a4           3.1  2008     6 auto… f        18    27 p     comp…
+##  8 audi         a4 quattro   1.8  1999     4 manu… 4        18    26 p     comp…
+##  9 audi         a4 quattro   1.8  1999     4 auto… 4        16    25 p     comp…
+## 10 audi         a4 quattro   2    2008     4 manu… 4        20    28 p     comp…
+## # … with 224 more rows
+```
+
+---
+
+# Data Set Examples: **flights**
+
+
+```r
+flights
+```
+
+```
+## # A tibble: 336,776 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # … with 336,766 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
+```
+
+---
+
+# Data Set Examples: **heroes**
+
+
+```r
+heroes
+```
+
+```
+## # A tibble: 599 × 7
+##    name          gender hair_color height publisher     alignment weight
+##    &lt;chr&gt;         &lt;fct&gt;  &lt;fct&gt;       &lt;dbl&gt; &lt;fct&gt;         &lt;fct&gt;      &lt;dbl&gt;
+##  1 A-Bomb        Male   No Hair       203 Marvel Comics good         441
+##  2 Abin Sur      Male   No Hair       185 DC Comics     good          90
+##  3 Abomination   Male   No Hair       203 Marvel Comics bad          441
+##  4 Abraxas       Male   Black          NA Marvel Comics bad           NA
+##  5 Absorbing Man Male   No Hair       193 Marvel Comics bad          122
+##  6 Adam Strange  Male   Blond         185 DC Comics     good          88
+##  7 Agent 13      Female Blond         173 Marvel Comics good          61
+##  8 Agent Bob     Male   Brown         178 Marvel Comics good          81
+##  9 Agent Zero    Male   NA            191 Marvel Comics good         104
+## 10 Air-Walker    Male   White         188 Marvel Comics bad          108
+## # … with 589 more rows
+```
+
+---
+
+# Variable Types
+
+Seven data types in R:
+
+* `int` : integer
+--
+
+* `dbl`: for double-precision, or real numbers
+
+--
+
+* `chr`:  character vectors, or strings
+
+--
+
+* `dttm`: date-times (a date + a time)
+
+--
+
+* `lgl`: logical contains only TRUE or FALSE values
+
+--
+
+* `fctr`: factors used to represent categorical variables
+
+--
+
+* `date`: dates
+
+---
+
+## Today: A Grammar for Data Wrangling  
+
+While the object is always *data*, R4DS identifies a grammar for data wrangling that uses five *verbs*:
+
+* `filter()`: picks observations by their values
+
+--
+
+* `select()`: picks variables by their names
+
+--
+
+* `arrange()`: reorders rows
+
+--
+
+
+* `mutate()`: creates new variables from existing variables
+
+--
+
+* `summarise()`: collapses many values down to a single summary
+
+--
+
+`\(\Rightarrow\)` Used with the `group_by()` function to operate group-by-group
+
+---
+
+# filter() 
+
+&lt;img src="figures/filter.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+# Operators: Tools of the Trade
+
+* Comparison  
+
+    + Equality: `==`
+    
+    + Inequality:  `&gt;`, `&gt;=`, `&lt;`, `&lt;=`,  `!=`
+
+--
+
+* Logical  
+
+    + AND: `&amp;` 
+     
+    + OR: `|` 
+    
+    + NOT: `!`  
+    
+---
+
+## `select()`
+
+&lt;img src="figures/select.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+# `select()` Helper Functions 
+
+For selecting specific variables or groups of variables with similar names or distinguishing strings: 
+
+* `starts_with("abc")`: matches names that begin with "abc"
+
+--
+
+* `ends_with("xyz")`: matches names that end with "xyz"
+
+--
+
+* `contains("ijk")`: matches names that contain "ijk"
+
+--
+
+* `matches("(.)\\1")`: selects variables that match a "regular expression" ( more about these later)
+
+--
+
+* `num_range("x", 1:3)`: matches x1, x2 and x3.
+
+---
+
+# Connect `filter()` and `select()` with the Pipe 
+
+
+![](https://magrittr.tidyverse.org/logo.png)
+
+
+---
+
+## `arrange()` 
+
+&lt;img src="figures/arrange.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+---
+
+## `mutate()` 
+
+&lt;img src="figures/mutate.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]&gt;
+
+
+---
+# `mutate()` Commands  
+
+* `mutate()`: computes and adds new columns to the end of your dataset   
+
+* `transmute()`: compute and keep only the newly computed variables  
+
+---
+# summarise() 
+
+&lt;img src="figures/summarise.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Source: Data Transformation with `dplyr`: CHEAT SHEET]
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 12 Tidy Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 12 Tidy Data
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Tidy Data  
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+* Every variable has its own column  
+
+* Every case has its own row  
+
+* Every value has its own cell  
+
+.footnote[Source: R4DS]
+
+---
+background-image: url(figures/tidying_up_cover.jpg)
+background-position: 50% 30%
+background-size: contain
+
+class: left, bottom
+
+--
+# Tidying data sparks joy!
+
+---
+
+# Why tidy data?  
+
+1. Easy to understand
+
+1. Consistent structure works predictably with familiar tools  
+
+1. Tidyverse tools optimized for this structure  
+
+
+---
+
+# What's Tidy for you may not be tidy for me?  
+
+* Tidy may be in the eye of the beholder  
+
+* College course records  
+
+    + Project 1: Students are of interest so student is the case but...
+    
+    + Project 2: Individual courses are of primary interest so course is the case 
+    
+* The definition of tidy for a given data set could be ambiguous
+
+---
+
+# Why not tidy data?  
+
+1. Gain doesn't justify the trouble  
+
+1. Analytical methods better suited for other structures  
+
+1. Discipline-specific expectations
+
+---
+
+# Sample Datasets: `table1`  
+
+
+```r
+# Tidy Dataset
+table1
+```
+
+```
+## # A tibble: 6 × 4
+##   country      year  cases population
+##   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+## 1 Afghanistan  1999    745   19987071
+## 2 Afghanistan  2000   2666   20595360
+## 3 Brazil       1999  37737  172006362
+## 4 Brazil       2000  80488  174504898
+## 5 China        1999 212258 1272915272
+## 6 China        2000 213766 1280428583
+```
+
+---
+# Sample Datasets: `table2`
+
+
+```r
+# Untidy Dataset
+# Variables appear in rows
+# Two rows per case
+table2
+```
+
+```
+## # A tibble: 12 × 4
+##    country      year type            count
+##    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
+##  1 Afghanistan  1999 cases             745
+##  2 Afghanistan  1999 population   19987071
+##  3 Afghanistan  2000 cases            2666
+##  4 Afghanistan  2000 population   20595360
+##  5 Brazil       1999 cases           37737
+##  6 Brazil       1999 population  172006362
+##  7 Brazil       2000 cases           80488
+##  8 Brazil       2000 population  174504898
+##  9 China        1999 cases          212258
+## 10 China        1999 population 1272915272
+## 11 China        2000 cases          213766
+## 12 China        2000 population 1280428583
+```
+
+---
+
+# Sample Datasets: `table3`
+
+
+```r
+# Untidy Dataset
+# Two values in one cell (both "cases" and "population")
+table3
+```
+
+```
+## # A tibble: 6 × 3
+##   country      year rate             
+## * &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;            
+## 1 Afghanistan  1999 745/19987071     
+## 2 Afghanistan  2000 2666/20595360    
+## 3 Brazil       1999 37737/172006362  
+## 4 Brazil       2000 80488/174504898  
+## 5 China        1999 212258/1272915272
+## 6 China        2000 213766/1280428583
+```
+
+---
+
+### Sample Datasets: `table4a` and `table4b` 
+
+
+```r
+# Untidy Dataset
+# Columns are the values of the year variable 
+# Cases and Population are split across two columns
+table4a # cases
+```
+
+```
+## # A tibble: 3 × 3
+##   country     `1999` `2000`
+## * &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;
+## 1 Afghanistan    745   2666
+## 2 Brazil       37737  80488
+## 3 China       212258 213766
+```
+
+```r
+table4b # population
+```
+
+```
+## # A tibble: 3 × 3
+##   country         `1999`     `2000`
+## * &lt;chr&gt;            &lt;int&gt;      &lt;int&gt;
+## 1 Afghanistan   19987071   20595360
+## 2 Brazil       172006362  174504898
+## 3 China       1272915272 1280428583
+```
+
+---
+
+# Pivoting: Longer or Wider?
+
+Once you understand the data, you may need to resolve one of the following problems to carry out analysis using **tidyverse** tools:  
+
+1. One variable might be spread across multiple columns.   
+    + Tables 4a and 4b because data are in year-specific columns  
+
+2. One observation might be scattered across multiple rows.  
+    + Table 2 because observation is Country-Year combination  
+
+---
+
+# Pivoting Longer 
+
+Pivoting **table4** into a longer, tidy form
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+* Each year-country combination gets its own row.
+
+* Observations are year-country combination.
+
+.footnote[Source: R4DS]
+
+---
+
+### The `pivot_longer()` Command
+
+* Format: 
+```
+df %&gt;% 
+  pivot_longer(columns, names_to = key, values_to = value, 
+     ..., values_drop_na = FALSE)
+```
+
+Referring to sample `table4a` : 
+
+* `columns` specifies the columns to pivot into the longer format
+
+* `key` specifies the name of the variable whose values form the column names  
+    + year  
+    
+* `value` specifies the variable whose values are spread over the cells 
+    + number of `cases` or `population`  
+    
+    
+**Note:** `key` and `value` are new columns whose names you specify. 
+
+---
+
+# `pivot_longer()` Example
+
+
+```r
+table4a %&gt;% 
+  pivot_longer(!country, names_to = "year", values_to = "cases")
+```
+
+```
+## # A tibble: 6 × 3
+##   country     year   cases
+##   &lt;chr&gt;       &lt;chr&gt;  &lt;int&gt;
+## 1 Afghanistan 1999     745
+## 2 Afghanistan 2000    2666
+## 3 Brazil      1999   37737
+## 4 Brazil      2000   80488
+## 5 China       1999  212258
+## 6 China       2000  213766
+```
+
+--
+* Note use of `!country` to specify all columns except `country`
+  + We used dplyr::select() style notation to select columns to pivot
+    
+
+---
+
+# Pivoting Wider  
+
+Pivot **table2** into a "wider", tidy form.
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/8350f0dda414629b9d6c354f87acf5c5f722be43/bcb84/images/tidy-8.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+* Use when an observation is scattered across multiple rows
+
+* Spreads variables across the columns
+
+
+.footnote[Source: R4DS]
+
+---
+
+### The `pivot_wider()` Command
+
+* Use `pivot_wider()` when an observation is scattered across multiple rows as in `table2`  
+
+* Format: 
+
+```
+df %&gt;% 
+  pivot_wider(data, names_from = key, 
+  values_from = value, …, values_fill = NA)
+```
+* We need two parameters:  
+
+    +  The column that contains variable names, the `key` column.
+        -  `type` for `table2`
+        
+    + The column that contains **values** from multiple variables, the value column. 
+        -   `count` for `table2`
+
+---
+
+
+# `pivot_wider()` Example
+
+
+```r
+table2 %&gt;% 
+  pivot_wider(names_from = type, values_from = count)
+```
+
+```
+## # A tibble: 6 × 4
+##   country      year  cases population
+##   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+## 1 Afghanistan  1999    745   19987071
+## 2 Afghanistan  2000   2666   20595360
+## 3 Brazil       1999  37737  172006362
+## 4 Brazil       2000  80488  174504898
+## 5 China        1999 212258 1272915272
+## 6 China        2000 213766 1280428583
+```
+
+--
+* Note use of `!country` to specify all columns except `country`
+  + We used dplyr::select() style notation to select columns to pivot
+    
+
+---
+
+# Separate and Unite  
+
+* Use `separate()` when we have one column that contains more than one variable  
+    + Use common separators or specify a column number for the split  
+
+--
+
+* Use `unite()` to (re-)combine multiple columns into a single column 
+    + Specify the separator to use when combining
+  
+
+---
+
+## Separate 
+
+Separate each cell in a column to make several columns.  
+
+&lt;img src="figures/separate.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+* By default, splits using any non-alphanumeric characters
+
+* Split character can be specified using `sep = ""`
+
+---
+
+## Separate: Basketball data example
+
+U of M Basketball Results 2017-18:   
+
+
+
+
+```r
+u_of_m_bball
+```
+
+```
+## # A tibble: 12 × 3
+##    Date        Result   Hi_Points    
+##    &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;        
+##  1 Mon, Nov 11 W 86-66  Robinson     
+##  2 Wed, Nov 13 W 72-65  Abdur-Rahkman
+##  3 Sat, Nov 16 W 61-47  Abdur-Rahkman
+##  4 Wed, Nov 20 L 77-75  Matthews     
+##  5 Thu, Nov 21 W 102-64 Matthews     
+##  6 Fri, Nov 22 W 68-60  Robinson     
+##  7 Tue, Nov 26 W 87-42  Wagner       
+##  8 Fri, Nov 29 L 86-71  Wagner       
+##  9 Mon, Dec 2  W 69-55  Poole        
+## 10 Wed, Dec 4  L 71-62  Wagner       
+## 11 Mon, Dec 9  W 78-69  Wagner       
+## 12 Thu, Dec 12 W 59-52  Abdur-Rahkman
+```
+
+
+---
+
+## Separate: Basketball data example
+
+Separate the First Two Columns into Their Parts 
+
+
+```r
+df_sep &lt;- u_of_m_bball %&gt;% 
+  separate(Date, c("Weekday","Month", "Day")) %&gt;% 
+  separate(Result, c("Win_loss", "Pts_For", "Pts_Against"))
+df_sep
+```
+
+```
+## # A tibble: 12 × 7
+##    Weekday Month Day   Win_loss Pts_For Pts_Against Hi_Points    
+##    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;        
+##  1 Mon     Nov   11    W        86      66          Robinson     
+##  2 Wed     Nov   13    W        72      65          Abdur-Rahkman
+##  3 Sat     Nov   16    W        61      47          Abdur-Rahkman
+##  4 Wed     Nov   20    L        77      75          Matthews     
+##  5 Thu     Nov   21    W        102     64          Matthews     
+##  6 Fri     Nov   22    W        68      60          Robinson     
+##  7 Tue     Nov   26    W        87      42          Wagner       
+##  8 Fri     Nov   29    L        86      71          Wagner       
+##  9 Mon     Dec   2     W        69      55          Poole        
+## 10 Wed     Dec   4     L        71      62          Wagner       
+## 11 Mon     Dec   9     W        78      69          Wagner       
+## 12 Thu     Dec   12    W        59      52          Abdur-Rahkman
+```
+
+---
+
+## Unite  
+
+Collapse cells across several columns
+make a single column.  
+
+  + Specify separator or use default "_"
+
+&lt;img src="figures/unite.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+* Above example uses no separator by specifying `sep = ""`.
+
+---
+
+###  Example: Unite the Win/Loss Columns
+
+Create a new Score column from two columns:  
+
+
+```r
+df_sep %&gt;% unite(Score, c(Pts_For, Pts_Against), sep = " to ")
+```
+
+```
+## # A tibble: 12 × 6
+##    Weekday Month Day   Win_loss Score     Hi_Points    
+##    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;        
+##  1 Mon     Nov   11    W        86 to 66  Robinson     
+##  2 Wed     Nov   13    W        72 to 65  Abdur-Rahkman
+##  3 Sat     Nov   16    W        61 to 47  Abdur-Rahkman
+##  4 Wed     Nov   20    L        77 to 75  Matthews     
+##  5 Thu     Nov   21    W        102 to 64 Matthews     
+##  6 Fri     Nov   22    W        68 to 60  Robinson     
+##  7 Tue     Nov   26    W        87 to 42  Wagner       
+##  8 Fri     Nov   29    L        86 to 71  Wagner       
+##  9 Mon     Dec   2     W        69 to 55  Poole        
+## 10 Wed     Dec   4     L        71 to 62  Wagner       
+## 11 Mon     Dec   9     W        78 to 69  Wagner       
+## 12 Thu     Dec   12    W        59 to 52  Abdur-Rahkman
+```
+
+* Note the text separator "to" specified along with surrounding blanks.
+---
+
+## Missing Values 
+
+Two distinct types of missing variables in R4DS:  
+
+1. *Explicit:* data cell is empty or contains NA or similar code  
+    + Can be omitted using `na.rm = TRUE` in `gather()`
+
+2. *Implicit:* data are not present but no NA code  
+    + Structure of the data confirms there are missing data
+    + Missing number for one day of the week or a particular year/month combination  
+    + Can be made explicit using `complete()` specifying the columns whose combinations should appear in the data.
+    
+`\(\Rightarrow\)` Use `fill()` to fill-in missing values up or down a column.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
