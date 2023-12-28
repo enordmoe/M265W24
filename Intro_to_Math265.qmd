@@ -1,0 +1,83 @@
+---
+title: "Introduction to Data Science"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+format:
+  revealjs: 
+    theme: default
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+```{r, echo=F,message=FALSE}
+library(tidyverse)
+```
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Bullets
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+# What is Data Science?
+
+## A Picture is Worth 1000 Words
+
+![](https://r4ds.hadley.nz/diagrams/data-science/base.png){fig-align="center"}
+
+## What you will learn about in this class
+
+::: incremental
+-   Importing data
+-   Wrangling data
+    -   Tidying
+    -   Transforming
+-   Visualization (using **ggplot2**)
+-   Modeling
+:::
+
+## What you will learn about in this class (cont'd)
+
+::: incremental
+-   Communication
+    -   Reproducible project sharing using GitHub
+    -   Reproducible documents using the Quarto unified authoring framework for data science
+-   ...and some R programming
+:::
+
+------------------------------------------------------------------------
+
+![](figs/Intro_to_Math265/r4ds_diagram_overlay.png){width="640"}
+
+------------------------------------------------------------------------
+
+::: columns
+::: {.column width="50%"}
+::: columns
+By the end of this class, you should be a data wrangler.
+:::
+:::
+
+::: {.column width="50%"}
+
+![](figs/Intro_to_Math265/data_wrangler.png){fig-alt="data wrangle" fig-align="center" width="1280"}
+:::
+:::
+
+
