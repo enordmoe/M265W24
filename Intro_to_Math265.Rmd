@@ -28,7 +28,7 @@ library(tidyverse)
 
 
 ```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
-knitr::include_graphics('figs/Intro_to_Math265/r4ds_diagram.png')
+knitr::include_graphics('https://r4ds.hadley.nz/diagrams/data-science/base.png')
 ```
 ---
 
@@ -52,7 +52,7 @@ knitr::include_graphics('figs/Intro_to_Math265/r4ds_diagram.png')
 
 * Communication
     - Reproducible project sharing using GitHub   
-    - Reproducible documents using R Markdown reports
+    - Reproducible documents using the Quarto unified authoring framework for data science
 --
 
 * ...and some R programming  
@@ -104,7 +104,6 @@ Source: moderndive.com
 ![:scale 10%](figs/Intro_to_Math265/stickers/pipe.png)
 ![:scale 10%](figs/Intro_to_Math265/stickers/purrr.png)
 ![:scale 10%](figs/Intro_to_Math265/stickers/readr.png)
-![:scale 10%](figs/Intro_to_Math265/stickers/rmarkdown.png)
 ![:scale 10%](figs/Intro_to_Math265/stickers/rvest.png)
 ![:scale 10%](figs/Intro_to_Math265/stickers/shiny.png)
 ![:scale 10%](figs/Intro_to_Math265/stickers/stringr.png)
@@ -229,7 +228,7 @@ knitr::include_graphics("img/lego-steps-commit-messages.png")
 
 ## Why do we need version control?
 
-```{r echo=FALSE, fig.align = "center", out.width="25%"}
+```{r echo=FALSE, fig.align = "center", out.width="35%"}
 knitr::include_graphics("img/phd_comics_vc.gif")
 ```
 
