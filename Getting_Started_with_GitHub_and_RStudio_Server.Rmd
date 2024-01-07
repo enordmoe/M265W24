@@ -133,17 +133,20 @@ Commit these changes to your local repo. How?
 
 From RStudio:
 
--   Click the "Git" tab in upper right pane.
+-   Click the "Git" tab in the upper right pane.
+
+-   Click the Commit button at the top of the Git pane.
 
 -   Check the "Staged" box for `README.md`.
 
--   Enter a Commit message such as "My first commit from RStudio."
+-   Enter a Commit message such as "My first commit from RStudio." Then click on the button Commit to stage. Don't close this window yet.
 
--   If you're not already in the Git pop-up, click "Commit". This gets the file (or files) ready to be "push"ed to GitHub repository. Close the pop-up dialog box that appears after clicking commit.
+
+
 
 ## 8. Push your local changes online to GitHub
 
-Click the green "Push" button to send your local changes to GitHub. If you are challenged for username and password, provide them but for your password, you should paste in the PAT created earlier. You should see some message along these lines.
+Click the green "Push" arrow button in the upper right  to send your local changes to GitHub. If you are challenged for username and password, provide them but for your password, you should paste in the PAT created earlier. You should see some message along these lines.
 
 ```         
 [master dc671f0] blah
