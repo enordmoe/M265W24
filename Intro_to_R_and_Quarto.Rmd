@@ -1,0 +1,170 @@
+---
+title: "Introduction to R and Quarto"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+
+```{r, echo=F,message=FALSE}
+library(tidyverse)
+```
+
+
+# Learning Outcomes for Today
+
+* Become comfortable with basics of R syntax and running scripts
+
+* Become familiar with the RStudio IDE
+
+* Creating Quarto documents
+
+* Gain awareness of available references
+
+* Use Quarto to create a simple document to be pushed to a GitHub repository
+ 
+
+---
+# R and RStudio  
+
+![:scale 10%](figs/Intro_to_Math265/stickers/R_logo.svg.png) is the statistical programming language.
+
+
+--
+
+
+![:scale 10%](figs/Intro_to_Math265/stickers/RStudio.png) is the IDE (Integrated Development Environment). 
+
+--
+
+.center[![:scale 75%](figs/Intro_to_Math265/engine-dashboard.png)]
+
+Source: moderndive.com
+
+
+
+---
+class: inverse, center, middle
+
+# R and RStudio Demo 
+
+---
+
+# R and RStudio Demo Topics  
+
+* Working at the Console
+
+* R as calculator
+
+* Getting help
+
+* Variables
+
+* Vectors
+
+* Data Frames
+
+* Functions
+
+* Indexing
+
+* Lists
+
+---
+
+
+# Quarto documents  
+
+**Quarto** is an open source scientific and technical publishing system.
+
+* Input (`qmd`) can contain code chunks, text content, LaTeX mathematical formatting.
+  - Code chunks can be R, Python, Julia and Observable JavaScript
+  - Visual editor built into RStudio
+--
+
+* Produces dynamic reports including text, code, tables, equations, citations, cross references, output, figures and advanced layouts.
+  - Many document types: articles, presentations, dashboards, websites, books, etc.
+  - Multiple output formats such as HTML, MS Word, and many more
+  - Many style themes available to change the look and feel of the document
+  
+--
+
+* Emphasis is on sharability, reproducibility, and versatility  
+
+
+Source: [Quarto.org](https://quarto.org/)
+---
+
+# The Quarto Document Process  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figs/quarto_process_fig1.png')
+```
+
+Source:  [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/html/quarto.html)
+
+---
+
+# The Quarto Document Process with Details  
+
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figs/quarto_process_fig2.png')
+```
+
+Source:  [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/html/quarto.html)
+
+---
+
+# Reproducibility  
+
+Value of reproducibility: 
+
+* Transparency of research
+
+--
+
+* Verification of code
+
+--
+
+* Longer term
+    - use code/analysis for new or updated data
+    - extend/modify analysis for other settings/data
+    
+---
+class: inverse, center, middle
+
+# Quarto demo  
+
+---
+
+## Quarto demo topics  
+
+* YAML
+
+* Rendering
+
+* Inline code
+
+* Code chunks
+
+* Markdown formatting
+
+* Running code chunks
+
+* Setting parameters
+
+* Console vs Quarto environments
+
