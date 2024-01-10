@@ -9,15 +9,18 @@ execute:
   warning: false
 ---
 
+
 ## Setup for Work
 
 To use **ggplot2** functions, we always have to first load the **tidyverse**:
+
 
 ```{r}
 #| label: setup
 #| message: false
 library(tidyverse)
 ```
+
 
 For help with `ggplot2`, see [ggplot2.tidyverse.org](http://ggplot2.tidyverse.org/) and the `ggplot2` Cheatsheet [here](https://rstudio.github.io/cheatsheets/html/data-visualization.html?_gl=1*1h8t95l*_ga*MTA3NzMyODY4OS4xNzAxMzU3ODEw*_ga_2C0WZ1JHG0*MTcwNDUwMzkwOC4xMC4wLjE3MDQ1MDM5MDguMC4wLjA.) last updated July 2023.
 
@@ -35,10 +38,12 @@ The data set `starwars` is a built-in data set that's available after loading th
 
 -   Each entry is a **value**
 
+
 ```{r}
 #| fig-cap: Example of tabular data
 starwars
 ```
+
 
 Questions:
 
@@ -55,17 +60,21 @@ You can type the `View()` command at the Console to browse the data interactivel
 
 The `glimpse` commands also help give us a feel for the basic characteristics of the data. This command essentially transposes the print command so that the rows are the data columns, showing as much of the data as possible in a small area.
 
+
 ```{r}
 #| fig-cap: glimpse provides a condensed view
 glimpse(starwars)
 ```
 
+
 Fortunately, most built-in R functions have help documentation to give more details. We typically run this at the command line since you wouldn't want help pages in your output. The line `#|eval:false` line tells R not to run this code cell when we Render the document.
+
 
 ```{r}
 #| eval: false
 ?starwars
 ```
+
 
 ## Creating a ggplot
 
@@ -78,6 +87,7 @@ Steps in creating a **ggplot:**
         -   aesthetic mappings specify connections between data and visual features of the graphs
         -   aesthetics can also specify general visual properties (e.g., dot size)
 
+
 ```{r}
 ggplot(
   data = starwars, 
@@ -86,11 +96,13 @@ ggplot(
   geom_point()
 ```
 
+
 **Question**: Which is the unusual character? How did you figure it out?
 
 #### Adding aesthetics and layers
 
 Let's consider a third variable to see if the relationship between height and mass holds across categories of sex by mapping sex to the aesthetic color.
+
 
 ```{r}
 ggplot(
@@ -100,9 +112,11 @@ ggplot(
   geom_point()
 ```
 
+
 **Note**: We will worry about dealing with missing and NA values later on in the course.
 
 Alternatively, we could map sex to *shape* rather than color as shown below:
+
 
 ```{r}
 ggplot(
@@ -112,7 +126,9 @@ ggplot(
   geom_point()
 ```
 
+
 We now add one more layer: a best fit line displaying the relationship between height and mass.
+
 
 ```{r}
 ggplot(
@@ -122,6 +138,7 @@ ggplot(
   geom_point() +
   geom_smooth(method = "lm")
 ```
+
 
 This is probably not what we want since there are too few characters in some categories of sex to construct a meaningful best fit line. Why did we get lines for each category of sex rather than one overall line?
 
@@ -135,6 +152,7 @@ As we learn more about using **ggplot2**, it will be important to understand the
 
 Moving `color = sex` to be a local mapping for the `geom_point` layer gives us the overall smoothed line we want. Note that we know have two separate `aes()` instances, one global and one local:
 
+
 ```{r}
 ggplot(
   data = starwars, 
@@ -144,7 +162,9 @@ ggplot(
   geom_smooth(method = "lm")
 ```
 
+
 As in the text, we can map sex to both color and shape to make it easier to distinguish the groups. The legend at the right updates accordingly:
+
 
 ```{r}
 ggplot(
@@ -155,9 +175,11 @@ ggplot(
   geom_smooth(method = "lm")
 ```
 
+
 #### Labeling Our Plot
 
 Graphs are not complete without labeling. That comes in another layer of the grammar of graphics, the thematic elements (more about that later). The plot below includes appropriate labels for our data:
+
 
 ```{r}
 ggplot(
@@ -174,16 +196,19 @@ ggplot(
   )
 ```
 
+
 **Note**: Labels are just text and do not need to use the original variable names. Many more label options are available.
 
 **Aside: ggplot2 calls**
 
 More concise ggplot2 code is used in practice, taking advantage of the fact that R expects the first two arguments of the `ggplot()` command to be `data=` and `mapping=`. The following chunk shows a concise way of specifying a simple scatterplot.
 
+
 ```{r}
 ggplot(starwars, aes(x = height, y = mass)) +
   geom_point()
 ```
+
 
 ## Visualizing Distributions
 
@@ -197,12 +222,15 @@ The types of graphs used to visualize the distribution of a variable depends on 
 
 First, for a variable with relatively few categories:
 
+
 ```{r}
 ggplot(starwars, aes(x = sex)) +
   geom_bar()
 ```
 
+
 With many distinct categories (homeworld), one option is to rotate the graph by putting the variable on the side as the `y` instead of `x`:
+
 
 ```{r}
 ggplot(starwars, aes(y = homeworld)) +
@@ -213,21 +241,26 @@ ggplot(starwars, aes(y = fct_infreq(homeworld))) +
 
 ```
 
+
 ### Histograms for numerical variables
 
 Inspect the distribution of height for Star Wars characters via a histogram showing heights and their associated frequencies:
+
 
 ```{r}
 ggplot(starwars, aes(x = height)) +
   geom_histogram()
 ```
 
+
 Note the clusters of shorter and taller characters (remember the scale is cm). We can obtain a more colorful result and a different view by changing aesthetic and parameter specifications. (Note the different functions of `color` and `fill` here.)
+
 
 ```{r}
 ggplot(starwars, aes(x = height)) +
   geom_histogram(fill = "orange", color = "black",binwidth = 20)
 ```
+
 
 ## Visualizing Relationships
 
@@ -237,10 +270,12 @@ ggplot(starwars, aes(x = height)) +
 
 Boxplots are convenient for comparing the distribution of variables across levels of categorical variables and for highlighting extreme observations:
 
+
 ```{r}
 ggplot(starwars, aes(x = sex, y = height)) +
   geom_boxplot()
 ```
+
 
 Note: The above boxplot looks different from those in this section of the text because some categories have very few characters.
 
@@ -256,6 +291,7 @@ Features of boxplots:
 
 Density plots are smoothed versions of histograms and can also be used to compare distributions across levels of categorical variables. Note that groups with fewer than two data points (e.g., "hermaphroditic") are too small to be smoothed.
 
+
 ```{r}
 ggplot(starwars, aes(x = height, color = sex)) +
   geom_density()
@@ -265,11 +301,13 @@ ggplot(starwars, aes(x = height, color = sex, fill = sex)) +
 
 ```
 
+
 ### Two Categorical Variables for cars Data
 
 We seem to be stretching the **starwars** data a bit thin so let's look at a different data set. To consider the relationships between two categorical variables, we'll consider the built-in **mpg** dataset. This dataset has fuel economy data for 34 cars for the years 1998 to 2008 with a total of 234 observations. We will use bar charts to explore the relationship between class of car and type of drive train (e.g., front wheel drive, 4 wheel drive, etc.).
 
 Note the variability in the number of vehicles in each class.
+
 
 ```{r}
 #|fig-cap = "Single variable bar chart"
@@ -278,9 +316,11 @@ ggplot(mpg, aes(x = class)) +
   geom_bar()
 ```
 
+
 The first plot below shows the counts in each class-drv combination while the second shows conditional proportions of drv in each category of class. (What do you observe?)
 
 **Stacked bar charts**
+
 
 ```{r}
 ggplot(mpg, aes(x = class, fill = drv)) +
@@ -288,38 +328,47 @@ ggplot(mpg, aes(x = class, fill = drv)) +
 
 ```
 
+
 **Relative frequency bar chart**
+
 
 ```{r}
 ggplot(mpg, aes(x = class, fill = drv)) +
   geom_bar(position = "fill")
 ```
 
+
 ### Two Numerical Variables for cars Data
 
 **Question**: How is highway mileage related to engine size (displacement)
+
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point()
 ```
 
+
 **Question:** Consider also how vehicle class is related to these variables using two approaches:
 
 Approach 1: Color vehicles by class
+
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
   geom_point()
 ```
 
+
 Approach 2: Separate plots (facets) for each class
+
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
   geom_point() + 
   facet_wrap(~class)
 ```
+
 
 ## Summary
 
@@ -336,3 +385,4 @@ Key topics in this section
     -   Relationships
 
 More depth and details to come!
+
