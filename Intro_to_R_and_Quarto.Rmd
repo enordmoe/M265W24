@@ -23,67 +23,153 @@ library(tidyverse)
 ```
 
 
-# Learning Outcomes for Today
+# Outcomes for Today
 
-* Become comfortable with basics of R syntax and running scripts
+* Get more familiar with the RStudio IDE
 
-* Become familiar with the RStudio IDE
+* Get RStudio to talk to GitHub
 
-* Creating Quarto documents
+* Learn about Quarto documents
 
 * Gain awareness of available references
 
 * Use Quarto to create a simple document to be pushed to a GitHub repository
- 
-
----
-# R and RStudio  
-
-![:scale 10%](figs/Intro_to_Math265/stickers/R_logo.svg.png) is the statistical programming language.
-
-
---
-
-
-![:scale 10%](figs/Intro_to_Math265/stickers/RStudio.png) is the IDE (Integrated Development Environment). 
-
---
-
-.center[![:scale 75%](figs/Intro_to_Math265/engine-dashboard.png)]
-
-Source: moderndive.com
-
-
 
 ---
 class: inverse, center, middle
 
-# R and RStudio Demo 
+# Version Control and Collaboration
 
 ---
 
-# R and RStudio Demo Topics  
+# Git and GitHub
 
-* Working at the Console
+.pull-left[
+```{r echo=FALSE, out.width="25%"}
+knitr::include_graphics("img/git-logo.png")
+```
+- Git is a version control system -- like “Track Changes” features from Microsoft Word, on steroids
 
-* R as calculator
+- It's not the only version control system, but it's a very popular one
 
-* Getting help
+- Was created by Linus Torvalds in 2005
+]
+.pull-right[
+```{r echo=FALSE, out.width="25%"}
+knitr::include_graphics("img/GitHub_Logo.png")
+```
+- GitHub is the home for your Git-based projects on the internet -- like Dropbox but much, much better
 
-* Variables
+- We will use GitHub as a platform for submitting homework and collaboration on projects
+]
 
-* Vectors
+---
+## Git vs GitHub
 
-* Data Frames
+* What's the difference?
 
-* Functions
+<div style="text-align:center;">
+<img src="https://devmountain.com/wp-content/uploads/2022/01/Gitvs_Github-1a-1.jpg" alt="Image Alt Text" width="60%"/>
+</div>
 
-* Indexing
+* We will use RStudio running Git behind the scenes to interface with GitHub
 
-* Lists
+.left[.footnote[Source: https://blog.devmountain.com/git-vs-github-whats-the-difference/]]
+
+
 
 ---
 
+## Versioning
+
+```{r echo=FALSE, fig.align = "center", out.width = "70%"}
+knitr::include_graphics("img/lego-steps.png")
+```
+
+Source: [Data Science in a Box](https://datasciencebox.org/)
+???
+
+Note that in a real construction project, progress is not so linear. There may be work going on in several parts of the building.
+---
+
+## Versioning
+### with human readable commit messages
+
+```{r echo=FALSE, fig.align = "center", out.width = "60%"}
+knitr::include_graphics("img/lego-steps-commit-messages.png")
+```
+
+???
+
+
+---
+
+## Why do we need version control?
+
+```{r echo=FALSE, fig.align = "center", out.width="35%"}
+knitr::include_graphics("img/phd_comics_vc.gif")
+```
+
+* Document project
+* Facilitate team collaboration
+* Share work
+
+
+---
+
+## How will we use Git and GitHub?
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/whole-game-01_265.png")
+```
+
+---
+
+## How will we use Git and GitHub?
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/whole-game-02_265.png")
+```
+
+---
+
+## How will we use Git and GitHub?
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/whole-game-03_265.png")
+```
+
+---
+
+## How will we use Git and GitHub?
+
+```{r echo=FALSE, out.width="100%"}
+knitr::include_graphics("img/whole-game-04_265.png")
+```
+
+---
+
+# Git and GitHub tips
+
+- Becoming Git masters is beyond the scope of the course.
+
+- Using the RStudio server to interface with GitHub will allow us to focus on just a few commands and avoid command line complications.
+
+--
+- For much more on working with git and R, consult  [happygitwithr.com](http://happygitwithr.com/). 
+
+---
+class: inverse, center, middle
+
+# Getting Started with GitHub and RStudio Server activity
+
+---
+
+class: inverse, center, middle
+
+# Let's talk about Quarto
+
+---
 
 # Quarto documents  
 
@@ -143,28 +229,7 @@ Value of reproducibility:
     - use code/analysis for new or updated data
     - extend/modify analysis for other settings/data
     
----
-class: inverse, center, middle
 
-# Quarto demo  
 
----
 
-## Quarto demo topics  
-
-* YAML
-
-* Rendering
-
-* Inline code
-
-* Code chunks
-
-* Markdown formatting
-
-* Running code chunks
-
-* Setting parameters
-
-* Console vs Quarto environments
 
