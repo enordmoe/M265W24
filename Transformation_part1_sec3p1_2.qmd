@@ -1,0 +1,248 @@
+---
+title: "Data Transformation Part I"
+subtitle: "Introduction to Data Science"
+author: "Eric Nordmoe"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(nycflights13)
+heroes <- read_csv(file = "data/heroes.csv", 
+                   col_types = cols(
+                     name = col_character(),
+                     gender = col_factor(),
+                     hair_color = col_factor(),
+                     height = col_double(),
+                     publisher = col_factor(),
+                     alignment = col_factor(),
+                     weight = col_double()
+)
+)
+```
+
+# Review from Last Week
+
+## Layered Grammar of Graphics
+
+The **ggplot2** code template:
+
+```{r}
+#| eval: FALSE
+ggplot(data = <DATA>, mapping = aes(<GLOBAL_MAPPINGS>)) +
+  <GEOM_FUNCTION>(
+     mapping = aes(<LOCAL_MAPPINGS>),
+     other arguments
+)+ 
+  <FACET_FUNCTION> +
+  labs(NAME-VALUE pairs)
+```
+
+\
+\
+More details to come later
+
+## ggplot2 Review: Find the errors
+
+**Chunk 1**
+
+```{r}
+#| eval: false
+ggplot(data = mpg, aes(x = hwy)) + 
+  geom_point()
+```
+
+. . .
+
+**Chunk 2**
+
+```{r}
+#| eval: false
+ggplot(data = mpg) + 
+  geom_bar(aes(x = hwy))  
+```
+
+. . .
+
+**Chunk 3**
+
+```{r}
+#| eval: false
+ggplot(data = mpg) +
+  geom_point(aes(x = hwy, y = displ, color = "blue"))
+```
+
+## R Basics Review Question 1
+
+**Find the error**
+
+```{r}
+#| eval: false
+my_variable <- 10
+my_varıable
+#> Error in eval(expr, envir, enclos): object 'my_varıable' not found
+```
+
+## R Basics Review Question 2
+
+**Modify the following to make it run correctly.**
+
+```{r}
+#| eval: false
+libary(todyverse)
+
+ggplot(dTA = mpg) + 
+  geom_point(maping = aes(x = displ y = hwy)) +
+  geom_smooth(method = "lm)
+```
+
+# Working with Data in R
+
+## Variable Types
+
+Seven data types in R:
+
+::: incremental
+-   `int` : integer
+-   `dbl`: for double-precision, or real numbers
+-   `chr`: character vectors, or strings
+-   `dttm`: date-times (a date + a time)
+-   `lgl`: logical contains only TRUE or FALSE values
+-   `fctr`: factors used to represent categorical variables
+-   `date`: dates
+:::
+
+## Data Set Examples: **mpg** {.smaller}
+
+```{r}
+mpg
+```
+
+## Data Set Examples: **flights** {.smaller}
+
+```{r}
+flights
+```
+
+## Data Set Examples: **heroes** {.smaller}
+
+```{r}
+heroes
+```
+
+::: aside
+Source: https://www.kaggle.com/datasets/claudiodavi/superhero-set
+:::
+
+# A Grammar for Data Wrangling
+
+## Transformation Overview
+
+-   Transformations get data into forms for creating visuals and generating insights
+
+-   Data are nouns and transformations are verbs
+
+![](images/clipboard-2480804491.png)
+
+::: aside
+Source: https://r-pedia.gitbook.io/cevi/intro-to-r-bootcamp/03-data-transformations
+:::
+
+## Kinds of Transformation
+
+The **dplyr** package provides several types of functions for manipulating data frames
+
+-   **Rows:** sorting, filtering, and identifying rows with specified characteristics
+
+-   **Columns**: selecting, renaming and rearranging variables and creating new variables from old
+
+-   **Groups:** processing, summarizing and subsetting groups of observations
+
+## The **dplyr** Package
+
+-   The **dplyr** package functions follow a consistent pattern
+
+    -   The first argument is a data frame
+
+    -   Subsequent arguments specify columns to operate on
+
+    -   The output is a new data frame
+
+-   Functions are linked using the pipe `|>` (similar to the `+` in **ggplot2**)
+
+## Get to Know the dplyr Cheat Sheet
+
+![](Transformation_part1_sec3p1_2_files/dply_cheat_sheet.png){fig-align="center" width="640"}
+
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/data-transformation.pdf>
+:::
+
+## Today: Wrangling Rows
+
+Key **verbs** or **functions** for today:
+
+::: incremental
+-   `filter()`: picks observations by their values
+
+-   `arrange()`: reorders rows
+
+-   `distinct()`: finds rows with unique values
+:::
+
+## `filter()`
+
+-   Extract cases based using specified criteria
+
+![](figures/filter.png)
+
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
+:::
+
+## `arrange()`
+
+-   Reorder rows based on specified variable(s)
+
+![](figures/arrange.png)
+
+::: aside Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
+
+## `distinct()`
+
+-   Remove rows with duplicate values of specified variable(s)
+
+![](figures/distinct.png)
+
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
+:::
+
+## Operators: Tools of the Trade
+
+Use these operators to specify logical conditions when working with rows
+
+-   Comparison
+    -   Equality: `==`
+    -   Inequality: `>`, `>=`, `<`, `<=`, `!=`
+
+. . .
+
+-   Logical
+    -   AND: `&`
+    -   OR: `|`
+    -   NOT: `!`
+
+# Examples
