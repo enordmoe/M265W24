@@ -218,7 +218,9 @@ Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
 
 ![](figures/arrange.png)
 
-::: aside Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
+:::
 
 ## `distinct()`
 
