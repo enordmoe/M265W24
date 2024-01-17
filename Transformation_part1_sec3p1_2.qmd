@@ -41,7 +41,9 @@ The **ggplot2** code template:
 
 ```{r}
 #| eval: FALSE
-ggplot(data = <DATA>, mapping = aes(<GLOBAL_MAPPINGS>)) +
+ggplot(data = <DATA>,
+       mapping = aes(<GLOBAL_MAPPINGS>)
+       ) +
   <GEOM_FUNCTION>(
      mapping = aes(<LOCAL_MAPPINGS>),
      other arguments
