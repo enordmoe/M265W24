@@ -78,6 +78,74 @@ Key **verbs** or **functions** for working with variables (columns) today:
 -   `relocate()`: reorder variable columns
 :::
 
+## `mutate()`
+
+Adds new columns (variables) that are calculated from the existing columns (variables)
+
+![](figures/mutate.png)
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
+## `mutate()` arguments
+
+-   `.after =` and `.before =` used to specify where to put the new column(s)
+
+-   `.keep =` specify which columns to retain in addition to the newly created columns
+
+    ::: incremental
+    -   `.keep = "all"` (default) retain the existing and newly created columns
+    -   `.keep = "used"` only keep the columns used in the `mutate()` computations
+    -   `.keep = "none"` replace the existing columns with the newly created columns
+    :::
+
+## `select()`
+
+Selects specific columns to focus on
+
+![](figures/select.png)
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
+## `select()` Helper Functions
+
+For selecting specific variables or groups of variables with similar names or distinguishing strings:
+
+::: incremental
+-   `starts_with("abc")`: matches names that begin with "abc"
+
+-   `ends_with("xyz")`: matches names that end with "xyz"
+
+-   `contains("ijk")`: matches names that contain "ijk"
+
+-   `num_range("x", 1:3)`: matches x1, x2 and x3.
+:::
+
+## `rename()`
+
+Rename one or more columns
+
+![](figures/rename.png)
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
+## `relocate()`
+
+Changes the order of variables within a data frame.
+
+![](figures/relocate.png)
+
+-   Important arguments: `.before` and `.after` to specify locations
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
 ## Connect Data Wrangling Commands with the Pipe
 
 -   The `|>` operator in Tidyverse functions is called the pipe operator.
@@ -116,49 +184,4 @@ find("keys") |>
 Source: datasciencebox.org
 :::
 
-## `filter()`
-
--   Extract cases based using specified criteria
-
-![](figures/filter.png)
-
-::: aside
-Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
-:::
-
-## `arrange()`
-
--   Reorder rows based on specified variable(s)
-
-![](figures/arrange.png)
-
-::: aside
-Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
-:::
-
-## `distinct()`
-
--   Remove rows with duplicate values of specified variable(s)
-
-![](figures/distinct.png)
-
-::: aside
-Source: <https://rstudio.github.io/cheatsheets/html/data-transformation.html>
-:::
-
-## Operators: Tools of the Trade
-
-Use these operators to specify logical conditions when working with rows
-
--   Comparison
-    -   Equality: `==`
-    -   Inequality: `>`, `>=`, `<`, `<=`, `!=`
-
-. . .
-
--   Logical
-    -   AND: `&`
-    -   OR: `|`
-    -   NOT: `!`
-
-# Examples
+# Try the Examples

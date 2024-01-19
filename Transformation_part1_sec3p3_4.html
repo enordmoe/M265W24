@@ -453,6 +453,67 @@ Eric Nordmoe
 </ul>
 </div>
 </section>
+<section id="mutate" class="slide level2">
+<h2><code>mutate()</code></h2>
+<p>Adds new columns (variables) that are calculated from the existing columns (variables)</p>
+<p><img data-src="figures/mutate.png"></p>
+
+<aside><div>
+<p>Source: Data Transformation with <code>dplyr</code>: CHEAT SHEET</p>
+</div></aside></section>
+<section id="mutate-arguments" class="slide level2">
+<h2><code>mutate()</code> arguments</h2>
+<ul>
+<li><p><code>.after =</code> and <code>.before =</code> used to specify where to put the new column(s)</p></li>
+<li><p><code>.keep =</code> specify which columns to retain in addition to the newly created columns</p>
+<div>
+<ul>
+<li class="fragment"><code>.keep = "all"</code> (default) retain the existing and newly created columns</li>
+<li class="fragment"><code>.keep = "used"</code> only keep the columns used in the <code>mutate()</code> computations</li>
+<li class="fragment"><code>.keep = "none"</code> replace the existing columns with the newly created columns</li>
+</ul>
+</div></li>
+</ul>
+</section>
+<section id="select" class="slide level2">
+<h2><code>select()</code></h2>
+<p>Selects specific columns to focus on</p>
+<p><img data-src="figures/select.png"></p>
+
+<aside><div>
+<p>Source: Data Transformation with <code>dplyr</code>: CHEAT SHEET</p>
+</div></aside></section>
+<section id="select-helper-functions" class="slide level2">
+<h2><code>select()</code> Helper Functions</h2>
+<p>For selecting specific variables or groups of variables with similar names or distinguishing strings:</p>
+<div>
+<ul>
+<li class="fragment"><p><code>starts_with("abc")</code>: matches names that begin with “abc”</p></li>
+<li class="fragment"><p><code>ends_with("xyz")</code>: matches names that end with “xyz”</p></li>
+<li class="fragment"><p><code>contains("ijk")</code>: matches names that contain “ijk”</p></li>
+<li class="fragment"><p><code>num_range("x", 1:3)</code>: matches x1, x2 and x3.</p></li>
+</ul>
+</div>
+</section>
+<section id="rename" class="slide level2">
+<h2><code>rename()</code></h2>
+<p>Rename one or more columns</p>
+<p><img data-src="figures/rename.png"></p>
+
+<aside><div>
+<p>Source: Data Transformation with <code>dplyr</code>: CHEAT SHEET</p>
+</div></aside></section>
+<section id="relocate" class="slide level2">
+<h2><code>relocate()</code></h2>
+<p>Changes the order of variables within a data frame.</p>
+<p><img data-src="figures/relocate.png"></p>
+<ul>
+<li>Important arguments: <code>.before</code> and <code>.after</code> to specify locations</li>
+</ul>
+
+<aside><div>
+<p>Source: Data Transformation with <code>dplyr</code>: CHEAT SHEET</p>
+</div></aside></section>
 <section id="connect-data-wrangling-commands-with-the-pipe" class="slide level2">
 <h2>Connect Data Wrangling Commands with the Pipe</h2>
 <ul>
@@ -493,59 +554,8 @@ Eric Nordmoe
 <aside><div>
 <p>Source: datasciencebox.org</p>
 </div></aside></section>
-<section id="filter" class="slide level2">
-<h2><code>filter()</code></h2>
-<ul>
-<li>Extract cases based using specified criteria</li>
-</ul>
-<p><img data-src="figures/filter.png"></p>
-
-<aside><div>
-<p>Source: <a href="https://rstudio.github.io/cheatsheets/html/data-transformation.html" class="uri">https://rstudio.github.io/cheatsheets/html/data-transformation.html</a></p>
-</div></aside></section>
-<section id="arrange" class="slide level2">
-<h2><code>arrange()</code></h2>
-<ul>
-<li>Reorder rows based on specified variable(s)</li>
-</ul>
-<p><img data-src="figures/arrange.png"></p>
-
-<aside><div>
-<p>Source: <a href="https://rstudio.github.io/cheatsheets/html/data-transformation.html" class="uri">https://rstudio.github.io/cheatsheets/html/data-transformation.html</a></p>
-</div></aside></section>
-<section id="distinct" class="slide level2">
-<h2><code>distinct()</code></h2>
-<ul>
-<li>Remove rows with duplicate values of specified variable(s)</li>
-</ul>
-<p><img data-src="figures/distinct.png"></p>
-
-<aside><div>
-<p>Source: <a href="https://rstudio.github.io/cheatsheets/html/data-transformation.html" class="uri">https://rstudio.github.io/cheatsheets/html/data-transformation.html</a></p>
-</div></aside></section>
-<section id="operators-tools-of-the-trade" class="slide level2">
-<h2>Operators: Tools of the Trade</h2>
-<p>Use these operators to specify logical conditions when working with rows</p>
-<ul>
-<li>Comparison
-<ul>
-<li>Equality: <code>==</code></li>
-<li>Inequality: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>!=</code></li>
-</ul></li>
-</ul>
-<div class="fragment">
-<ul>
-<li>Logical
-<ul>
-<li>AND: <code>&amp;</code></li>
-<li>OR: <code>|</code></li>
-<li>NOT: <code>!</code></li>
-</ul></li>
-</ul>
-</div>
-</section>
-<section id="examples" class="title-slide slide level1 center">
-<h1>Examples</h1>
+<section id="try-the-examples" class="title-slide slide level1 center">
+<h1>Try the Examples</h1>
 <div class="footer footer-default">
 
 </div>
