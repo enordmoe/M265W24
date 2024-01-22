@@ -1,0 +1,234 @@
+---
+title: "Data Transformation Part III"
+subtitle: "Introduction to Data Science"
+author: "Eric Nordmoe"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+library(nycflights13)
+library(fueleconomy)
+```
+
+## Review from Previous Class
+
+1.  Compare `filter()` and `select()`
+
+    -   `filter(df, condition1, condition2)`
+
+    -   `select(df, condition1, condition2)`
+
+. . .
+
+2.  Compare `arrange()` and `relocate`()\`
+
+    -   How are they similar? different?
+
+## Review from Previous Class
+
+3.  What does `mutate()` do?
+
+    -   What are the `.keep =` options for?
+
+    -   `select(df, condition1, condition2)`
+
+
+## Review: Kinds of Transformation
+
+The **dplyr** package provides several types of functions for manipulating data frames
+
+-   **Rows:** sorting, filtering, and identifying rows with specified characteristics
+
+-   **Columns**: selecting, renaming and rearranging variables and creating new variables from old
+
+-   **Groups:** processing, summarizing and subsetting groups of observations
+
+## Get to Know the dplyr Cheat Sheet
+
+![](Transformation_part1_sec3p1_2_files/dply_cheat_sheet.png){fig-align="center" width="640"}
+
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/data-transformation.pdf>
+:::
+
+## Today: Working with Groups
+
+Key **verbs** or **functions** for working with groups in your data:
+
+::: incremental
+-   `summarize()`: compute and save summary statistics by group
+
+-   `group_by()`: create groups based on one or more variables
+
+-   `slice()`: extract rows overall or within groups
+:::
+
+## `summarize()`
+
+Calculates summary statistics by group and saves as a new variable with the name you specify.
+
+![](figures/summarize.png)
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
+## Summarize the whole dataset  
+
+```{r}
+vehicles |> 
+  summarize(mean_cty = mean(cty), med_cty = median(cty))
+```
+
+* Sometimes useful but other times could be very misleading  
+
+* Subgroup analysis is more common
+
+
+## `summarize()` and `group_by()`  
+
+* Use `group_by()` to create a "grouped" copy of a table grouped by specified variables
+
+* Use `summarize()` (or other functions) to act on each group separately and combine the results.
+
+## `summarize()` and `group_by()`  
+
+![](figures/group_by.png)
+
+::: aside
+Source: Data Transformation with `dplyr`: CHEAT SHEET
+:::
+
+
+## Use `group_by()` to use  `summarize()` with subgroups
+
+
+
+```{r}
+#| eval = TRUE
+vehicles |> 
+  group_by(make) |>  
+  summarize(med_cty = median(cty), ncases = n()) 
+```
+
+
+
+
+## But notice `group_by()` does little by itself
+
+```{r}
+vehicles |> 
+  group_by(make)
+```
+
+
+---
+
+## Facts about `summarize()` 
+
+* Displays results for `group_by()` groups in ascending order  
+
+* Can be used with many functions and variations (see the Data Transformations Cheat sheet)  
+
+    + Functions: `mean()`, `median()`, `n()`, `n_distinct()`, `sd()`, `IQR()`, etc.
+
+    + Variations: `count()`
+    
+
+## Can be combined with other verbs using the pipe operator
+
+```{r}
+vehicles |>
+  filter(year == 2010) |>
+  group_by(make, model) |> 
+  summarize(avg_hwy = mean(hwy)) |>
+  arrange(desc(avg_hwy)) |> 
+  ungroup()
+```
+
+* Note use of `ungroup()`; try taking it out and see what happens? What do you think it's doing?
+
+## Combine with `ggplot()`: Example 1 
+
+```{r}
+vehicles |>
+  filter(make %in% c("Chevrolet", "Ford", "Toyota")) |>
+  group_by(make, year) |> 
+  summarize(avg_hwy = mean(hwy)) |>
+  ggplot(aes(x = year, y = avg_hwy, color = make)) +
+  geom_point() +
+  labs(title = "Trend in Highway Mileage for Three Makes of Vehicles")
+```
+
+
+## Combine with `ggplot()`: Example 2 
+
+* Includes **ggplot2** features yet to come
+
+```{r}
+vehicles |> 
+  filter(make %in% c("Chevrolet", "Ford", "Toyota"), year %in% c(2000, 2005, 2010)) |>
+  group_by(make, year) |> 
+  summarize(avg_hwy = mean(hwy)) |>
+  ggplot(aes(x = make, y = avg_hwy, fill = factor(year))) +
+  geom_col(position = position_dodge()) + 
+  labs(title = "Average Highway Mileage by Make and Year", x = "", y = "MPG")
+```
+
+
+---
+
+### Combine with `ggplot()`: Example 3 
+
+::: {.panel-tabset}
+
+### Code
+
+```{r}
+#| eval: false
+# Using boxplots  
+vehicles |>
+  group_by(make, year) |> 
+  summarize(avg_hwy = mean(hwy), n = n()) |> 
+  filter(n >= 5) |> 
+  ggplot(aes(x = avg_hwy, y = factor(year), fill= factor(year))) + 
+  geom_boxplot() +
+  labs(x = "", y = "MPG", title = "Average Highway Mileage Variation Across Models and Time")
+```
+
+### Graph
+
+```{r}
+#| echo: false
+# Using boxplots  
+vehicles |>
+  group_by(make, year) |> 
+  summarize(avg_hwy = mean(hwy), n = n()) |> 
+  filter(n >= 5) |> 
+  ggplot(aes(x = avg_hwy, y = factor(year), fill= factor(year))) + 
+  geom_boxplot(show.legend = FALSE) +
+  labs(x = "MPG", y = "Year", title = "Average Highway Mileage Variation Across Models and Time")
+```
+
+:::
+
+
+
+
+
+
+# Minilab
