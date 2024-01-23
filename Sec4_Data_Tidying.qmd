@@ -1,0 +1,322 @@
+---
+title: "Data Tidying"
+subtitle: "Introduction to Data Science"
+author: "Eric Nordmoe"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+library(nycflights13)
+library(fueleconomy)
+```
+
+# Review from Previous Class
+
+## Review from Previous Class
+
+1.  Compare `filter()` and `select()`
+
+    -   `filter(df, condition1, condition2)`
+
+    -   `select(df, condition1, condition2)`
+
+. . .
+
+2.  Compare `arrange()` and `relocate`()\`
+
+    -   How are they similar? different?
+
+## Review from Previous Class
+
+3.  What does `mutate()` do?
+
+    -   What are the `.keep =` options for?
+
+    -   `select(df, condition1, condition2)`
+
+# Data Tidying
+
+## Tidying data sparks joy!
+
+![](figures/tidying_up_cover.jpg){fig-alt="marie kondo" fig-align="center"}
+
+## Get to Know the Data Tidying with `tidyr` Cheat Sheet
+
+![](figures/tidy_cheat.png){fig-alt="tidy cheat sheet" fig-align="center" width="516"}
+
+::: aside
+Source: <https://rstudio.github.io/cheatsheets/html/tidyr.html>
+:::
+
+## Tidy Data
+
+![](https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png){fig-alt="tidy cheat sheet" fig-align="center" width="800"}
+
+-   Every variable has its own column
+-   Every case has its own row
+-   Every value has its own cell
+
+::: aside
+Source: R4DS2e
+:::
+
+## Why tidy data?
+
+::: incremental
+1.  Easy to understand
+
+2.  Consistent structure works predictably with familiar tools
+
+3.  Tidyverse tools optimized for this structure
+:::
+
+## What's Tidy for you may not be tidy for me?
+
+-   Tidy may be in the eye of the beholder
+
+-   College course records
+
+    -   Project 1: Students are of interest so student is the case but...
+
+    -   Project 2: Individual courses are of primary interest so course is the case
+
+-   The definition of tidy for a given data set could be ambiguous
+
+## Why not tidy data?
+
+1.  Gain doesn't justify the trouble
+
+2.  Analytical methods better suited for other structures
+
+3.  Discipline-specific expectations
+
+## Sample Datasets: `table1`
+
+```{r}
+# Tidy Dataset
+table1
+```
+
+## Sample Datasets: `table4a` Cases
+
+```{r}
+# Untidy Dataset
+#  "Cases" variable spread across multiple columns
+table4a
+```
+
+## Sample Datasets: `table4b` Populations
+
+```{r}
+# Untidy Dataset
+#  "Population" variable spread across multiple columns
+table4b
+```
+
+## Sample Datasets: `table2`
+
+```{r}
+# Untidy Dataset
+# Variables appear in rows
+# Cases spread across multiple rows
+table2
+```
+
+::: aside
+See also the **cms_patient_experience** dataset
+:::
+
+## Pivoting: Longer or Wider?
+
+Once you understand the data, you may need to resolve one of the following problems to carry out analysis using **tidyverse** tools:
+
+1.  One variable might be spread across multiple columns.
+    -   Tables 4a and 4b because data are in year-specific columns
+2.  One observation might be scattered across multiple rows.
+    -   Table 2 because observation is Country-Year combination
+
+# `pivot_longer()`
+
+## Pivoting Longer
+
+Pivoting **table4a** TB cases into a longer, tidy form
+
+![](https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png){fig-alt="pivot longer" fig-align="center" width="800"}
+
+-   Each year-country combination gets its own row.
+
+-   Observations are year-country combination.
+
+::: aside
+Source: R4DS
+:::
+
+## `pivot_longer()` Example {.smaller}
+
+```{r}
+#| eval: false
+table4a %>% 
+  pivot_longer(
+    cols = c(`1999`, `2000`), 
+    names_to = "year", 
+    values_to = "cases"
+    )
+```
+
+. . .
+
+Referring to sample `table4a` :
+
+-   `cols` specifies the (old) columns to pivot into the longer format
+    -   Single ticks because numbers (1999) are illegal R variable names.
+
+. . .
+
+-   `names_to` specifies the new name to be given to the variable stored in column names
+    -   `year`
+
+. . .
+
+-   `values_to` specifies the variable whose values are spread over the cells
+    -   number of TB `cases`
+
+**Note:** `names_to` and `values_to` are *new* columns whose names you specify so they are quoted.
+
+## Another `pivot_longer()` Example: Part 1 {.smaller}
+
+-   Make a toy data set
+
+```{r}
+df <- tribble(
+  ~student,  ~height8, ~height12, ~height18,
+   "Arjun",  49,  61, 70,
+   "Basil",  53,  63, 69,
+   "Chen",  51,  62, 73
+)
+df
+```
+
+## Another `pivot_longer()` Example: Part 2 {.smaller}
+
+-   Apply pivot_longer()
+
+```{r}
+#| code-line-numbers: "1-2|3|4|5|"
+df |> 
+  pivot_longer(
+    cols = !student, #Note use of ! for all other columns
+    names_to = "age", 
+    values_to = "height"
+    )
+```
+
+## Another `pivot_longer()` Example: Part 3 {.smaller}
+
+-   Further tidying of the data
+
+```{r}
+#| code-line-numbers: "|6-7|"
+df |> 
+  pivot_longer(
+    cols = !student, #Note use of ! for all other columns
+    names_to = "age", 
+    values_to = "height"
+    ) |> 
+  mutate(age = parse_number(age))
+```
+
+. . .
+
+-   More on `parse_number()` later in the term
+
+# `pivot_wider()`
+
+## Recall `table2`
+
+-   Observations spread across rows
+
+```{r}
+table2
+```
+
+## The Widening of `table2`
+
+```{r}
+table2 |> 
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  )
+```
+
+. . .
+
+Referring to sample `table4a` :
+
+-   `names_from` specifies the variable containing the names of the output columns
+
+. . .
+
+-   `values_from` specifies the variable(s) to get the cell values from
+
+. . .
+
+**Note:** Names are not quoted because they already exist in `table2`
+
+## Example: Return to the Growth Charts {.smaller}
+
+```{r}
+# Transpose this table
+df2 <- tribble(
+  ~student,  ~age, ~height,
+   "Arjun",  8, 49, 
+   "Arjun",  12, 61, 
+   "Arjun",  18, 70,
+   "Basil",  8, 53, 
+   "Basil",  12, 63, 
+   "Basil",  18, 69,
+   "Chen",  8, 51, 
+   "Chen",  12, 62, 
+   "Chen",  18, 73
+  )
+df2
+```
+
+## The Widening of `df2`
+
+<!--# Two versions of this slide with and without names_prefix -->
+
+```{r}
+df2 |> 
+  pivot_wider(
+    names_from = age,
+    names_prefix = "ChildAge",
+    values_from = height
+  )
+```
+
+# Appendix
+
+## sample Datasets: `cms_patient_experience` {.smaller}
+
+```{r}
+# Untidy Dataset
+# More extreme verson of table2
+cms_patient_experience
+```
+
+# Application Exercise
