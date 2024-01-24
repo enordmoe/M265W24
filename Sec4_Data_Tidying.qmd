@@ -26,29 +26,122 @@ library(fueleconomy)
 
 # Review from Previous Class
 
-Add questions here
+## First, Create a Toy Data Set
 
-## Review from Previous Class
+```{r}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+df
+```
 
-1.  Compare `filter()` and `select()`
+## What does it do? Part 1
 
-    -   `filter(df, condition1, condition2)`
+**Chunk 1**
 
-    -   `select(df, condition1, condition2)`
+```{r}
+#| eval: false
+df |>
+  group_by(y)
+```
 
 . . .
 
-2.  Compare `arrange()` and `relocate`()\`
+<br>
 
-    -   How are they similar? different?
+**Chunk 2**
 
-## Review from Previous Class
+```{r}
+#| eval: false
+df |>
+  arrange(y)
+```
 
-3.  What does `mutate()` do?
+## What does it do? Part 2
 
-    -   What are the `.keep =` options for?
+**Chunk 3**
 
-    -   `select(df, condition1, condition2)`
+```{r}
+#| eval: false
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+```
+
+. . .
+
+<br>
+
+**Chunk 4**
+
+```{r}
+#| eval: false
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
+## What does it do? Part 3
+
+**Chunk 5**
+
+```{r}
+#| eval: false
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+```
+
+## What's the difference?
+
+**Chunk A**
+
+```{r}
+#| eval: false
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
+. . .
+
+**Chunk B**
+
+```{r}
+#| eval: false
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+```
+
+## For More Thought
+
+Explain what each of the following is producing:
+
+. . .
+
+**Chunk 1**
+
+```{r}
+#| eval: false
+starwars  |>  
+  select(name, mass, species) |>
+  mutate(mass_norm = mass / mean(mass, na.rm = TRUE))
+```
+
+. . .
+
+**Chunk 2**
+
+```{r}
+#| eval: false
+starwars |>
+  select(name, mass, species) |>
+  group_by(species) |>
+  mutate(mass_norm = mass / mean(mass, na.rm = TRUE))
+```
 
 # Data Tidying
 
@@ -171,7 +264,7 @@ Source: R4DS
 
 ```{r}
 #| eval: false
-table4a %>% 
+table4a |> 
   pivot_longer(
     cols = c(`1999`, `2000`), 
     names_to = "year", 
@@ -298,11 +391,26 @@ df2 <- tribble(
 df2
 ```
 
-## The Widening of `df2`
-
-<!--# Two versions of this slide with and without names_prefix -->
+## The Widening of `df2`: Part 1
 
 ```{r}
+df2 |> 
+  pivot_wider(
+    names_from = age,
+    values_from = height
+  )
+```
+
+. . .
+
+Variable names look suspicious!
+
+## The Widening of `df2`: Part 2
+
+-   A handy solution:
+
+```{r}
+#| code-line-numbers: "|4|"
 df2 |> 
   pivot_wider(
     names_from = age,
@@ -311,14 +419,67 @@ df2 |>
   )
 ```
 
-# Appendix
+## R4DS Widening Example: `cms` data {.smaller}
 
-## sample Datasets: `cms_patient_experience` {.smaller}
+-   Dataset about Medicare and Medicaid Services patient experiences
 
 ```{r}
-# Untidy Dataset
-# More extreme verson of table2
-cms_patient_experience
+glimpse(cms_patient_experience)
 ```
 
-# Application Exercise
+## A Better Perspective {.smaller}
+
+Using `View(cms_patient_experience)`
+
+![](images/clipboard-731490597.png)
+
+## A First Attempt at Widening {.smaller}
+
+```{r}
+cms_patient_experience |> 
+  pivot_wider(
+    names_from = measure_cd,
+    values_from = prf_rate
+  )
+```
+
+* This doesn't look right
+
+## Uniquely Identifying the Rows {.smaller}
+
+![](figures/cms_wider_annot.png){fig-alt="annotated cms data" fig-align="center"}
+
+## A Better Attempt at Widening {.smaller}
+
+```{r}
+#| code-line-numbers: "|3|"
+cms_patient_experience |> 
+  pivot_wider(
+    id_cols = starts_with("org"),
+    names_from = measure_cd,
+    values_from = prf_rate
+  )
+```
+
+
+* This looks better! 
+* Key is to uniquely identify the rows
+
+
+## Summary 
+
+::: incremental
+
+* Tidy data are best suited for our work in the **Tidyverse**
+
+* The need to pivot is very common!
+
+* `pivot_longer()` is most common in practice
+  + Be sure to review the fun Billboard example in R4DS
+  
+* `pivot_wider()` may require carefully specifying the id columns
+
+* Start simple and move on to more challenging data
+
+:::
+
