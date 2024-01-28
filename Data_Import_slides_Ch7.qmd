@@ -36,11 +36,11 @@ Some R data types:
 
 -   and others we'll focus on later like factors, times and dates
 
-# Demo: Import data sets
+# Demo: Examples of less friendly data sets
 
-## `heroes.csv`
+<!-- Duke basketball data and Anna R.'s Activity Roster Data, Math Department classes -->
 
-## `cat-lovers.csv`
+Demo: Import data sets
 
 ## Two Types of Data Sets
 
@@ -54,10 +54,6 @@ Some R data types:
     -   Linked data sets
     -   Mixed data types: variables are values, lists, other objects
     -   Require careful handling
-
-# Demo: Examples of less friendly data sets
-
-<!-- Duke basketball data and Anna R.'s Activity Roster Data, Math Department classes -->
 
 ## Common data set types and corresponding `read_` functions
 
@@ -227,3 +223,11 @@ tribble(
   5, "g", 0.60
 )
 ```
+
+## Importing Data using the RStudio GUI
+
+1.    `heroes.csv`
+
+. . .
+
+2.    `cat-lovers.csv`
