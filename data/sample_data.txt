@@ -1,0 +1,4 @@
+Name-Age,GPA
+John-25,3.5
+Jane-30, 4.2
+Michael-22,    3.8
