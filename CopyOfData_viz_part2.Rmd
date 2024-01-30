@@ -1,0 +1,263 @@
+---
+title: "Data visualisation Part II"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+
+# Review from Last Time  
+
+1. What does the `ggplot()` function do?
+
+2. What are aesthetics?
+
+3. Give three examples of an aesthetic.
+
+---
+
+## The ggplot() function  
+
+`ggplot()` initalizes a **ggplot** 
+
+* Declare the data frame
+
+--
+
+* Specify plot aesthetics common to all subsequent layers...
+    - **Unless**  specificially overridden
+
+
+---
+
+## Warm-up Question  
+
+Question: What's wrong with this plot and what's the solution?
+
+```{r, fig.height = 4}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+```
+
+---
+
+## Topics for Today
+
+* Facets
+
+
+* Geoms  
+    + Scatterplot
+    + Smoother
+    + Bar charts
+    
+
+
+* Global vs local mappings
+
+
+
+* Statistical transformations
+    + Use of `stat_xxxx()` functions to create layers
+
+
+
+* Resources
+    + Data visualization with `ggplot2` cheat sheet
+    + Use of help for `geom_xxxx()` functions
+
+---
+
+## Learning Outcomes for Today
+
+* Be able to identify the default `stat` and `geom`
+
+* Be able to construct graphs with facet wrapping and facet grids  
+
+* Be able to  use global mappings correctly to avoid code duplication
+
+* Be able to construct the following kinds of graphs for common situations:  
+    + Scatterplot with smoother overlay with and without subgroups
+    + Bar charts  
+    + Boxplots 
+    + Histograms
+
+* Be able to find help for making customized or less common graphs
+
+---
+
+## Introduction to ggplot2
+
+* `ggplot2` implements the grammar of graphics
+
+*  Basic graphing template 
+
+```{r, eval=FALSE}
+ ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) +
+  other options
+```
+
+1. Begin with the `ggplot()` function
+    + Constructs base coordinate system
+    
+--
+
+1. Add layers
+
+--
+
+1. Map variables to aesthetics (visual properties)
+
+--
+
+1. Use the `+` sign to connect lines
+
+---
+
+## Faceting
+
+* Create subsets of the data to make the same graph for each subset
+
+* Subsets based on either
+    + Categorical variables  OR
+    + Quantitative variables with small number of distinct values OR
+    + Quantitative variables sliced into sub-intervals
+    
+* Useful for exploring conditional relationships and large data sets
+
+---
+class: inverse, center, middle
+
+# Examples using mpg_viz2.Rmd 
+
+---
+
+
+## Faceting Summary  
+
+Two facet commands:  
+* `facet_wrap(~var)`: Wraps a 1d sequence of panels into 2d Panels defined by levels of `var`  
+    + `facet_wrap(~ var1 + var2)` for wrapping all combinations of `var1` and `var2` observed in the data. 
+
+* `facet_grid(rowvar ~ colvar)`: Forms a matrix of panels  
+    + Panels defined by combinations of `rowvar` and `colvar`  
+    + Use `(. ~ colvar)` or `(rowvar ~ .)` for 1d sequence of panels  
+    
+* Consider `cut_interval()` and `cut_number()` functions for faceting with continuous variables
+
+---
+
+# Smoothers
+###  Using `geom_smooth()`
+
+The `geom_smooth()` object plots a line fitted to the data
+
+--
+
+* Shows the general pattern in a scatterplot
+
+--
+
+* Aids the eye in seeing the visual pattern, especially with overplotting
+
+--
+
+* Default `method` is a smooth curve but can also be used to overlay the least squares line: 
+    + `method = "lm"`
+
+
+---
+class: inverse, center, middle
+
+# More examples using mpg_viz2.Rmd 
+
+---
+
+## A Simple Bar Chart  
+
+* Height of bars represents frequency
+
+```{r, fig.height = 3, fig.width = 6}
+ggplot(mpg, aes(x = class)) + 
+  geom_bar()
+```
+
+---
+
+## How `ggplot2` Creates a Bar Chart
+
+```{r, out.width='90%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://d33wubrfki0l68.cloudfront.net/70a3b18a1128c785d8676a48c005ee9b6a23cc00/7283c/images/visualization-stat-bar.png')
+```
+
+
+<div class="footnote">
+Source: http://r4ds.had.co.nz
+</div>
+
+---
+
+## Geoms and Stats 
+
+* In `ggplot2()` the algorithm used to calculate values for a graph is called the `stat`.
+
+* Each `geom` type has a default `stat`
+
+|     geom    |  Default stat |             What is being plotted:            |
+|:-------------:|:---------------:|:---------------------------------------------:|
+| `geom_point`  | `stat_identity` |             Actual x and y values             |
+| `geom_smooth` |  `stat_smooth`  |      Predictions from the smoothing model     |
+| `geom_bar`    |   `stat_count`  | Frequency (count) of values for each category |
+
+
+---
+class: inverse, center, middle
+
+
+# Examples using mpg_viz.Rmd
+
+---
+
+## An unusual and dangerous bar chart using Polar Coordinates  
+
+```{r, fig.height = 4}
+ ggplot(mpg, aes(x = factor(1), fill = factor(class))) +
+  geom_bar() +
+  coord_polar(theta = "y") +
+   labs(title = "Dangerous Plot", subtitle = "Do Not Use")
+```
+
+---
+
+## More practice  
+
+Use the `starwars` data to construct the following: 
+
+1. A scatterplot with a smoothing overlay using global mappings
+
+1. A scatterplot with a smoothing overlay using local mappings
+
+1. A scatterplot using faceting
+
+1. A bar chart showing proportions in each category
+
+1. A few more of your own choosing
+

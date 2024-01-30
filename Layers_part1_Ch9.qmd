@@ -1,0 +1,98 @@
+---
+title: "Chapter 9: Visualization with Layers"
+subtitle: "Part 1"
+author: "Introduction to Data Science"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+```
+
+## Review of Data Import
+
+::: incremental
+-   What function would you use to read a file where fields were
+    separated with "\|"?
+
+-   Apart from file, skip, and comment, what other arguments do
+    `read_csv()` and `read_tsv()` have in common?
+
+-   What are the most important arguments to `read_fwf()`?
+:::
+
+::: notes
+Answers:
+
+1.  `read_delim()`
+2.  All of them are the same. They're virtually identical except for the
+    default delimiter.
+3.  Position and width (can specify either way). Show examples.
+:::
+
+## Example of Reading from a Fixed Width File {.smaller}
+
+```{r}
+#| eval: false
+# use built-in text file called fwf-sample.txt
+fwf_sample <- readr_example("fwf-sample.txt")
+writeLines(read_lines(fwf_sample))
+# A vector of field widths
+read_fwf(fwf_sample, fwf_widths(c(20, 10, 12), c("name", "state", "ssn")))
+# Paired vectors of start and end positions
+read_fwf(fwf_sample, fwf_positions(c(1, 30), c(20, 42), c("name", "ssn")))
+```
+
+## Find the Problem
+
+Q: What is wrong with each of the following inline CSV files?
+
+```{r}
+#| eval: false
+read_csv("a,b\n1,2,3\n4,5,6")
+read_csv("a,b,c\n1,2\n1,2,3,4")
+read_csv("a,b\n\"1")
+read_csv("a,b\n1,2\na,b")
+read_csv("a,b\n1,t\nt,f")
+read_csv("a;b\n1;3")
+```
+
+::: notes
+Answers:
+
+1.  two variables names but three columns of data, concatenates last two
+    into one column ignoring comma between
+2.  three variable names but 2 columns of data in first row and 4 in
+    second; creates df with NA in first row and concatenates last two
+    numbers in second row
+3.  Only 1 observation but two names. The  character quotes the quote
+    symbol so we have no beginning to the data. No data is seen. The
+    first row is incomplete which seems to be problematic
+4.  Works fine but both columns are coerced to character variables.
+5.  Second column is recognized as logical because of t and f.
+6.  One character variable with the non-syntactic name `a;b`
+:::
+
+## Outline
+
+-   Grammar of graphics review
+-   Aesthetic mappings and settings
+-   Faceting
+
+## New
