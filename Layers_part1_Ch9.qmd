@@ -180,7 +180,6 @@ plot:
 **Note:** Not all aesthetics can be used with all types of graphs. More
 to come on this.
 
-
 ## Aesthetics summary {.smaller}
 
 -   Behavior of aesthetics depends on the nature of the variable:
@@ -197,11 +196,11 @@ to come on this.
 |   shape    | different shape for each level/category |                  shouldn't (and doesn't) work but ...                  |
 |   alpha    |             discrete steps              | linear mapping between alpha level and value (range can be restricted) |
 
-## Aesthetics Details 
+## Aesthetics Details
 
 This "vignette" contains many details not easily found elsewhere.
 
-https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
+<https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>
 
 ## Mapping vs Customization {.smaller}
 
@@ -375,7 +374,7 @@ ggplot(penguins,
 
 ::: columns
 ::: {.column width="50%"}
-::: {.fragment}
+::: fragment
 **Mapping**
 
 ```{r}
@@ -392,7 +391,7 @@ ggplot(penguins,
 :::
 
 ::: {.column width="50%"}
-::: {.fragment}
+::: fragment
 **Setting**
 
 ```{r}
@@ -406,7 +405,6 @@ ggplot(penguins,
 :::
 :::
 :::
-
 
 ## Linetypes `lty` {.smaller}
 
@@ -423,9 +421,6 @@ ggplot(penguins,
   geom_smooth(aes(lty = species)) +
   scale_colour_colorblind()
 ```
-
-
-
 
 # Faceting with the `mpg` data
 
