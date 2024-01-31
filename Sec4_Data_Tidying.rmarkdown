@@ -24,9 +24,11 @@ library(nycflights13)
 library(fueleconomy)
 ```
 
+
 # Review from Previous Class
 
 ## First, Create a Toy Data Set
+
 
 ```{r}
 df <- tibble(
@@ -37,9 +39,11 @@ df <- tibble(
 df
 ```
 
+
 ## What does it do? Part 1
 
 **Chunk 1**
+
 
 ```{r}
 #| eval: false
@@ -47,11 +51,13 @@ df |>
   group_by(y)
 ```
 
+
 . . .
 
 <br>
 
 **Chunk 2**
+
 
 ```{r}
 #| eval: false
@@ -59,9 +65,11 @@ df |>
   arrange(y)
 ```
 
+
 ## What does it do? Part 2
 
 **Chunk 3**
+
 
 ```{r}
 #| eval: false
@@ -70,11 +78,13 @@ df |>
   summarize(mean_x = mean(x))
 ```
 
+
 . . .
 
 <br>
 
 **Chunk 4**
+
 
 ```{r}
 #| eval: false
@@ -83,9 +93,11 @@ df |>
   summarize(mean_x = mean(x))
 ```
 
+
 ## What does it do? Part 3
 
 **Chunk 5**
+
 
 ```{r}
 #| eval: false
@@ -94,9 +106,11 @@ df |>
   summarize(mean_x = mean(x), .groups = "drop")
 ```
 
+
 ## What's the difference?
 
 **Chunk A**
+
 
 ```{r}
 #| eval: false
@@ -105,9 +119,11 @@ df |>
   summarize(mean_x = mean(x))
 ```
 
+
 . . .
 
 **Chunk B**
+
 
 ```{r}
 #| eval: false
@@ -115,6 +131,7 @@ df |>
   group_by(y, z) |>
   mutate(mean_x = mean(x))
 ```
+
 
 ## For More Thought
 
@@ -124,6 +141,7 @@ Explain what each of the following is producing:
 
 **Chunk 1**
 
+
 ```{r}
 #| eval: false
 starwars  |>  
@@ -131,9 +149,11 @@ starwars  |>
   mutate(mass_norm = mass / mean(mass, na.rm = TRUE))
 ```
 
+
 . . .
 
 **Chunk 2**
+
 
 ```{r}
 #| eval: false
@@ -142,6 +162,7 @@ starwars |>
   group_by(species) |>
   mutate(mass_norm = mass / mean(mass, na.rm = TRUE))
 ```
+
 
 # Data Tidying
 
@@ -201,12 +222,15 @@ Source: R4DS2e
 
 ## Sample Datasets: `table1`
 
+
 ```{r}
 # Tidy Dataset
 table1
 ```
 
+
 ## Sample Datasets: `table4a` Cases
+
 
 ```{r}
 # Untidy Dataset
@@ -214,7 +238,9 @@ table1
 table4a
 ```
 
+
 ## Sample Datasets: `table4b` Populations
+
 
 ```{r}
 # Untidy Dataset
@@ -222,7 +248,9 @@ table4a
 table4b
 ```
 
+
 ## Sample Datasets: `table2`
+
 
 ```{r}
 # Untidy Dataset
@@ -230,6 +258,7 @@ table4b
 # Cases spread across multiple rows
 table2
 ```
+
 
 ::: aside
 See also the **cms_patient_experience** dataset
@@ -262,6 +291,7 @@ Source: R4DS
 
 ## `pivot_longer()` Example {.smaller}
 
+
 ```{r}
 #| eval: false
 table4a |> 
@@ -271,6 +301,7 @@ table4a |>
     values_to = "cases"
     )
 ```
+
 
 . . .
 
@@ -295,6 +326,7 @@ Referring to sample `table4a` :
 
 -   Make a toy data set
 
+
 ```{r}
 df <- tribble(
   ~student,  ~height8, ~height12, ~height18,
@@ -305,9 +337,11 @@ df <- tribble(
 df
 ```
 
+
 ## Another `pivot_longer()` Example: Part 2 {.smaller}
 
 -   Apply pivot_longer()
+
 
 ```{r}
 #| code-line-numbers: "1-2|3|4|5|"
@@ -319,9 +353,11 @@ df |>
     )
 ```
 
+
 ## Another `pivot_longer()` Example: Part 3 {.smaller}
 
 -   Further tidying of the data
+
 
 ```{r}
 #| code-line-numbers: "|6-7|"
@@ -334,6 +370,7 @@ df |>
   mutate(age = parse_number(age))
 ```
 
+
 . . .
 
 -   More on `parse_number()` later in the term
@@ -344,11 +381,14 @@ df |>
 
 -   Observations spread across rows
 
+
 ```{r}
 table2
 ```
 
+
 ## The Widening of `table2`
+
 
 ```{r}
 table2 |> 
@@ -357,6 +397,7 @@ table2 |>
     values_from = count
   )
 ```
+
 
 . . .
 
@@ -373,6 +414,7 @@ Referring to sample `table4a` :
 **Note:** Names are not quoted because they already exist in `table2`
 
 ## Example: Return to the Growth Charts {.smaller}
+
 
 ```{r}
 # Transpose this table
@@ -391,7 +433,9 @@ df2 <- tribble(
 df2
 ```
 
+
 ## The Widening of `df2`: Part 1
+
 
 ```{r}
 df2 |> 
@@ -401,6 +445,7 @@ df2 |>
   )
 ```
 
+
 . . .
 
 Variable names look suspicious!
@@ -408,6 +453,7 @@ Variable names look suspicious!
 ## The Widening of `df2`: Part 2
 
 -   A handy solution:
+
 
 ```{r}
 #| code-line-numbers: "|4|"
@@ -419,13 +465,16 @@ df2 |>
   )
 ```
 
+
 ## R4DS Widening Example: `cms` data {.smaller}
 
 -   Dataset about Medicare and Medicaid Services patient experiences
 
+
 ```{r}
 glimpse(cms_patient_experience)
 ```
+
 
 ## A Better Perspective {.smaller}
 
@@ -435,6 +484,7 @@ Using `View(cms_patient_experience)`
 
 ## A First Attempt at Widening {.smaller}
 
+
 ```{r}
 cms_patient_experience |> 
   pivot_wider(
@@ -443,6 +493,7 @@ cms_patient_experience |>
   )
 ```
 
+
 -   This doesn't look right
 
 ## Uniquely Identifying the Rows {.smaller}
@@ -450,6 +501,7 @@ cms_patient_experience |>
 ![](figures/cms_wider_annot.png){fig-alt="annotated cms data" fig-align="center"}
 
 ## A Better Attempt at Widening {.smaller}
+
 
 ```{r}
 #| code-line-numbers: "|3|"
@@ -460,6 +512,7 @@ cms_patient_experience |>
     values_from = prf_rate
   )
 ```
+
 
 -   This looks better!
 -   Key is to uniquely identify the rows
@@ -479,3 +532,4 @@ cms_patient_experience |>
 
 -   Start simple and move on to more challenging data
 :::
+
