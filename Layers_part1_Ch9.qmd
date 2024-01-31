@@ -1,5 +1,5 @@
 ---
-title: "Chapter 9: Visualization with Layers"
+title: "Chapter : Visualization with Layers"
 subtitle: "Part 1"
 author: "Introduction to Data Science"
 format:
@@ -13,6 +13,7 @@ format:
     execute:
       warning: false
       echo: true
+      cache: true
 editor: 
   markdown: 
     wrap: 72
@@ -23,6 +24,8 @@ editor:
 #| include: false
 #| #| eval: true
 library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
 ```
 
 ## Review of Data Import
@@ -95,4 +98,583 @@ Answers:
 -   Aesthetic mappings and settings
 -   Faceting
 
-## New
+## The Power of Visualization
+
+::: columns
+::: {.column width="70%"}
+::: columns
+> "The simple graph has brought more information to the data analyst’s
+> mind than any other device."
+:::
+:::
+
+::: {.column width="30%"}
+![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/John_Tukey.jpg/119px-John_Tukey.jpg){fig-alt="Tukey picture"
+fig-align="center"} <br> John Tukey
+:::
+:::
+
+::: aside
+Source: https://en.wikipedia.org/w/index.php?curid=17099473
+:::
+
+## Brief History of Visualization: Leland Wilkinson
+
+![Grammar of
+Graphics](https://images-na.ssl-images-amazon.com/images/I/41ZIHtc9TJL._SX327_BO1,204,203,200_.jpg){width="310"}
+<br> 1999, 2005
+
+------------------------------------------------------------------------
+
+![](https://2953482177-files.gitbook.io/~/files/v0/b/gitbook-legacy-files/o/assets%2F-M38c0s4s0YCM6dGwrz1%2F-MMNdKyIg_4oaa1q8xtH%2F-MMOe8ya6IVIbUJiTsTL%2F1*mcLnnVdHNg-ikDbHJfHDNA.png?alt=media&token=20a0e845-8d17-4dfb-807f-7f4f18be70ac){fig-alt="ggplot2 graphics layers"}
+
+::: aside
+Source: [Introduction to
+R](https://r-unimelb.gitbook.io/rbook/putting-the-r-in-art/ggplot2-and-the-grammar-of-graphics)
+:::
+
+## Implementation in R
+
+::: columns
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Hadley-wickham2016-02-04.jpg/200px-Hadley-wickham2016-02-04.jpg){fig-alt="Hadley"}
+<br> Hadley Wickham
+:::
+
+::: {.column width="50%"}
+![](https://images-na.ssl-images-amazon.com/images/I/31uXd9st7ZL._SX329_BO1,204,203,200_.jpg){fig-alt="ggplot book"}
+:::
+:::
+
+------------------------------------------------------------------------
+
+## [R-Ladies](https://rladies.org/)
+
+![](img/r-ladies.png){width="390"}
+
+## Introduction to ggplot2
+
+-   **ggplot2** implements the grammar of graphics
+
+-   Basic graphing template
+
+```{r, eval=FALSE}
+ ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>)) +
+  other options
+```
+
+## Aesthetics {.smaller}
+
+We can map specific variables in the data to various features of the
+plot:
+
+-   Aesthetics (`aes`)
+    -   shape\
+    -   color\
+    -   size\
+    -   alpha (transparency)
+-   Faceting: use categorical variables to view cross sections of the
+    data
+
+**Note:** Not all aesthetics can be used with all types of graphs. More
+to come on this.
+
+
+## Aesthetics summary {.smaller}
+
+-   Behavior of aesthetics depends on the nature of the variable:
+
+    -   Factor and discrete quantitative variables are measured (or
+        often counted) on a discrete scale or by categories
+
+    -   Continuous variable are measured on a continuous scale
+
+| Aesthetics |             Discrete/Factor             |                               Continuous                               |
+|:-----------------:|:-------------------------:|:-------------------------:|
+|   color    |            palette of colors            |                   gradient (e.g, dark blue to light)                   |
+|    size    |             discrete steps              |                linear mapping between radius and value                 |
+|   shape    | different shape for each level/category |                  shouldn't (and doesn't) work but ...                  |
+|   alpha    |             discrete steps              | linear mapping between alpha level and value (range can be restricted) |
+
+## Aesthetics Details 
+
+This "vignette" contains many details not easily found elsewhere.
+
+https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
+
+## Mapping vs Customization {.smaller}
+
+-   Use aesthetics for mapping features of a plot to a variable
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, size = cyl)) +
+   geom_point()
+```
+
+## Mapping vs Customization (cont'd) {.smaller}
+
+-   Define the features in the `geom` outside the `aes()` function for
+    aesthetic settings **not** mapped to a variable
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+   geom_point(size = 0.5)
+```
+
+## Faceting
+
+-   Create subsets of the data to make the same graph for each subset
+
+-   Subsets based on either
+
+    -   Categorical variables OR
+    -   Quantitative variables with small number of distinct values OR
+    -   Quantitative variables sliced into sub-intervals
+
+-   Useful for exploring conditional relationships and large data sets
+
+# Exploring aesthetics with the Palmer Penguins
+
+## Data: Palmer Penguins
+
+Measurements for penguin species, island in Palmer Archipelago, size
+(flipper length, body mass, bill dimensions), and sex.
+
+::: columns
+::: {.column width="30%"}
+![](img/penguins.png){fig-align="center"}
+:::
+
+::: {.column width="70%"}
+```{r}
+library(palmerpenguins)
+glimpse(penguins)
+```
+:::
+:::
+
+------------------------------------------------------------------------
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, y = bill_length_mm,
+                     color = species)) +
+  geom_point() +
+  labs(title = "Bill depth and length",
+       subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+       x = "Bill depth (mm)", y = "Bill length (mm)",
+       color = "Species") + 
+  scale_color_viridis_d()
+```
+
+## Code
+
+```{r}
+#| eval: false
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, y = bill_length_mm,
+                     color = species)) +
+  geom_point() +
+  labs(title = "Bill depth and length",
+       subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+       x = "Bill depth (mm)", y = "Bill length (mm)",
+       color = "Species") + 
+  scale_color_viridis_d()
+```
+:::
+
+# Aesthetics examples
+
+## Color
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|4"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species)) +
+  geom_point() +
+  scale_colour_viridis_d()
+```
+
+## Shape
+
+Mapped to a different variable than `color`
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|5"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species,
+           shape = island)) +
+  geom_point() +
+  scale_colour_viridis_d()
+```
+
+## Shape
+
+Mapped to same variable as `color`
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|5"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species,
+           shape = species)) +
+  geom_point() +
+  scale_colour_viridis_d()
+```
+
+## Size
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|6"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species,
+           shape = species,
+           size = body_mass_g)) +
+  geom_point() +
+  scale_colour_viridis_d()
+```
+
+## Alpha transparency
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|7"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species,
+           shape = species,
+           size = body_mass_g,
+           alpha = flipper_length_mm)) +
+  geom_point() +
+  scale_colour_viridis_d()
+```
+
+## Mapping vs Setting {.smaller}
+
+::: columns
+::: {.column width="50%"}
+::: {.fragment}
+**Mapping**
+
+```{r}
+#| echo: true
+#| code-line-numbers: "|4-5"
+ggplot(penguins,
+       aes(x = bill_depth_mm,
+           y = bill_length_mm,
+           size = body_mass_g, 
+           alpha = flipper_length_mm)) +
+  geom_point()
+```
+:::
+:::
+
+::: {.column width="50%"}
+::: {.fragment}
+**Setting**
+
+```{r}
+#| echo: true
+#| code-line-numbers: "|4"
+ggplot(penguins,
+       aes(x = bill_depth_mm,
+           y = bill_length_mm)) + 
+  geom_point(size = 2, alpha = 0.5) 
+```
+:::
+:::
+:::
+
+
+## Linetypes `lty` {.smaller}
+
+```{r}
+#| echo: true
+#| output-location: slide
+#| code-line-numbers: "|7-8"
+ggplot(penguins,
+       aes(x = bill_depth_mm, 
+           y = bill_length_mm,
+           color = species
+           )) +
+  geom_point() +
+  geom_smooth(aes(lty = species)) +
+  scale_colour_colorblind()
+```
+
+
+
+
+# Faceting with the `mpg` data
+
+------------------------------------------------------------------------
+
+## Using `facet_wrap()`
+
+::: panel-tabset
+## Code
+
+-   Useful for splitting a graph for subsets determined by a single
+    variable
+
+-   Does the relationship between `displ` and `hwy` depend on `class`
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~class)
+```
+
+## Plots
+
+```{r}
+#| eval: true
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~class)
+```
+:::
+
+::: notes
+Pretty cool, eh? What do you notice? (We should add better labeling but
+we'll come back to that later.) Be sure to notice the tilde in front of
+the variable name (`~class`). This is required to identify what follows
+as a "formula" which is a specific "object class" that R expects to see
+here. (Actually, if you check the help on this function, you'll see that
+there's a newer way of specifying faceting variables that involves
+"quoting" using the `vars()` function but we'll use formulas for
+consistency with the text.)
+:::
+
+## `facet_wrap()` can be used with a large number of categories {.smaller}
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~manufacturer)
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~manufacturer)
+```
+:::
+
+## Using `facet_grid()`
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, hwy)) +
+  geom_point() + 
+  facet_grid(year~class)
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, hwy)) +
+  geom_point() + 
+  facet_grid(year~class)
+```
+:::
+
+## But what's the problem here?
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(manufacturer~model)
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(manufacturer~model)
+```
+:::
+
+::: notes
+Many combinations do not occur. Better to just use model.
+:::
+
+## Row- and Column-Wise Faceting Using `facet_grid()` {.smaller}
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+# Plot 1
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(.~ class)
+
+# Plot 2
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(drv ~ .)
+```
+
+## Plot 1
+
+```{r}
+#| echo: false
+# Plot 1
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(.~ class)
+```
+
+## Plot 2
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_grid(drv ~ .)
+```
+:::
+
+## `facet_wrap()` with Nesting
+
+::: panel-tabset
+## Code
+
+-   Using `facet_wrap(~xvar+yvar)` creates subplots only for
+    combinations that occur in the data
+    -   Efficient faceting by 2 variables
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~class + drv)
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~class + drv)
+```
+:::
+
+::: notes
+Note that graphs have been constructed for all combinations of `drv` and
+`class` that appear in the data. Since some combinations do not occur
+(e.g., 2 seater with 4-wheel drive), the number of graphs shown is less
+than the product of the number of categories in each variable (that
+would be $3 \times 7 = 21$ for these data).
+:::
+
+## Avoid faceting with continuous variables
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~cty)
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~cty)
+```
+:::
+
+## Faceting with a continuous variable by discretizing
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~cut_number(cty, 3))
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() + 
+  facet_wrap(~cut_number(cty, 3))
+```
+:::
+
+## Faceting Summary {.smaller}
+
+Two facet commands:
+
+. . .
+
+1.  `facet_wrap()`
+
+    -   `facet_wrap(~var)`: Wraps a 1d sequence of panels into 2d Panels
+        defined by levels of `var`
+    -   `facet_wrap(~ var1 + var2)` for wrapping all combinations of
+        `var1` and `var2` observed in the data.
+
+. . .
+
+2.  `facet_grid()`
+
+    -   `facet_grid(rowvar ~ colvar)`: Forms a matrix of panels
+    -   Panels defined by combinations of `rowvar` and `colvar`
+    -   Use `(. ~ colvar)` or `(rowvar ~ .)` for 1d sequence of panels
+    -   Consider discretizing (e.g., `cut_number()`) for faceting with
+        continuous variables
