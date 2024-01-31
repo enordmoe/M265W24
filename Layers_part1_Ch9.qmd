@@ -221,17 +221,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
    geom_point(size = 0.5)
 ```
 
-## Faceting
 
--   Create subsets of the data to make the same graph for each subset
-
--   Subsets based on either
-
-    -   Categorical variables OR
-    -   Quantitative variables with small number of distinct values OR
-    -   Quantitative variables sliced into sub-intervals
-
--   Useful for exploring conditional relationships and large data sets
 
 # Exploring aesthetics with the Palmer Penguins
 
@@ -423,6 +413,18 @@ ggplot(penguins,
 ```
 
 # Faceting with the `mpg` data
+
+## Faceting
+
+-   Create subsets of the data to make the same graph for each subset
+
+-   Subsets based on either
+
+    -   Categorical variables OR
+    -   Quantitative variables with small number of distinct values OR
+    -   Quantitative variables sliced into sub-intervals
+
+-   Useful for exploring conditional relationships and large data sets
 
 ------------------------------------------------------------------------
 
