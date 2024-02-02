@@ -31,6 +31,7 @@ library(ggthemes)
 ## Outline
 
 -   Statistical Transformations
+-   Coordinate Systems
 -   Position Adjustments
 
 # Statistical Transformations
