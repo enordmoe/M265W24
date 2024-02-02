@@ -3027,6 +3027,7 @@ vertical-align: -.125em;
   <li><a href="#data-transformation-chapter-3" id="toc-data-transformation-chapter-3" class="nav-link" data-scroll-target="#data-transformation-chapter-3">Data Transformation: Chapter 3</a></li>
   <li><a href="#data-tidying-chapter-5" id="toc-data-tidying-chapter-5" class="nav-link" data-scroll-target="#data-tidying-chapter-5">Data Tidying: Chapter 5</a></li>
   <li><a href="#data-import-chapter-7" id="toc-data-import-chapter-7" class="nav-link" data-scroll-target="#data-import-chapter-7">Data Import: Chapter 7</a></li>
+  <li><a href="#study-suggestions" id="toc-study-suggestions" class="nav-link" data-scroll-target="#study-suggestions">Study suggestions</a></li>
   <li><a href="#types-of-questions" id="toc-types-of-questions" class="nav-link" data-scroll-target="#types-of-questions">Types of Questions</a></li>
   </ul>
 </nav>
@@ -3068,96 +3069,93 @@ vertical-align: -.125em;
 <li>Be familiar with the following geoms and their typical aesthetic specifications:</li>
 </ol>
 <ul>
-<li><code>geom_bar()</code><br>
-</li>
-<li><code>geom_boxplot()</code><br>
-</li>
-<li><code>geom_col()</code><br>
-</li>
-<li><code>geom_density()</code><br>
-</li>
-<li><code>geom_freqpoly()</code><br>
-</li>
-<li><code>geom_histogram()</code><br>
-</li>
-<li><code>geom_jitter()</code><br>
-</li>
+<li><code>geom_bar()</code></li>
+<li><code>geom_boxplot()</code></li>
+<li><code>geom_col()</code></li>
+<li><code>geom_histogram()</code></li>
+<li><code>geom_jitter()</code></li>
 <li><code>geom_line()</code></li>
-<li><code>geom_point()</code><br>
-</li>
+<li><code>geom_point()</code></li>
 <li><code>geom_smooth()</code></li>
 </ul>
 <ol start="2" type="1">
-<li>Common aesthetics and their relationship to type of variable (categorical vs quantitative/continuous) :</li>
+<li>Know common aesthetics and their relationship to type of variable (categorical vs quantitative/continuous) :</li>
 </ol>
 <ul>
-<li><code>x</code> and <code>y</code><br>
-</li>
-<li><code>color</code> and <code>fill</code><br>
-</li>
-<li><code>size</code>, <code>shape</code>, and <code>linetype</code></li>
+<li><code>x</code> and <code>y</code></li>
+<li><code>color</code> and <code>fill</code></li>
+<li><code>size</code>, <code>shape</code>, <code>alpha</code> and <code>linetype</code></li>
 </ul>
 <ol start="3" type="1">
-<li><p>Scales and how they can be used and specified manually</p></li>
 <li><p>Stats and their connections to geoms, especially for categorical variable plots like <code>geom_bar()</code>.</p></li>
-<li><p>Position adjustments and their relationship to geoms</p></li>
-<li><p>Faceting methods and their purposes</p></li>
+<li><p>Position adjustments and their relationship to <code>geom</code>s, especially for <code>geom_bar()</code> and <code>geom_point()</code></p></li>
+<li><p>Faceting methods and their purposes:</p>
+<ul>
+<li><code>facet_wrap()</code>and <code>facet_grid()</code></li>
+<li>Use of nesting, e.g., `facet_wrap(~xvar + yvar)</li>
+</ul></li>
 <li><p>Use of <code>coord_flip()</code> and <code>coord_cartesian()</code> to control the appearance of plots.</p></li>
-<li><p>Practice on the end of section questions in R4DS. I have a link to R4DS solutions near the top of the Moodle page but <a href="https://jrnold.github.io/r4ds-exercise-solutions/">it’s also here</a>. These solutions also have some very valuable insights and extensions to the text material.</p></li>
 </ol>
 </section>
 <section id="data-transformation-chapter-3" class="level1">
 <h1>Data Transformation: Chapter 3</h1>
 <ol type="1">
 <li><p>Be familiar with the different types of variables in R.</p></li>
-<li><p>Know the purpose and syntax of the five key <strong>dplyr</strong> functions:<br>
-</p></li>
+<li><p>Know the purpose and syntax of the key <strong>dplyr</strong> functions:</p></li>
 </ol>
 <ul>
-<li><code>filter()</code><br>
-</li>
-<li><code>arrange()</code><br>
-</li>
-<li><code>select()</code><br>
-</li>
-<li><code>mutate()</code><br>
-</li>
-<li><code>summarise()</code></li>
+<li><code>filter()</code></li>
+<li><code>arrange()</code></li>
+<li><code>select()</code></li>
+<li><code>mutate()</code></li>
+<li><code>group_by()</code></li>
+<li><code>summarize()</code></li>
 </ul>
 <ol start="3" type="1">
 <li><p>Be able to describe the role of <code>group_by()</code> to change the scope of each function from operating on the entire dataset to operating on it group-by-group.</p></li>
-<li><p>Know how missing values work and how to use the <code>is.na()</code> function to include or remove cases with NA values.</p></li>
 <li><p>Be familiar with “helper” functions for <code>select()</code> and <code>summarize()</code>. These need not be memorized since you have them on the cheat sheets.</p></li>
 <li><p>Other commands from this section you should know about and be able to use when necessary:</p></li>
 </ol>
 <ul>
-<li><code>distinct()</code><br>
+<li><code>distinct()</code></li>
+<li><code>count()</code></li>
+<li><code>slice_()</code> functions</li>
+<li><code>rename()</code></li>
+<li><code>relocate()</code><br>
 </li>
-<li><code>count()</code><br>
-</li>
-<li><code>slice()</code><br>
-</li>
-<li><code>pull()</code><br>
-</li>
-<li><code>top_n()</code></li>
 </ul>
 </section>
 <section id="data-tidying-chapter-5" class="level1">
 <h1>Data Tidying: Chapter 5</h1>
+<ol type="1">
+<li>Know what it means for a dataset to be tidy and be able to distinguish between a tidy and untidy dataset.</li>
+<li>Know the primary arguments for <code>pivot_longer()</code> and <code>pivot_wider()</code>
+<ul>
+<li><code>pivot_longer()</code>: <code>cols</code>, <code>names_to</code> and <code>values_to</code></li>
+<li><code>pivot_wider()</code>: <code>id_cols</code>, <code>names_from</code>, <code>values_from</code></li>
+</ul></li>
+<li></li>
+</ol>
 </section>
 <section id="data-import-chapter-7" class="level1">
 <h1>Data Import: Chapter 7</h1>
 </section>
+<section id="study-suggestions" class="level1">
+<h1>Study suggestions</h1>
+<ul>
+<li><p>Review reading</p></li>
+<li><p>Review notes</p></li>
+<li><p>Review group work and homework assignments</p></li>
+<li><p>Work end of section problems in <a href="https://r4ds.hadley.nz/">R4DS2e</a> and check partial list of solutions <a href="https://mine-cetinkaya-rundel.github.io/r4ds-solutions/">here</a>.</p></li>
+</ul>
+</section>
 <section id="types-of-questions" class="level1">
 <h1>Types of Questions</h1>
 <ol type="1">
-<li>Multiple choice: Which code chunk yields this output?<br>
-</li>
+<li>Multiple choice: Which code chunk yields this output?</li>
 <li>What does this code do? What object(s) will it produce (e.g., dataset with 20 rows and 3 columns)</li>
-<li>Find the error and fix it (nothing very obscure).<br>
-</li>
-<li>What goes in the missing spot in the code chunk?<br>
-</li>
+<li>Find the error and fix it (nothing very obscure).</li>
+<li>What goes in the missing spot in the code chunk?</li>
 <li>Complete the code chunk to create the given output.</li>
 </ol>
 </section>

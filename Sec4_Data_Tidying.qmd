@@ -348,7 +348,7 @@ df |>
 table2
 ```
 
-## The Widening of `table2`
+## The Widening of `table2` {.smaller}
 
 ```{r}
 table2 |> 
