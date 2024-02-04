@@ -3037,7 +3037,7 @@ vertical-align: -.125em;
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Midterm Exam Review Topics</h1>
-<p class="subtitle lead">EXam Date: February 9, 2024</p>
+<p class="subtitle lead">Exam Date: February 9, 2024</p>
 </div>
 
 
@@ -3087,8 +3087,12 @@ vertical-align: -.125em;
 <li><code>size</code>, <code>shape</code>, <code>alpha</code> and <code>linetype</code></li>
 </ul>
 <ol start="3" type="1">
-<li><p>Stats and their connections to geoms, especially for categorical variable plots like <code>geom_bar()</code>.</p></li>
-<li><p>Position adjustments and their relationship to <code>geom</code>s, especially for <code>geom_bar()</code> and <code>geom_point()</code></p></li>
+<li><p>Know <code>stat_</code>s and their connections to <code>geom_</code>s especially for categorical variable plots like <code>geom_bar()</code>.</p></li>
+<li><p>Position adjustments and their relationship to <code>geom</code>s, especially for <code>geom_bar()</code> and <code>geom_point()</code></p>
+<ul>
+<li><p>For <code>geom_bar()</code>: <code>position_fill()</code>, <code>position_stack()</code>, <code>position_dodge()</code></p></li>
+<li><p>For <code>geom_point()</code>: <code>position_nudge()</code>, <code>position_dodge()</code></p></li>
+</ul></li>
 <li><p>Faceting methods and their purposes:</p>
 <ul>
 <li><code>facet_wrap()</code>and <code>facet_grid()</code></li>
@@ -3113,6 +3117,7 @@ vertical-align: -.125em;
 </ul>
 <ol start="3" type="1">
 <li><p>Be able to describe the role of <code>group_by()</code> to change the scope of each function from operating on the entire dataset to operating on it group-by-group.</p></li>
+<li><p>Know which functions operate on rows and columns and groups.</p></li>
 <li><p>Be familiar with “helper” functions for <code>select()</code> and <code>summarize()</code>. These need not be memorized since you have them on the cheat sheets.</p></li>
 <li><p>Other commands from this section you should know about and be able to use when necessary:</p></li>
 </ol>
@@ -3129,16 +3134,84 @@ vertical-align: -.125em;
 <h1>Data Tidying: Chapter 5</h1>
 <ol type="1">
 <li>Know what it means for a dataset to be tidy and be able to distinguish between a tidy and untidy dataset.</li>
+<li>Know the difference between <code>pivot_longer()</code> and <code>pivot_wider()</code>
+<ul>
+<li><code>pivot_longer()</code>
+<ul>
+<li><strong>What it does:</strong> Turns “wide” data with many columns into “long” data with fewer columns.</li>
+<li><strong>Aim:</strong> Organizing similar items together.</li>
+<li><strong>Example:</strong> You have a table with students’ scores in Math, Science, and History in which the cases are individual students. You want to see all scores in one column, with another column saying which subject it belongs to.</li>
+</ul></li>
+<li><code>pivot_wider()</code>
+<ul>
+<li><strong>What it does:</strong> Turns “long” data with few columns into “wide” data with many columns.</li>
+<li><strong>Aim:</strong> Spreading items out for easy comparison.</li>
+<li><strong>Example:</strong> You have a table with students’ names, subjects, and scores in which you have one case for each student-subject combination. You want to see each student’s scores side-by-side for different subjects.</li>
+</ul></li>
+</ul></li>
 <li>Know the primary arguments for <code>pivot_longer()</code> and <code>pivot_wider()</code>
 <ul>
 <li><code>pivot_longer()</code>: <code>cols</code>, <code>names_to</code> and <code>values_to</code></li>
 <li><code>pivot_wider()</code>: <code>id_cols</code>, <code>names_from</code>, <code>values_from</code></li>
 </ul></li>
-<li></li>
+<li>Know why variable names are quoted in <code>pivot_longer()</code> but not in <code>pivot_wider()</code></li>
 </ol>
 </section>
 <section id="data-import-chapter-7" class="level1">
 <h1>Data Import: Chapter 7</h1>
+<ol type="1">
+<li>Be familiar with most common <code>read_xyz()</code> functions and their typical use cases:
+<ul>
+<li><p><code>read_csv()</code></p>
+<ul>
+<li><strong>Purpose</strong>: for importing comma separated variables (CSV) data files</li>
+<li><strong>Key arguments:</strong>
+<ul>
+<li><code>file</code>: Path to the CSV file.</li>
+<li><code>col_names</code>: A vector of column names (optional, read from first row by default).</li>
+<li><code>skip</code>: Number of rows to skip at the beginning (e.g., for descriptive headers).</li>
+<li><code>na</code>: String to interpret as missing values (e.g. “N\A”, “999”).</li>
+</ul></li>
+</ul></li>
+<li><p><code>read_delim()</code> for data that are delimited like CSV but with a delimiter other than a comma</p>
+<ul>
+<li><strong>Purpose</strong>: for data that are delimited like CSV but with a delimiter other than a comma</li>
+<li><strong>Key arguments</strong>:
+<ul>
+<li><code>delim</code>: specify the non-standard delimiter used</li>
+<li>others as above</li>
+</ul></li>
+</ul></li>
+<li><p><code>read_fwf()</code></p>
+<ul>
+<li><p><strong>Purpose</strong>: reads fixed width/position data where each data element has a fixed position</p></li>
+<li><p><strong>Key arguments</strong>:</p>
+<ul>
+<li><p><code>fwf_widths()</code>, <code>fwf_cols()</code>, and <code>fwf_positions()</code></p></li>
+<li><p>Typically specify both widths/positions and variable name</p></li>
+<li><p>… Other arguments from <code>read_csv()</code> also apply.</p></li>
+</ul></li>
+<li><p><strong>Example</strong>: Read 2 variables from <code>sample.txt</code> with fixed-width format specifying widths.</p></li>
+</ul></li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specifies names along with start and end positions</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the data using fwf_cols() with positions</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">read_fwf</span>(<span class="st">&quot;sample.txt&quot;</span>, <span class="fu">fwf_widths</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">15</span>), <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;name&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Beware of <strong>non-syntactic</strong> names. R will add single ticks around <strong>non-syntactic</strong> names when importing.
+<ul>
+<li><code>clean_names()</code> is a powerful function in the package <strong>janitor</strong> to convert all names to syntactic snake case names</li>
+</ul></li>
+<li>Know the use of <code>problems(df)</code> for diagnosing data import problems</li>
+<li>Understand logic of <strong>readr</strong> strategy for parsing files
+<ul>
+<li>Guess types based on first 1000 rows</li>
+<li>Guesses variable types (in order from least to most restrictive): (1) Logical, (2) Numeric, (3) Date-time, and (4) Character.</li>
+</ul></li>
+</ol>
 </section>
 <section id="study-suggestions" class="level1">
 <h1>Study suggestions</h1>
