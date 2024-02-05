@@ -1,0 +1,273 @@
+---
+title: "Chapter 9: Visualization with Layers"
+subtitle: "Introduction to Data Science"
+author: "Eric Nordmoe"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+library(fueleconomy)
+library(ggthemes)
+```
+
+## EDA Cycle
+
+![](figs/EDA_cycle.png){fig-align="center"}
+
+::: aside
+Source: R4DS
+:::
+
+## Two Key Goals
+
+Understand:
+
+1.  Variation within variables
+    -   Center, spread, shape, unusual observations
+    -   Overall and within groups
+
+. . .
+
+2.  Covariation among variables
+    -   Form, direction, and strength of relationships
+
+## Graphical Methods for Exploring Variation
+
+-   Categorical variables
+    -   Bar charts `geom_bar()` and `geom_col()`
+
+. . .
+
+-   Continuous variables
+    -   Histograms: `geom_histogram()`
+    -   Frequency polygons: `geom_freqpoly()`
+    -   Density: `geom_density()`
+
+## Exploring the Vehicles Data with Bar Charts
+
+```{r}
+ggplot(vehicles, aes(x = make)) + 
+  geom_bar()
+```
+
+-   Consider only the common makes?
+
+-   Rotate to improve visiblity
+
+## Use the common makes data
+
+```{r}
+cardata <- left_join(common, vehicles)
+
+ggplot(cardata, aes(y = make)) + 
+  geom_bar() 
+```
+
+## Reorder bars and graph proportions {.smaller}
+
+::: panel-tabset
+## Code
+
+-   Use `fct_rev()` and `fct_infreq()` to order bars from top to bottom
+    in order of occurrence
+
+```{r}
+#| eval: false
+ggplot(cardata, aes(x = after_stat(prop), y = fct_rev(fct_infreq(make)), group = 1)) + 
+  geom_bar() +
+  labs(x = "Proportion of All\n  Models Tested", y = "Car Makes")
+```
+
+## Plot
+
+```{r}
+#| echo: false
+ggplot(cardata, aes(x = after_stat(prop), y = fct_rev(fct_infreq(make)), group = 1)) + 
+  geom_bar() +
+  labs(
+    x = "Proportion of All\n  Models Tested", 
+    y = "Car Makes"
+    )
+```
+:::
+
+## Frequency table of makes with the most models tested
+
+```{r}
+cardata |> 
+  count(make, sort = TRUE)
+```
+
+# Exploring Variability with Histograms
+
+## Example: The `diamonds` data
+
+```{r}
+ggplot(diamonds, aes(x = carat)) + 
+  geom_histogram()
+```
+
+## Considerations
+
+-   Height represents count for corresponding interval
+
+-   Interpret center, spread, shape, unusual observations
+
+-   Modify the binwidth to generate more hypotheses
+
+## Shiny Apps on RStudio {background-color="#ff961c"}
+
+-   [Diamond data](https://kjytay.shinyapps.io/datasetexplorer1/)
+
+-   [Movie
+    explorer](https://shiny.rstudio.com/gallery/movie-explorer.html)
+
+## Histograms with Proportions {.smaller}
+
+-   To show the proportions (relative frequency), use the `after_stat()`
+    function as shown.
+-   `The`count\` contains the frequency for each interval
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = after_stat(count / sum(count)))) + 
+  geom_histogram()
+```
+
+## Frequency Polygons: `geom_freqpoly()`
+
+-   An alternative to histograms that is especially useful for comparing
+    groups
+
+-   Replace bars with lines whose **vertices** represent the **counts**
+    for the corresponding intervals
+
+## Example: Diamonds data frequency polygon {.smaller}
+
+```{r}
+#| output-location: fragment
+ggplot(diamonds, aes(x = carat)) + 
+  geom_freqpoly()
+```
+
+## Example: Frequency polygon with subgroups {.smaller}
+
+```{r}
+#| output-location: fragment
+ggplot(diamonds, aes(x = carat, color = clarity)) + 
+  geom_freqpoly()
+```
+
+**Note:** Heights are NOT additive
+
+## Missing data
+
+-   Use `is.na()` to check for NA values
+-   Avoid simply omitting cases with missing/NA values
+-   When possible, use EDA to compare cases with missing vs non-missing
+    data.
+-   More on this in Chapter 18
+
+# Exploring Relationships {background-color="#ff961c"}
+
+## Graphical Methods for Exploring Relationships
+
+-   Quantitative and quantitative variable
+    -   Scatterplot with smoothing line
+    -   Conditional boxplots
+-   Categorical and quantitative variable
+    -   Boxplots
+    -   Faceted plots (histogram)
+
+## Price vs Carat Weight
+
+Use only diamonds no more than 3 carats in weight
+
+```{r}
+smaller <- 
+  filter(diamonds, carat <= 3)
+
+ggplot(smaller, mapping = aes(x = carat, y = price)) +
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+------------------------------------------------------------------------
+
+## Boxplot example comparing mileage by year
+
+Oops, what went wrong?
+
+```{r}
+cardata <- 
+  vehicles |>  semi_join(common)
+
+ggplot(cardata, aes(x = hwy, y = year)) +
+  geom_boxplot() 
+```
+
+## Boxplot example comparing mileage by year {.smaller}
+
+```{r}
+#| output-location: slide
+ggplot(cardata, aes(x = hwy, y = fct_rev(factor(year)), fill = factor(year))) +
+  geom_boxplot(show.legend = FALSE) + 
+  labs(y = "year")
+```
+
+-   That's better and add some color
+-   Use `fct_rev()` to put the years in order from top to bottom
+-   Turn off the legend to save space and reduce clutter
+
+## Outliers
+
+-   Often best identified using judgment by inspection of a visual data
+    display.
+-   Can use width of the box (IQR = 75th-25th percentile) to help detect
+    outliers
+-   **Rule of Thumb** suspected outliers are data values more than 1.5
+    IQRs beyond the quartiles
+-   Seek to understand outliers before removing
+-   Use `filter()` to remove and re-plot/re-analyze
+
+## Quantitative and Categorical Relationships
+
+-   Compare the distribution of a quantitative variable across groups
+    determined by the categorical variable(s).
+
+    -   Use side-by-side boxplots for an overview.
+
+    -   Use comparative histograms or frequency polygons to see more
+        detail.
+
+-   Any of the statistics we use for a quantitative variable can be
+    looked at separately for each level of a categorical variable.
+
+## Using Conditional Boxplots with Quantitative Data
+
+-   Use cut functions (`cut_interval`, `cut_width`, etc) to discretize
+    one of the continuous variables.
+
+```{r}
+ggplot(smaller) +
+  geom_boxplot(aes(x = carat, y = price, group = cut_width(carat, 0.25, boundary = 0)))
+```
+
+
