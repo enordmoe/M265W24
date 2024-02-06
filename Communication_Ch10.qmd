@@ -1,0 +1,344 @@
+---
+title: "Chapter 11: Communication"
+author: "Introduction to Data Science"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+library(palmerpenguins)
+library(ggthemes)
+```
+
+## Outline
+
+-   Labels
+-   Annotations
+-   Scales
+-   Themes
+-   Layout
+
+## Visualization
+
+> "When communicating results to non-technical types there is nothing
+> better than a clear visualization to make your point."
+
+\~ John Tukey
+
+## Visualization 2.0
+
+> "Visualization is often used for evil — twisting insignificant data
+> changes and making them look meaningful. Don't do that crap if you
+> want to be my friend. Present results clearly and honestly. If
+> something isn't working - those reviewing results need to know."
+
+\~ John Tukey
+
+## Communication: TLDR version {.smaller}
+
+Strategies to enhance the effectivness of your visualizations:
+
+1.  
+
+# Statistical Transformations
+
+## A Simple Bar Chart
+
+-   Height of bars represents frequency
+
+```{r}
+#| output-location: fragment
+ggplot(mpg, aes(x = class)) + 
+  geom_bar()
+```
+
+## How `ggplot2` Creates a Bar Chart
+
+![](https://d33wubrfki0l68.cloudfront.net/70a3b18a1128c785d8676a48c005ee9b6a23cc00/7283c/images/visualization-stat-bar.png)
+
+::: aside
+Source: http://r4ds.had.co.nz
+:::
+
+## `geom_`s and `stat_`s {.smaller}
+
+-   In `ggplot2()` the algorithm used to calculate values for a graph is
+    called the `stat`.
+
+-   Each `geom` type has a default `stat`
+
+|     geom      |  Default stat   |            What is being plotted:             |
+|:-------------:|:---------------:|:---------------------------------------------:|
+| `geom_point`  | `stat_identity` |             Actual x and y values             |
+| `geom_smooth` |  `stat_smooth`  |     Predictions from the smoothing model      |
+|  `geom_bar`   |  `stat_count`   | Frequency (count) of values for each category |
+|  `geom_col`   | `stat_identity` |      Actual y value for each x category       |
+
+## Use Wrangling First {.smaller}
+
+::: columns
+::: {.column width="50%"}
+```{r}
+mpg |> 
+  count(class) |> 
+  mutate(prop = n/sum(n)) |> 
+  ggplot (aes(x = class, y = prop, fill = class)) + 
+  geom_col()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+mpg |> 
+  count(class) |> 
+  mutate(prop = n/sum(n)) |> 
+  ggplot (aes(x = class, y = prop, fill = class)) + 
+  geom_bar(stat = "identity")
+```
+:::
+:::
+
+The code on the the left works because `geom_col()` defaults to
+`stat_identity`
+
+## Example: An alternative approach using special functions to control aesthetic evaluation {.smaller}
+
+-   Use `after_stat()` with `geom_bar()`
+
+```{r}
+#| output-location: slide
+ggplot(mpg, aes(x = class, y = after_stat(prop), group = 1)) +
+  geom_bar()
+```
+
+-   The computed variable `prop` contains relative frequencies.
+
+-   What does `group = 1` do?
+
+# Coordinate Systems
+
+## Coordinate Systems {.smaller}
+
+-   A coordinate system (**coord**) maps the position of objects onto
+    the plane of the plot
+
+-   A few useful cases:
+
+`coord_cartesian()`
+
+-   useful for zooming in without clipping or filtering
+
+. . .
+
+`coord_flip()`
+
+-   interchanges x and y, often useful for legibility or convention
+-   less important since ggplot2 becamse more flexible in setting `x`
+    and `y` mappings
+
+. . .
+
+`coord_polar()`
+
+-   good to know when you need polar coordinates
+
+## Example 1a
+
+Interchanging x and y for a bar chart (before)
+
+```{r}
+p1 <- ggplot(mpg, aes(x=manufacturer))
+p1 + geom_bar()
+```
+
+## Example 1b
+
+Interchanging x and y for a bar chart (after)
+
+```{r}
+#| code-line-numbers: "2"
+p1 + geom_bar() + 
+  coord_flip() 
+```
+
+## Example 2a
+
+Using `coord_cartesian()` to Zoom in (before)
+
+```{r}
+p2 <- ggplot(mpg, aes(x = displ, y = hwy))
+p2 + geom_point()
+```
+
+## Example 2b
+
+Using `coord_cartesian()` to Zoom in (after)
+
+```{r}
+#| code-line-numbers: "2"
+p2 + geom_point() + 
+  coord_cartesian(xlim = c(2, 3), ylim = c(20, 35)) 
+```
+
+## An unusual and dangerous bar chart using Polar Coordinates
+
+```{r}
+#| output-location: slide
+ ggplot(mpg, aes(x = factor(1), fill = factor(class))) +
+  geom_bar() +
+  coord_polar(theta = "y") +
+   labs(title = "Dangerous Plot", subtitle = "Do Not Use")
+```
+
+# Position Adjustments
+
+## Position Adjustments
+
+-   Position adjustments apply tweaks to the position of elements within
+    a layer.
+
+. . .
+
+-   For Bar Charts:
+    -   `position_stack()`: stack overlapping bars on top of each other.
+    -   `position_fill()`: stack overlapping bars, scaling so the
+        heights sum to 1.
+    -   `position_dodge()`: place overlapping bars side-by-side.
+
+# Bar chart position examples
+
+## Example 1 Default Position
+
+```{r,}
+# To illustrate, save the base layer as the object and add adjustments
+p <- ggplot(mpg, aes(class, fill = drv)) 
+p + geom_bar()
+```
+
+## Example 2 Stacked Bar chart
+
+```{r}
+p + geom_bar(position = position_stack())
+# OR use
+# p + geom_bar(position = "stack")
+```
+
+## Example 3 Stacked Showing Proportions
+
+```{r}
+p + geom_bar(position = position_fill())
+# OR use
+# p + geom_bar(position = "fill")
+```
+
+## Example 4 Side-by-side Bar Charts
+
+```{r}
+p + geom_bar(position = position_dodge())
+# OR use
+# p + geom_bar(position = "dodge")
+```
+
+## Position Adjustments (cont'd)
+
+Other commonly used position adjustments
+
+For point plots such as scatterplots (or other situations with
+overlapping)
+
+-   `position_jitter()`: add a little random noise to every position.
+
+    -   Amount of jittering can be controlled using `width` and `height`
+        arguments
+
+-   `position_nudge()`: move points by a fixed offset (say, for placing
+    labels)
+
+## Example 1a Standard Scatterplot {.smaller}
+
+```{r}
+#| fig-width: 8
+p2 <- ggplot(mpg, aes(cty, hwy))
+p2 + geom_point()
+```
+
+## Example 1b Scatterplot with Jittering {.smaller}
+
+```{r}
+#| fig-width: 8
+#| code-line-numbers: "2"
+p2 + 
+  geom_point(position = position_jitter())
+```
+
+::: aside
+**Note:** Using the function form `position_jitter()` allows you to add
+arguments inside to control the amount of jittering.
+:::
+
+## Example 2a Point plot before `jitter` {.smaller}
+
+```{r}
+p3 <- ggplot(mpg, aes(class, hwy)) 
+p3 + geom_point()
+```
+
+## Example 2b Point plot after horizontal jittering {.smaller}
+
+::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+#| code-line-numbers: "2|4"
+# Plot 1
+p3 + 
+  geom_point(position = position_jitter(width = 0.1))
+# Plot 2
+p3 + 
+  geom_point(position = position_jitter(width = 0.2)) 
+```
+
+## Plot 1
+
+```{r}
+#| echo: false
+p3 + 
+  geom_point(position = position_jitter(width = 0.1))
+```
+
+## Plot 2
+
+```{r}
+#| echo: false
+p3 + 
+  geom_point(position = position_jitter(width = 0.2)) 
+```
+:::
+
+## Position Recommendations
+
+-   Experiment with combinations of adjustments and parameter settings
+    to see what works.
+
+-   Trial and error but reproducible
+
+-   Can use the `seed` argument of `position_jitter()` to make the
+    jitter reproducible
