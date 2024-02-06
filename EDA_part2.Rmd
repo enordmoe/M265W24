@@ -1,4 +1,4 @@
----
+W---
 title: "Exploratory Data Analysis: Part 2"
 subtitle: "MATH 265"
 author: "Eric Nordmoe"

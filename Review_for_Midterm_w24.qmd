@@ -1,6 +1,6 @@
 ---
 title: "Midterm Exam Review Topics"
-subtitle: "EXam Date: February 9, 2024"
+subtitle: "Exam Date: February 9, 2024"
 toc: true
 format:
   html:
@@ -19,15 +19,13 @@ library(ggplot2)
 library(ggthemes)
 ```
 
-
-
 # Data Visualization: Chapters 1 and 9
 
 Every **ggplot2** plot has three key components:
 
-1. data,
-2. A set of aesthetic mappings between variables in the data and visual properties, and
-3. At least one layer which describes how to render each observation. Layers are usually created with a geom function.
+1.  data,
+2.  A set of aesthetic mappings between variables in the data and visual properties, and
+3.  At least one layer which describes how to render each observation. Layers are usually created with a geom function.
 
 Here’s a simple example:
 
@@ -36,76 +34,143 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point()
 ```
 
-1. Be familiar with the following geoms and their typical aesthetic specifications:  
+1.  Be familiar with the following geoms and their typical aesthetic specifications:
 
-  * `geom_bar()`  
-  * `geom_boxplot()`  
-  * `geom_col()`  
-  * `geom_density()`  
-  * `geom_freqpoly()`  
-  * `geom_histogram()`  
-  * `geom_jitter()`  
-  * `geom_line()`
-  * `geom_point()`  
-  * `geom_smooth()`  
+-   `geom_bar()`
+-   `geom_boxplot()`
+-   `geom_col()`
+-   `geom_histogram()`
+-   `geom_jitter()`
+-   `geom_line()`
+-   `geom_point()`
+-   `geom_smooth()`
 
-2. Common aesthetics and their relationship to type of variable (categorical vs quantitative/continuous) :  
+2.  Know common aesthetics and their relationship to type of variable (categorical vs quantitative/continuous) :
 
-  * `x` and `y`  
-  * `color` and `fill`  
-  * `size`, `shape`, and `linetype`  
+-   `x` and `y`
+-   `color` and `fill`
+-   `size`, `shape`, `alpha` and `linetype`
 
-  
-3. Scales and how they can be used and specified manually  
+3.  Know `stat_`s and their connections to `geom_`s especially for categorical variable plots like `geom_bar()`.
 
-4. Stats and their connections to geoms, especially for categorical variable plots like `geom_bar()`.  
+4.  Position adjustments and their relationship to `geom`s, especially for `geom_bar()` and `geom_point()`
 
-5. Position adjustments and their relationship to geoms  
+    -   For `geom_bar()`: `position_fill()`, `position_stack()`, `position_dodge()`
 
-6. Faceting methods and their purposes  
+    -   For `geom_point()`: `position_nudge()`, `position_dodge()`
 
-7. Use of `coord_flip()` and `coord_cartesian()` to control the appearance of plots.  
+5.  Faceting methods and their purposes:
 
-8. Practice on the end of section questions in R4DS.  I have a link to R4DS solutions near the top of the Moodle page but [it's also here](https://jrnold.github.io/r4ds-exercise-solutions/). These solutions also have some very valuable insights and extensions to the text material.  
+    -   `facet_wrap()`and `facet_grid()`
+    -   Use of nesting, e.g., \`facet_wrap(\~xvar + yvar)
 
-
+6.  Use of `coord_flip()` and `coord_cartesian()` to control the appearance of plots.
 
 # Data Transformation: Chapter 3
 
-1. Be familiar with the different types of variables in R.  
+1.  Be familiar with the different types of variables in R.
 
-2. Know the purpose and syntax of the five key **dplyr** functions:  
-  * `filter()`  
-  * `arrange()`  
-  * `select()`  
-  * `mutate()`  
-  * `summarise()`  
-  
-3. Be able to describe the role of `group_by()` to change the scope of each function from operating on the entire dataset to operating on it group-by-group.  
+2.  Know the purpose and syntax of the key **dplyr** functions:
 
-4. Know how missing values work and how to use the `is.na()` function to include or remove cases with NA values.  
+-   `filter()`
+-   `arrange()`
+-   `select()`
+-   `mutate()`
+-   `group_by()`
+-   `summarize()`
 
-5. Be familiar with "helper" functions for `select()` and `summarize()`. These need not be memorized since you have them on the cheat sheets.  
+3.  Be able to describe the role of `group_by()` to change the scope of each function from operating on the entire dataset to operating on it group-by-group.
 
-6. Other commands from this section you should know about and be able to use when necessary:  
+4.  Know which functions operate on rows and columns and groups.
 
-  * `distinct()`  
-  * `count()`  
-  * `slice()`  
-  * `pull()`  
-  * `top_n()`  
-  
-  
+5.  Be familiar with "helper" functions for `select()` and `summarize()`. These need not be memorized since you have them on the cheat sheets.
+
+6.  Other commands from this section you should know about and be able to use when necessary:
+
+-   `distinct()`
+-   `count()`
+-   `slice_()` functions
+-   `rename()`
+-   `relocate()`\
+
 # Data Tidying: Chapter 5
+
+1.  Know what it means for a dataset to be tidy and be able to distinguish between a tidy and untidy dataset.
+2.  Know the difference between `pivot_longer()` and `pivot_wider()`
+    -   `pivot_longer()`
+        -   **What it does:** Turns "wide" data with many columns into "long" data with fewer columns.
+        -   **Aim:** Organizing similar items together.
+        -   **Example:** You have a table with students' scores in Math, Science, and History in which the cases are individual students. You want to see all scores in one column, with another column saying which subject it belongs to.
+    -   `pivot_wider()`
+        -   **What it does:** Turns "long" data with few columns into "wide" data with many columns.
+        -   **Aim:** Spreading items out for easy comparison.
+        -   **Example:** You have a table with students' names, subjects, and scores in which you have one case for each student-subject combination. You want to see each student's scores side-by-side for different subjects.
+3.  Know the primary arguments for `pivot_longer()` and `pivot_wider()`
+    -   `pivot_longer()`: `cols`, `names_to` and `values_to`
+    -   `pivot_wider()`: `id_cols`, `names_from`, `values_from`
+4.  Know why variable names are quoted in `pivot_longer()` but not in `pivot_wider()`
 
 # Data Import: Chapter 7
 
-  
-# Types of Questions  
+1.  Be familiar with most common `read_xyz()` functions and their typical use cases:
+    -   `read_csv()`
 
-1. Multiple choice: Which code chunk yields this output?  
-2. What does this code do? What object(s) will it produce (e.g., dataset with 20 rows and 3 columns)
-3. Find the error and fix it (nothing very obscure).  
-4. What goes in the missing spot in the code chunk?  
-5. Complete the code chunk to create the given output.  
+        -   **Purpose**: for importing comma separated variables (CSV) data files
+        -   **Key arguments:**
+            -   `file`: Path to the CSV file.
+            -   `col_names`: A vector of column names (optional, read from first row by default).
+            -   `skip`: Number of rows to skip at the beginning (e.g., for descriptive headers).
+            -   `na`: String to interpret as missing values (e.g. "N\\A", "999").
 
+    -   `read_delim()` for data that are delimited like CSV but with a delimiter other than a comma
+
+        -   **Purpose**: for data that are delimited like CSV but with a delimiter other than a comma
+        -   **Key arguments**:
+            -   `delim`: specify the non-standard delimiter used
+            -   others as above
+
+    -   `read_fwf()`
+
+        -   **Purpose**: reads fixed width/position data where each data element has a fixed position
+
+        -   **Key arguments**:
+
+            -   `fwf_widths()`, `fwf_cols()`, and `fwf_positions()`
+
+            -   Typically specify both widths/positions and variable name
+
+            -   ... Other arguments from `read_csv()` also apply.
+
+        -   **Example**: Read 2 variables from `sample.txt` with fixed-width format specifying widths.
+
+```{r}
+# Specifies names along with start and end positions
+# Read the data using fwf_cols() with positions
+read_fwf("sample.txt", fwf_widths(c(10, 15), c("id", "name")))
+
+```
+
+2.  Beware of **non-syntactic** names. R will add single ticks around **non-syntactic** names when importing.
+    -    `clean_names()` is a powerful function in the package **janitor** to convert all names to syntactic snake case names
+3.  Know the use of `problems(df)` for diagnosing data import problems
+4.  Understand logic of **readr** strategy for parsing files
+    -   Guess types based on first 1000 rows
+    -   Guesses variable types (in order from least to most restrictive): (1) Logical, (2) Numeric, (3) Date-time, and (4) Character.
+
+# Study suggestions
+
+-   Review reading
+
+-   Review notes
+
+-   Review group work and homework assignments
+
+-   Work end of section problems in [R4DS2e](https://r4ds.hadley.nz/) and check partial list of solutions [here](https://mine-cetinkaya-rundel.github.io/r4ds-solutions/).
+
+# Types of Questions
+
+1.  Multiple choice: Which code chunk yields this output?
+2.  What does this code do? What object(s) will it produce (e.g., dataset with 20 rows and 3 columns)
+3.  Find the error and fix it (nothing very obscure).
+4.  What goes in the missing spot in the code chunk?
+5.  Complete the code chunk to create the given output.
