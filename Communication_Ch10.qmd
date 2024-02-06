@@ -29,7 +29,7 @@ library(ggthemes)
 
 ## Outline
 
--   Labels
+-   New outline here and overview
 -   Annotations
 -   Scales
 -   Themes
@@ -85,7 +85,7 @@ Source: http://r4ds.had.co.nz
 -   Each `geom` type has a default `stat`
 
 |     geom      |  Default stat   |            What is being plotted:             |
-|:-------------:|:---------------:|:---------------------------------------------:|
+|:--------------:|:--------------:|:--------------------------------------:|
 | `geom_point`  | `stat_identity` |             Actual x and y values             |
 | `geom_smooth` |  `stat_smooth`  |     Predictions from the smoothing model      |
 |  `geom_bar`   |  `stat_count`   | Frequency (count) of values for each category |
