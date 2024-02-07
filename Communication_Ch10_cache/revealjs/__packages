@@ -10,3 +10,6 @@ forcats
 lubridate
 palmerpenguins
 ggthemes
+scales
+ggrepel
+patchwork

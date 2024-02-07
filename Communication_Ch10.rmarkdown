@@ -1,0 +1,284 @@
+---
+title: "Chapter 11: Communication"
+author: "Introduction to Data Science"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+library(tidyverse)
+library(scales)
+library(ggrepel)
+library(patchwork)
+library(ggthemes)
+library(palmerpenguins)
+mammals <- read_csv("data/mammals.csv")
+```
+
+
+## Outline
+
+-   New outline here and overview
+-   Annotations
+-   Scales
+-   Themes
+-   Layout
+
+## Visualization
+
+> "When communicating results to non-technical types there is nothing better than a clear visualization to make your point."
+
+\~ John Tukey
+
+## Visualization 2.0
+
+> "Visualization is often used for evil — twisting insignificant data changes and making them look meaningful. Don't do that crap if you want to be my friend. Present results clearly and honestly. If something isn't working - those reviewing results need to know."
+
+\~ John Tukey
+
+## Communication: TLDR version {.smaller}
+
+Strategies to enhance the effectiveness of your visualizations:
+
+::: incremental
+1.  Use **labeling** to add informative text that communicates the context and meaning of the visualizations.
+
+2.  Use **annotations** (including text, shapes, arrows, etc) to focus attention, highlight patterns, and identify outliers.
+
+3.  Use custom scales, legends and tick marks to improve readability and address special circumstances such as a large number of categories.
+
+4.  Have fun with **colors**! Become a home [brewer](https://colorbrewer2.org/)!
+
+5.  Use **themes** to customize or standardize the looks of your plots (from default to minimalist to classic).
+
+6.  Use **layout** tools to organize multiple plot displays and consolidate legend information.
+:::
+
+# Exploring Mammals Data
+
+## A first look at the data
+
+
+```{r}
+mammals <- read_csv("data/mammals.csv")
+glimpse(mammals)
+```
+
+
+-   96 mammal species
+
+-   Four quantitative variables
+
+    -   `Brain`: brain weight in grams
+    -   `Body`: body weight in kilograms
+    -   `Gestation:` gestation period in days
+    -   `Litter`: average litter size
+
+## Brain vs Body Weight
+
+::: panel-tabset
+## Code
+
+Start with a simple scatterplot and smoother:
+
+
+```{r}
+#| eval: false
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+```
+
+
+## Plot
+
+
+```{r}
+#| echo: false
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+```
+
+:::
+
+## Add Labels and Title
+
+::: panel-tabset
+## Code
+
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|4-10"
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Body Weight (kg)",
+    y = "Brain Weight (g)",
+    title = "Heavier mammals have more massive brains",
+    subtitle = "Who are the exceptions?",
+    caption = "Source: Ramsey, F.L. and Schafer, D.W. (2013)"
+)
+```
+
+
+## Plot
+
+
+```{r}
+#| echo: false
+#| code-line-numbers: "|4-10"
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Body Weight (kg)",
+    y = "Brain Weight (g)",
+    title = "Heavier mammals have more massive brains",
+    subtitle = "Who are the exceptions?",
+    caption = "Source: Ramsey, F.L. and Schafer, D.W. (2013)"
+)
+```
+
+:::
+
+## Identify the unusual points
+
+
+```{r}
+#| output-location: slide
+#| code-line-numbers: "|1-2, 6|"
+extreme_points <-mammals |> 
+  filter(Body < 1000, Brain > 1000)
+
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_point(data = extreme_points, color = "black", fill = "red", size = 3, stroke = 1, shape = 21) +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Body Weight (kg)",
+    y = "Brain Weight (g)",
+    title = "Heavier mammals have more massive brains",
+    subtitle = "The larger than expected are highlighted"
+)
+```
+
+
+## Label the points  {.smaller}
+
+-   Use `geom_label_repel()` or `geom_text_repel()` from the **ggrepel** package for smart positioning of the labels
+-   Lots of fine tuning options
+
+
+```{r}
+#| output-location: slide
+#| code-line-numbers: "|6-8"
+extreme_points <-mammals |> 
+  filter(Body < 1000, Brain > 1000)
+
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_point(data = extreme_points, color = "black", fill = "red", 
+             size = 3, stroke = 1, shape = 21) +
+  geom_label_repel(data = extreme_points, aes(label = Species)) +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Body Weight (kg)",
+    y = "Brain Weight (g)",
+    title = "Heavier mammals have more massive brains",
+    subtitle = "The larger than expected are highlighted"
+)
+```
+
+
+## Pointing out the Small Brain Mammal
+
+We use filter to identify the mammal.
+
+
+```{r}
+mammals |> 
+  filter(Body > 1000, Brain < 1000)
+```
+
+
+## Pointing out the Small Brain Mammal {.smaller}
+
+Then manually position the annotation.
+
+
+```{r}
+#| output-location: slide
+#| code-line-numbers: "|10-15"
+ggplot(mammals, aes(x = Body, y = Brain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(
+    x = "Body Weight (kg)",
+    y = "Brain Weight (g)",
+    title = "Heavier mammals have more massive brains",
+    subtitle = "The larger than expected are highlighted"
+)+
+  annotate(geom = "rect", color = "grey", alpha = 0.15, xmin = 1250, xmax = 1550, 
+           ymin = 300, ymax = 800) +
+  annotate(geom = "segment", x = 1850, y = 1500, xend = 1550, yend = 800, color = "red",
+           lwd = 1.5, arrow = arrow(type = "closed")) +
+  annotate(geom = "text", label = "Hippos can\nhardly hide!", x = 1875, y = 1500, color = "red",
+           hjust = 0)
+```
+
+
+## Let's reconsider
+
+* We're missing out on most of the data because of the wide range in sizes
+
+* Two options:
+    - Transform the data
+    - Transform the scales
+    
+## Transform the data
+
+* Take logs and plot the logged data
+
+
+```{r}
+#| output-location: slide
+mammals |> 
+  mutate(logbody = log10(Body), logbrain = log10(Brain)) |> 
+  ggplot(aes(x = logbody, y = logbrain)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+
+```
+
+
+## Transform the scales
+
+* Now we can see the linear relatinship but our audience might not understand the logged scale
+
+
+
+
+## Examples of patchwork
+
+Use examples at this link: https://patchwork.data-imaginist.com/articles/guides/assembly.html
+
