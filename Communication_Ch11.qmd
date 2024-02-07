@@ -465,3 +465,27 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
   theme(text = element_text(size = 24)) # increase base font size of current theme
 ```
 
+## Communication: TLDR version Revisited {.smaller}
+
+Strategies to enhance the effectiveness of your visualizations:
+
+::: incremental
+1.  Use **labeling** to add informative text that communicates the
+    context and meaning of the visualizations.
+
+2.  Use **annotations** (including text, shapes, arrows, etc) to focus
+    attention, highlight patterns, and identify outliers.
+
+3.  Use custom scales, legends and tick marks to improve readability and
+    address special circumstances such as a large number of categories.
+
+4.  Have fun with **colors**! Become a home
+    [brewer](https://colorbrewer2.org/)!
+
+5.  Use **themes** to customize or standardize the looks of your plots
+    (from default to minimalist to classic).
+
+6.  Use **layout** tools to organize multiple plot displays and
+    consolidate legend information.
+:::
+
