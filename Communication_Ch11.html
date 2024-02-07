@@ -446,7 +446,7 @@ Introduction to Data Science
 <h1>Exploring Mammals Data</h1>
 
 </section>
-<section id="a-first-look-at-the-data" class="slide level2">
+<section id="a-first-look-at-the-data" class="slide level2 smaller">
 <h2>A first look at the data</h2>
 <div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-2_e6dbf1b97f283971bc9cf6ff69266e78">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mammals <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mammals.csv"</span>)</span>
@@ -593,7 +593,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <section id="pointing-out-the-small-brain-mammal-1" class="slide level2 smaller">
 <h2>Pointing out the Small Brain Mammal</h2>
 <p>Then manually position the annotation.</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_8476ccd60efeb1a0186151d619da900f">
+<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_4b5fd4544887290cf50b3f9c1f4c9c29">
 <div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|10-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
@@ -603,7 +603,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <span id="cb9-7"><a href="#cb9-7"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
 <span id="cb9-8"><a href="#cb9-8"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
 <span id="cb9-9"><a href="#cb9-9"></a>)<span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">xmin =</span> <span class="dv">1250</span>, <span class="at">xmax =</span> <span class="dv">1550</span>, </span>
+<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">xmin =</span> <span class="dv">1250</span>, <span class="at">xmax =</span> <span class="dv">1550</span>, </span>
 <span id="cb9-11"><a href="#cb9-11"></a>           <span class="at">ymin =</span> <span class="dv">300</span>, <span class="at">ymax =</span> <span class="dv">800</span>) <span class="sc">+</span></span>
 <span id="cb9-12"><a href="#cb9-12"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"segment"</span>, <span class="at">x =</span> <span class="dv">1850</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">xend =</span> <span class="dv">1550</span>, <span class="at">yend =</span> <span class="dv">800</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
 <span id="cb9-13"><a href="#cb9-13"></a>           <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
@@ -612,7 +612,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </div>
 
 </section>
-<section id="pointing-out-the-small-brain-mammal-1-output" class="slide level2 smaller output-location-slide"><h2>Pointing out the Small Brain Mammal</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_8476ccd60efeb1a0186151d619da900f">
+<section id="pointing-out-the-small-brain-mammal-1-output" class="slide level2 smaller output-location-slide"><h2>Pointing out the Small Brain Mammal</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_4b5fd4544887290cf50b3f9c1f4c9c29">
 <div class="cell-output-display">
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
 </div>
@@ -796,23 +796,23 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <section id="create-some-plots-and-save-them" class="slide level2 smaller">
 <h2>Create some plots and save them</h2>
 <p>Note that by default R assumes the first argument to <code>aes()</code> is <code>x</code> and the second is <code>y</code>.</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-18_9779c3360cf2ef6d9d5a9aff20cd9195">
+<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-18_07246dda28b4300c4f634f115c640da6">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_depth_mm, bill_length_mm)) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 1'</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 1'</span>)</span>
 <span id="cb17-4"><a href="#cb17-4"></a></span>
 <span id="cb17-5"><a href="#cb17-5"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
 <span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(flipper_length_mm, body_mass_g, <span class="at">group =</span> species)) <span class="sc">+</span> </span>
-<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 2'</span>)</span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 2'</span>)</span>
 <span id="cb17-8"><a href="#cb17-8"></a></span>
 <span id="cb17-9"><a href="#cb17-9"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
 <span id="cb17-10"><a href="#cb17-10"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_length_mm, flipper_length_mm, <span class="at">color =</span> sex)) <span class="sc">+</span> </span>
-<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 3'</span>)</span>
+<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 3'</span>)</span>
 <span id="cb17-12"><a href="#cb17-12"></a></span>
 <span id="cb17-13"><a href="#cb17-13"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
 <span id="cb17-14"><a href="#cb17-14"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(body_mass_g)) <span class="sc">+</span> </span>
 <span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>island) <span class="sc">+</span> </span>
-<span id="cb17-16"><a href="#cb17-16"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-16"><a href="#cb17-16"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators" class="slide level2">
@@ -890,16 +890,14 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </div></section><section id="communication-tldr-version-revisited" class="slide level2 smaller">
 <h2>Communication: TLDR version Revisited</h2>
 <p>Strategies to enhance the effectiveness of your visualizations:</p>
-<div>
 <ol type="1">
-<li class="fragment"><p>Use <strong>labeling</strong> to add informative text that communicates the context and meaning of the visualizations.</p></li>
-<li class="fragment"><p>Use <strong>annotations</strong> (including text, shapes, arrows, etc) to focus attention, highlight patterns, and identify outliers.</p></li>
-<li class="fragment"><p>Use custom scales, legends and tick marks to improve readability and address special circumstances such as a large number of categories.</p></li>
-<li class="fragment"><p>Have fun with <strong>colors</strong>! Become a home <a href="https://colorbrewer2.org/">brewer</a>!</p></li>
-<li class="fragment"><p>Use <strong>themes</strong> to customize or standardize the looks of your plots (from default to minimalist to classic).</p></li>
-<li class="fragment"><p>Use <strong>layout</strong> tools to organize multiple plot displays and consolidate legend information.</p></li>
+<li><p>Use <strong>labeling</strong> to add informative text that communicates the context and meaning of the visualizations.</p></li>
+<li><p>Use <strong>annotations</strong> (including text, shapes, arrows, etc) to focus attention, highlight patterns, and identify outliers.</p></li>
+<li><p>Use custom scales, legends and tick marks to improve readability and address special circumstances such as a large number of categories.</p></li>
+<li><p>Have fun with <strong>colors</strong>! Become a home <a href="https://colorbrewer2.org/">brewer</a>!</p></li>
+<li><p>Use <strong>themes</strong> to customize or standardize the looks of your plots (from default to minimalist to classic).</p></li>
+<li><p>Use <strong>layout</strong> tools to organize multiple plot displays and consolidate legend information.</p></li>
 </ol>
-</div>
 <div class="footer footer-default">
 
 </div>

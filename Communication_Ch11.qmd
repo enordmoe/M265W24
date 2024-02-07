@@ -82,7 +82,7 @@ Strategies to enhance the effectiveness of your visualizations:
 
 # Exploring Mammals Data
 
-## A first look at the data
+## A first look at the data {.smaller}
 
 ```{r}
 mammals <- read_csv("data/mammals.csv")
@@ -231,7 +231,7 @@ ggplot(mammals, aes(x = Body, y = Brain)) +
     title = "Heavier mammals have more massive brains",
     subtitle = "The larger than expected are highlighted"
 )+
-  annotate(geom = "rect", color = "grey", alpha = 0.15, xmin = 1250, xmax = 1550, 
+  annotate(geom = "rect", fill = "red", alpha = 0.15, xmin = 1250, xmax = 1550, 
            ymin = 300, ymax = 800) +
   annotate(geom = "segment", x = 1850, y = 1500, xend = 1550, yend = 800, color = "red",
            lwd = 1.5, arrow = arrow(type = "closed")) +
@@ -392,20 +392,20 @@ Note that by default R assumes the first argument to `aes()` is `x` and the seco
 ```{r}
 p1 <- ggplot(penguins) + 
   geom_point(aes(bill_depth_mm, bill_length_mm)) + 
-  ggtitle('Plot 1')
+  labs(title = 'Plot 1')
 
 p2 <- ggplot(penguins) + 
   geom_boxplot(aes(flipper_length_mm, body_mass_g, group = species)) + 
-  ggtitle('Plot 2')
+  labs(title = 'Plot 2')
 
 p3 <- ggplot(penguins) + 
   geom_point(aes(bill_length_mm, flipper_length_mm, color = sex)) + 
-  ggtitle('Plot 3')
+  labs(title = 'Plot 3')
 
 p4 <- ggplot(penguins) + 
   geom_bar(aes(body_mass_g)) + 
   facet_wrap(~island) + 
-  ggtitle('Plot 4')
+  labs(title = 'Plot 4')
 ```
 
 
@@ -469,7 +469,6 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 
 Strategies to enhance the effectiveness of your visualizations:
 
-::: incremental
 1.  Use **labeling** to add informative text that communicates the
     context and meaning of the visualizations.
 
@@ -487,5 +486,4 @@ Strategies to enhance the effectiveness of your visualizations:
 
 6.  Use **layout** tools to organize multiple plot displays and
     consolidate legend information.
-:::
 
