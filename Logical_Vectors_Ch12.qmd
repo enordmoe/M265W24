@@ -13,6 +13,10 @@ format:
       warning: false
       echo: true
       cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
 editor: 
   markdown: 
     wrap: 72
@@ -28,7 +32,7 @@ library(ggrepel)
 library(patchwork)
 library(ggthemes)
 library(palmerpenguins)
-load("data/chi_flights.rda")
+chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
 mammals <- read_csv("data/mammals.csv")
 ```
 
@@ -89,7 +93,7 @@ mammals <- read_csv("data/mammals.csv")
 ```{r}
 # Put this in the first R chunk in your Quarto file 
 # or at the command line
-# load("data/chi_flights.rda")
+# chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
 glimpse(chiflights2020)
 ```
 
@@ -147,7 +151,6 @@ age
 
 ```{r}
 #| echo: false
-#| output-location: column
 major <- sample(c("STEM","non-STEM"), size = 10, replace = TRUE)
 data.frame(age, major)
 ```
@@ -204,36 +207,38 @@ Add binary variable for study abroad participation and living on campus:
 
 ```{r}
 #| echo: false
-#| output-location: column
 abroad <- ifelse(runif(10)>.2,"Yes","No")
 oncampus <- ifelse(runif(10)>.3,"Yes","No")
 data.frame(age, major, abroad, oncampus)
 ```
 
-## Combining several logicals with `any()` and `all()`?
+## Combining several logicals with `any()`?
 
 Add binary variable for study abroad participation and living on campus:
 
 ```{r}
 #| echo: false
-#| output-location: column
 abroad <- ifelse(runif(10)>.2,"Yes","No")
 oncampus <- ifelse(runif(10)>.3,"Yes","No")
 data.frame(age, major, abroad, oncampus, anytrue = any(age>20, major=="STEM", abroad=="Yes", oncampus=="No"))
 ```
 
-## Combining several logicals with `any()` and `all()`
+. . .
 
-Add binary variable for study abroad participation and living on campus:
+That doesn't look right. Let's see if we have better luck with `all()`.
+
+## Combining several logicals with `all()?`
 
 ```{r}
 #| echo: false
-#| output-location: column
 abroad <- ifelse(runif(10)>.2,"Yes","No")
 oncampus <- ifelse(runif(10)>.2,"Yes","No")
 data.frame(age, major, abroad, oncampus, alltrue = all(age>20, major=="STEM", abroad=="Yes", oncampus=="Yes"))
 ```
 
+. . .
+
+That doesn't look right either. What's going on?
 
 ## Warnings {background-color="teal"}
 
@@ -247,4 +252,258 @@ data.frame(age, major, abroad, oncampus, alltrue = all(age>20, major=="STEM", ab
 
 {{< video https://youtu.be/IoyvvEWHodk start="7" >}}
 
+## The mystery of NAs
+
+-   Missing values are contagious. See these logical tests.
+
+```{r}
+NA < 25
+```
+
+```{r}
+10 == NA
+```
+
+```{r}
+# We don't know what we don't know
+NA == NA 
+```
+
+## Wisdom on NAs
+
+::: callout-tip
+## The unknown unknowns
+
+"Reports that say that something *hasn't* happened are always
+interesting to me, because as we know, there are \*\*known knowns\*8;
+there are things we know we know. We also know there are **known
+unknowns**; that is to say we know there are some things we do not know.
+But there are also **unknown unknowns**-the ones we don't know we don't
+know. And if one looks throughout the history of our country and other
+free countries, it is the latter category that tends to be the difficult
+ones."
+:::
+
+::: aside
+Donald Rumsfeld, former Secretary of Defense (and Data Scientist?)
+:::
+
+## R4DS example illustrates why
+
+```{r}
+# We don't know how tall Olds was
+height_olds <- NA
+height_olds
+```
+
+```{r}
+# We don't know how tall Upton was
+height_upton <- NA
+height_upton
+```
+
+```{r}
+# Were Olds and Upton the same height?
+height_olds == height_upton
+```
+
+-   We don't know (unless we have a picture of them together?)
+-   We can't say `NA == NA` because `NA` typically indicates
+    uncertainty.
+
+## Boolean and Missing Values {.smaller}
+
+Combining logicals with missing (NA) values can be
+[treacherous]{style="color: red;"} as this example from R4DS
+illustrates:
+
+```{r}
+df <- tibble(x = c(TRUE, FALSE, NA))
+
+df |> 
+  mutate(
+    and = x & NA,
+    or = x | NA
+  )
+```
+
+-   For an `&` to be TRUE, **both** conditions have to be knowably TRUE
+-   For an `|` to be TRUE, **at least one** condition has to be knowably
+    TRUE
+
+
+# Using Logicals to work with the Chicago Flights data
+
+## Outline for missing parts
+
+Focus on Chicago flights data
+
+### Filters
+
+* Use simple filters
+* Use `is.na()` examples (and as part of other conditions say, before March and after March)
+
+### Summarize
+
+* Use to count number and proportion with certain conditions
+* Other summarize examples
+
+## Simple Filtering
+
+Filter all flights leaving Midway (MDW)
+
+```{r}
+chiflights2020 |> 
+  filter(origin == "MDW")
+```
+
+## Simple Filtering
+
+Filter cancelled flights
+
+```{r}
+chiflights2020 |> 
+  filter(is.na(dep_delay))
+```
+
+## Simple Filtering
+
+Flights that "made up time" in flight:
+
+```{r}
+chiflights2020 |> 
+  filter(arr_delay < dep_delay) |> 
+  select(time_hour, dep_delay, arr_delay) |> 
+  arrange(desc(dep_delay)) # put longest delays first
+```
+
+## Complex Filtering
+
+Find all the flights that left from O'Hare (ORD) before noon destined for Orlando (MCO) and arrived more than one hour late.
+
+```{r}
+chiflights2020 |> 
+  filter(origin == "ORD", dep_time < 1200, dest == "MCO", arr_delay > 60)
+```
+
+## Filtering with %in% {.smaller}
+
+All flights leaving Midway headed for Florida destinations:
+
+```{r}
+florida_dest <- c("DAB", "FLL", "RSW", "VPS", "GNV", "JAX", "EYW", "MLB", "MIA", 
+"MCO", "ECP", "PNS", "PGD", "SFB", "SRQ", "PIE", "TLH", "TPA", 
+"PBI") # from Wikipedia
+chiflights2020 |> 
+  filter(origin == "MDW", dest %in% florida_dest) |> 
+  select(year, month, day, origin, dest)
+```
+## Filtering with %in% with NAs {.smaller} 
+
+Find all flights to Florida that were either canceled or left on the hour
+
+```{r}
+chiflights2020 |> 
+  filter(dest %in% florida_dest, dep_time %in% c(NA, seq(0,2400,100))) |> 
+  select(time_hour ,dep_time, dest)  
+```
+
+# Using logicals with `summarize()` 
+
+## Logical summaries {.smaller}
+
+Check if `any()` or `all()` conditions are true for the `group_by()` group:
+    + During which hour spans were any or all flights out of O'Hare?
+
+
+```{r}
+chiflights2020 |> 
+  group_by(year, month, day) |> 
+  summarize(
+    all_long_delayed = all(dep_delay >= 30, na.rm = TRUE),
+    any_long_delayed = any(dep_delay >= 30, na.rm = TRUE),
+    .groups = "drop"
+  ) 
+
+```
+
+
+
+## Numerical Summaries Using Logical Vectors {.smaller}
+
+Find all the days where more than half of the non-cancelled flights were delayed in departing:
+
+```{r}
+chiflights2020 |> 
+  group_by(year, month, day) |> 
+  summarize(
+    num_flights = n(),
+    num_cancelled = sum(is.na(dep_time)),
+    num_delayed = sum(dep_delay>0, na.rm = TRUE),
+    prop_delayed = mean(dep_delay>0, na.rm = TRUE),
+   .groups = "drop"
+    ) |> 
+  filter(prop_delayed > 0.5) 
+```
+
+## Complex Filtering {.smaller}
+
+Find all the dates on which more than half of the flights were either cancelled or delayed in departing
+
+    *     Assume `dep_delay` missing means the flight was cancelled
+
+```{r}
+chiflights2020 |> 
+  mutate(flight_date = date(time_hour)) |>  # extrac using date() 
+  group_by(flight_date) |> 
+  summarize(
+    num_flights = n(),
+    num_late_or_cancelled = sum(dep_delay > 0| is.na(dep_delay)),
+    prop_late_or_cancelled = mean(dep_delay > 0| is.na(dep_delay))
+  ) |> 
+  filter(prop_late_or_cancelled > 0.5) 
+```
+
+## Conditional transformation: `ifelse()` for simpler cases
+
+* Create a simple `morning_departure` binary variable:
+* NA values persist
+
+```{r}
+#| output-location: column
+chiflights2020 |> 
+  mutate(
+    morning = ifelse((dep_time < 1200), "morning", "non-morning")
+    ) |> 
+  count(morning) 
+```
+
+
+
+
+## Conditional transformation: `case_when()`  {.smaller}
+
+Use `case_when()` for more complicated transformations (beware of NAs)
+
+Create a new `timeofday` variable
+    * Value assigned based on first TRUE condition
+
+```{r}
+#| output-location: column
+chiflights2020 |> 
+  mutate(
+    timeofday = case_when(
+      is.na(dep_time)      ~ "cancelled",
+      dep_time < 0300       ~ "late night",
+      dep_time < 0700       ~ "early morning",
+      dep_time < 1100       ~ "morning",
+      dep_time < 1400       ~ "midday",
+      dep_time < 1700       ~ "afternoon",
+      dep_time < 2200       ~ "evening",
+      dep_time < 2400       ~ "late night"
+    ),
+    .keep = "used"
+  ) |> 
+  count(fct_inorder(timeofday)) # put times of day in order
+```
 
