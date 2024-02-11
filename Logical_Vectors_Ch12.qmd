@@ -46,7 +46,7 @@ mammals <- read_csv("data/mammals.csv")
 
 ------------------------------------------------------------------------
 
-## Logical Vectors: The Skinny {.smaller}
+## Logical Vectors: The Essentials {.smaller}
 
 ::: incremental
 1.  **Logical vectors** are those that can take on only TRUE, FALSE and
