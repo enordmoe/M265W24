@@ -408,487 +408,299 @@ Introduction to Data Science
 <ul>
 <li>Definition</li>
 <li>Comparisons and complications</li>
-<li>Themes</li>
-<li>Layout</li>
+<li>Boolean operations in data science</li>
+<li>Using logical in data summaries</li>
+<li>Conditional (transformation) love</li>
 </ul>
 </section>
-<section id="visualization" class="slide level2">
-<h2>Visualization</h2>
-<blockquote>
-<p>“When communicating results to non-technical types there is nothing better than a clear visualization to make your point.”</p>
-</blockquote>
-<p>~ John Tukey</p>
-</section>
-<section id="visualization-2.0" class="slide level2">
-<h2>Visualization 2.0</h2>
-<blockquote>
-<p>“Visualization is often used for evil — twisting insignificant data changes and making them look meaningful. Don’t do that crap if you want to be my friend. Present results clearly and honestly. If something isn’t working - those reviewing results need to know.”</p>
-</blockquote>
-<p>~ John Tukey</p>
-</section>
-<section id="communication-tldr-version" class="slide level2 smaller">
-<h2>Communication: TLDR version</h2>
-<p>Strategies to enhance the effectiveness of your visualizations:</p>
+<section id="logical-vectors-the-skinny" class="slide level2 smaller">
+<h2>Logical Vectors: The Skinny</h2>
 <div>
 <ol type="1">
-<li class="fragment"><p>Use <strong>labeling</strong> to add informative text that communicates the context and meaning of the visualizations.</p></li>
-<li class="fragment"><p>Use <strong>annotations</strong> (including text, shapes, arrows, etc) to focus attention, highlight patterns, and identify outliers.</p></li>
-<li class="fragment"><p>Use custom scales, legends and tick marks to improve readability and address special circumstances such as a large number of categories.</p></li>
-<li class="fragment"><p>Have fun with <strong>colors</strong>! Become a home <a href="https://colorbrewer2.org/">brewer</a>!</p></li>
-<li class="fragment"><p>Use <strong>themes</strong> to customize or standardize the looks of your plots (from default to minimalist to classic).</p></li>
-<li class="fragment"><p>Use <strong>layout</strong> tools to organize multiple plot displays and consolidate legend information.</p></li>
+<li class="fragment"><p><strong>Logical vectors</strong> are those that can take on only TRUE, FALSE and NA values.</p>
+<ul>
+<li class="fragment"><p>They can indicate presence or absence of a trait (some binary variables are logicals).</p></li>
+<li class="fragment"><p>They result from logical operations</p></li>
+</ul></li>
+<li class="fragment"><p><strong>Logical operations</strong> include <em>comparisons</em> (e.g., <code>&lt;</code>, <code>==</code>, etc.) and <em>Boolean algebra</em> operations such as <code>&amp;</code> and <code>|</code>.</p></li>
+<li class="fragment"><p>Logical vectors underlie our use of the <code>filter()</code> function.</p></li>
+<li class="fragment"><p>Logical vectors are also used in <strong>conditional operations</strong>, such as creating new variables via <code>mutate()</code> based on certain conditions.</p>
+<ul>
+<li class="fragment">Logical operations also allow for combining logical conditions to enable more complex filtering and creation of variables based on multiple characteristics.</li>
+</ul></li>
+<li class="fragment"><p>Data summaries can be produced relying on careful and sometimes creative use of statistical operations combined with logical variables, e.g.&nbsp;<code>summarize(number_seniors = sum(age &gt;= 65)</code></p></li>
 </ol>
 </div>
 </section>
 <section>
-<section id="exploring-mammals-data" class="title-slide slide level1 center">
-<h1>Exploring Mammals Data</h1>
+<section id="the-chicago-flights-data-set" class="title-slide slide level1 center">
+<h1>The Chicago Flights Data Set</h1>
 
 </section>
-<section id="a-first-look-at-the-data" class="slide level2">
-<h2>A first look at the data</h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-2_3eea4f9207cd2bfefb5255a525812c69">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mammals <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mammals.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">glimpse</span>(mammals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 96
-Columns: 5
-$ Species   &lt;chr&gt; "Quokka", "Hedgehog", "Tree shrew", "Elephant shrew I", "Ele…
-$ Brain     &lt;dbl&gt; 17.50, 3.50, 3.15, 1.14, 1.37, 22.00, 12.80, 9.90, 54.00, 73…
-$ Body      &lt;dbl&gt; 3.500, 0.930, 0.150, 0.049, 0.064, 2.100, 1.200, 0.700, 7.70…
-$ Gestation &lt;dbl&gt; 26, 34, 46, 51, 46, 135, 90, 135, 139, 180, 140, 140, 145, 1…
-$ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1.0, …</code></pre>
-</div>
-</div>
+<section id="chiflights2020" class="slide level2">
+<h2><code>chiflights2020</code></h2>
 <ul>
-<li><p>96 mammal species</p></li>
-<li><p>Four quantitative variables</p>
+<li><p>All flights out of Chicago O’Hare and Midway airports in 2020</p></li>
+<li><p>250,004 cases and 19 variables.</p></li>
+<li><p>Same arrival and delay variables as NYC <code>flights</code> data</p></li>
+<li><p>Binary R data file</p>
 <ul>
-<li><code>Brain</code>: brain weight in grams</li>
-<li><code>Body</code>: body weight in kilograms</li>
-<li><code>Gestation:</code> gestation period in days</li>
-<li><code>Litter</code>: average litter size</li>
+<li><code>chi_flights.rda</code> in <code>data</code> folder of <code>inclass265</code>.</li>
 </ul></li>
 </ul>
 </section>
-<section id="brain-vs-body-weight" class="slide level2">
-<h2>Brain vs Body Weight</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Code</a></li><li><a href="#tabset-1-2">Plot</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
-<p>Start with a simple scatterplot and smoother:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-3_568f6d1cdc159b43de20ed45e1b672ea">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-1-2">
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-4_ccaf302a752d697e9a569f2e5d98e20d">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-4-1.png" width="960"></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="add-labels-and-title" class="slide level2">
-<h2>Add Labels and Title</h2>
-<div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Code</a></li><li><a href="#tabset-2-2">Plot</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1">
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-5_1dfc606d2020f3b71f722b035414037a">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="|4-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">subtitle =</span> <span class="st">"Who are the exceptions?"</span>,</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="at">caption =</span> <span class="st">"Source: Ramsey, F.L. and Schafer, D.W. (2013)"</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-2-2">
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-6_9a58c49d528cf50f9db4666a40e57305">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-6-1.png" width="960"></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="identify-the-unusual-points" class="slide level2">
-<h2>Identify the unusual points</h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-7_cf99a463b9e0d5130890a180c01e2d8e">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|1-2, 6|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="identify-the-unusual-points-output" class="slide level2 output-location-slide"><h2>Identify the unusual points</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-7_cf99a463b9e0d5130890a180c01e2d8e">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
-</div>
-</div></section><section id="label-the-points" class="slide level2 smaller">
-<h2>Label the points</h2>
-<ul>
-<li>Use <code>geom_label_repel()</code> or <code>geom_text_repel()</code> from the <strong>ggrepel</strong> package for smart positioning of the labels</li>
-<li>Lots of fine tuning options</li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-8_59ddbbfbfaae64d9b1129f21439a1c2e">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, </span>
-<span id="cb6-7"><a href="#cb6-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">geom_label_repel</span>(<span class="at">data =</span> extreme_points, <span class="fu">aes</span>(<span class="at">label =</span> Species)) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">labs</span>(</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="label-the-points-output" class="slide level2 smaller output-location-slide"><h2>Label the points</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-8_59ddbbfbfaae64d9b1129f21439a1c2e">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
-</div>
-</div></section><section id="pointing-out-the-small-brain-mammal" class="slide level2">
-<h2>Pointing out the Small Brain Mammal</h2>
-<p>We use filter to identify the mammal.</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-9_349f6d63c9b4a7c2d68a385d46dbbdbc">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&gt;</span> <span class="dv">1000</span>, Brain <span class="sc">&lt;</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="chiflights2020-1" class="slide level2 smaller">
+<h2><code>chiflights2020</code></h2>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-2_92e7cd9508d039e22fcd958076a91fa9">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Put this in the first R chunk in your Quarto file </span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># or at the command line</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># load("data/chi_flights.rda")</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">glimpse</span>(chiflights2020)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 5
-  Species      Brain  Body Gestation Litter
-  &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-1 Hippopotamus   590  1400       240      1</code></pre>
+<pre><code>Rows: 250,004
+Columns: 19
+$ year           &lt;int&gt; 2020, 2020, 2020, 2020, 2020, 2020, 2020, 2020, 2020, 2…
+$ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ dep_time       &lt;int&gt; 515, 515, 548, 551, 551, 552, 555, 556, 557, 559, 600, …
+$ sched_dep_time &lt;int&gt; 515, 525, 550, 600, 600, 600, 600, 604, 600, 600, 601, …
+$ dep_delay      &lt;dbl&gt; 0, -10, -2, -9, -9, -8, -5, -8, -3, -1, -1, -4, -4, 13,…
+$ arr_time       &lt;int&gt; 912, 849, 853, 829, 919, 827, 933, 943, 933, 1006, 843,…
+$ sched_arr_time &lt;int&gt; 922, 844, 854, 900, 926, 901, 945, 1010, 935, 1000, 900…
+$ arr_delay      &lt;dbl&gt; -10, 5, -1, -31, -7, -34, -12, -27, -2, 6, -17, -6, -8,…
+$ carrier        &lt;chr&gt; "NK", "B6", "DL", "UA", "YX", "DL", "WN", "F9", "WN", "…
+$ flight         &lt;int&gt; 140, 143, 369, 437, 2247, 733, 2270, 560, 1764, 2324, 2…
+$ tailnum        &lt;chr&gt; "N668NK", "N304JB", "N912DL", "N898UA", "N204JQ", "N306…
+$ origin         &lt;chr&gt; "ORD", "ORD", "ORD", "ORD", "ORD", "MDW", "MDW", "ORD",…
+$ dest           &lt;chr&gt; "FLL", "BOS", "ATL", "ATL", "BOS", "ATL", "RSW", "RSW",…
+$ air_time       &lt;dbl&gt; 154, 104, 85, 83, 101, 81, 134, 138, 124, 150, 146, 75,…
+$ distance       &lt;dbl&gt; 1182, 867, 606, 606, 867, 591, 1105, 1120, 990, 1167, 9…
+$ hour           &lt;dbl&gt; 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6…
+$ minute         &lt;dbl&gt; 15, 25, 50, 0, 0, 0, 0, 4, 0, 0, 1, 5, 5, 51, 0, 17, 15…
+$ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-01 0…</code></pre>
 </div>
 </div>
 </section>
-<section id="pointing-out-the-small-brain-mammal-1" class="slide level2 smaller">
-<h2>Pointing out the Small Brain Mammal</h2>
-<p>Then manually position the annotation.</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-10_19c3e098e72e3cfb50f2013d1d8d47e9">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|10-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-5"><a href="#cb9-5"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>)<span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">xmin =</span> <span class="dv">1250</span>, <span class="at">xmax =</span> <span class="dv">1550</span>, </span>
-<span id="cb9-11"><a href="#cb9-11"></a>           <span class="at">ymin =</span> <span class="dv">300</span>, <span class="at">ymax =</span> <span class="dv">800</span>) <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"segment"</span>, <span class="at">x =</span> <span class="dv">1850</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">xend =</span> <span class="dv">1550</span>, <span class="at">yend =</span> <span class="dv">800</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>           <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Hippos can</span><span class="sc">\n</span><span class="st">hardly hide!"</span>, <span class="at">x =</span> <span class="dv">1875</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb9-15"><a href="#cb9-15"></a>           <span class="at">hjust =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="pointing-out-the-small-brain-mammal-1-output" class="slide level2 smaller output-location-slide"><h2>Pointing out the Small Brain Mammal</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-10_19c3e098e72e3cfb50f2013d1d8d47e9">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
-</div>
-</div></section><section id="lets-reconsider" class="slide level2">
-<h2>Let’s reconsider</h2>
-<ul>
-<li><p>We’re missing out on most of the data because of the wide range in sizes</p></li>
-<li><p>Two options:</p>
-<ul>
-<li>Transform the data</li>
-<li>Transform the scales</li>
-</ul></li>
-</ul>
-</section>
-<section id="transform-the-data" class="slide level2">
-<h2>Transform the data</h2>
-<ul>
-<li>Take logs and plot the logged data</li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-11_0f37e936a1ea71201b9d4e85eebb691b">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">mutate</span>(<span class="at">logbody =</span> <span class="fu">log10</span>(Body), <span class="at">logbrain =</span> <span class="fu">log10</span>(Brain)) <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> logbody, <span class="at">y =</span> logbrain)) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="transform-the-data-output" class="slide level2 output-location-slide"><h2>Transform the data</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-11_0f37e936a1ea71201b9d4e85eebb691b">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
-</div>
-</div></section><section id="transform-the-scales" class="slide level2">
-<h2>Transform the scales</h2>
-<ul>
-<li><p>Now we can see the linear relatinship but our audience might not understand the logged scale</p></li>
-<li><p>Let <strong>ggplot2</strong> transform the scale instead</p></li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-12_3c298dcf9306f3f1b218e78d389c117e">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)  <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="transform-the-scales-output" class="slide level2 output-location-slide"><h2>Transform the scales</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-12_3c298dcf9306f3f1b218e78d389c117e">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-12-1.png" width="960"></p>
-</div>
-</div></section><section id="maybe-customize-the-labels-in-comma-format" class="slide level2">
-<h2>Maybe customize the labels in comma format?</h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-13_b818014b69a0ad95d8b15e3f82f7ae73">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6"></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="maybe-customize-the-labels-in-comma-format-output" class="slide level2 output-location-slide"><h2>Maybe customize the labels in comma format?</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-13_b818014b69a0ad95d8b15e3f82f7ae73">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
-</div>
-</div></section><section id="use-theme-to-enhance-the-appearance" class="slide level2">
-<h2>Use <code>theme()</code> to enhance the appearance</h2>
+<section id="logical-vectors" class="slide level2 smaller">
+<h2>Logical Vectors</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li><p>Use <code>theme()</code> to customize font sizes and general appearance.</p></li>
-<li><p>Many, many options to customize</p></li>
-<li><p>See R4DS and other references for details</p></li>
+<li><p>Simplest vectors of all: <code>TRUE</code>, <code>FALSE</code>, or <code>NA</code></p></li>
+<li><p>Starting point in R data parsing workflow</p></li>
+<li><p>Much more useful that you might expect.</p></li>
+<li><p>A random logical vector:</p></li>
 </ul>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-3_142a226eb568331a8481a4d85b507ce7">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
 </div><div class="column" style="width:50%;">
-<p><img data-src="https://r4ds.hadley.nz/images/visualization-themes.png" alt="theme() gallery"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://www.random.org/analysis/dilbert.jpg" alt="Random number generator"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
-<section id="experiment-with-theme-options" class="slide level2">
-<h2>Experiment with <code>theme()</code> options</h2>
+<section id="the-danger-of-logic" class="slide level2">
+<h2>The Danger of Logic</h2>
+
+<img data-src="https://imgs.xkcd.com/comics/logic_boat.png" alt="Logic boat" class="r-stretch quarto-figure-center"></section>
+<section id="sample-logical-vector" class="slide level2">
+<h2>Sample logical vector</h2>
 <ul>
-<li><p>We <code>theme_bw()</code> and increase base font size to improve visibility on the slide.</p></li>
-<li><p>Default base size is 11 point</p></li>
-<li><p>The result is much easier to read.</p></li>
+<li>Generate a vector called <code>age</code> of random student ages:</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-14_4a3ce23ae014beeffb73bf46b830bbe0">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6"></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>) <span class="sc">+</span> </span>
-<span id="cb13-7"><a href="#cb13-7"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-4_3feef10c0f7834f78b668393d2b209ad">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 21 20 20 23 19 20 18 23 19 21</code></pre>
 </div>
-
-</section><section id="experiment-with-theme-options-output" class="slide level2 output-location-slide"><h2>Experiment with <code>theme()</code> options</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-14_4a3ce23ae014beeffb73bf46b830bbe0">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
 </div>
-</div></section></section>
-<section>
-<section id="question-do-heavier-mammals-have-longer-gestation-periods" class="title-slide slide level1 center">
-<h1>Question: Do heavier mammals have longer gestation periods?</h1>
-
-</section>
-<section id="plot-the-data" class="slide level2">
-<h2>Plot the data</h2>
 <ul>
-<li>As before, we put <code>Body</code> weight on a log scale</li>
+<li><p>Test each of the 10 individuals to see if they’re older than 20</p>
+<ul>
+<li>The result is a <strong>logical vector</strong></li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-15_374dddc9f57e3836a1e6f77089812250">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">scale_x_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-5_591644c88769b0219eb61dde3c8b9494">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE</code></pre>
 </div>
-
-</section>
-<section id="plot-the-data-output" class="slide level2 output-location-slide"><h2>Plot the data</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-15_374dddc9f57e3836a1e6f77089812250">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
-</div>
-</div></section><section id="zoom-in" class="slide level2">
-<h2>Zoom in</h2>
-<p>We use <code>coord_cartesian()</code> to zoom in on the data</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-16_7d22014c41f1a51cf06439d5062f4a68">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="zoom-in-output" class="slide level2 output-location-slide"><h2>Zoom in</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-16_7d22014c41f1a51cf06439d5062f4a68">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
-</div>
-</div></section><section id="add-tick-marks-and-reduce-clutter" class="slide level2">
-<h2>Add Tick Marks and Reduce Clutter</h2>
-<ul>
-<li><p>If we wanted more detail on the Y-axis, we could add more tick labels but</p></li>
-<li><p>Reduce some of the other “clutter” with <code>theme_minimal()</code> and turning off minor tick lines.</p></li>
+</div></li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-17_2cfefdc2d1574c924f453eab6fceae94">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>)) <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">400</span>, <span class="dv">50</span>), <span class="at">minor_breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section><section id="add-tick-marks-and-reduce-clutter-output" class="slide level2 output-location-slide"><h2>Add Tick Marks and Reduce Clutter</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-17_2cfefdc2d1574c924f453eab6fceae94">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
-</div>
-</div></section></section>
-<section>
-<section id="layout" class="title-slide slide level1 center">
-<h1>Layout</h1>
-
 </section>
-<section id="arranging-plots" class="slide level2">
-<h2>Arranging Plots</h2>
+<section id="logical-connections" class="slide level2 smaller">
+<h2>Logical connections</h2>
 <ul>
-<li><p>So far we have focused on one plot at a time</p>
-<ul>
-<li>Except for faceting</li>
-</ul></li>
-<li><p>Alternatively, we would often like to combine several plots into a single display to tell a story or make comparisons</p></li>
-<li><p>The <strong>patchwork</strong> package provides a highly flexible way to do this</p></li>
+<li><p>Use logical operators to combine logicals as follows.</p></li>
+<li><p>Age and Major of each of the 10 students:</p></li>
 </ul>
-</section></section>
-<section>
-<section id="round-up-the-penguins" class="title-slide slide level1 center">
-<h1>Round up the Penguins!</h1>
-
-</section>
-<section id="create-some-plots-and-save-them" class="slide level2 smaller">
-<h2>Create some plots and save them</h2>
-<p>Note that by default R assumes the first argument to <code>aes()</code> is <code>x</code> and the second is <code>y</code>.</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-18_53a88a9eeb8903ee725b158c3e5365e8">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_depth_mm, bill_length_mm)) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 1'</span>)</span>
-<span id="cb17-4"><a href="#cb17-4"></a></span>
-<span id="cb17-5"><a href="#cb17-5"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(flipper_length_mm, body_mass_g, <span class="at">group =</span> species)) <span class="sc">+</span> </span>
-<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 2'</span>)</span>
-<span id="cb17-8"><a href="#cb17-8"></a></span>
-<span id="cb17-9"><a href="#cb17-9"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-10"><a href="#cb17-10"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_length_mm, flipper_length_mm, <span class="at">color =</span> sex)) <span class="sc">+</span> </span>
-<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 3'</span>)</span>
-<span id="cb17-12"><a href="#cb17-12"></a></span>
-<span id="cb17-13"><a href="#cb17-13"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-14"><a href="#cb17-14"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(body_mass_g)) <span class="sc">+</span> </span>
-<span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>island) <span class="sc">+</span> </span>
-<span id="cb17-16"><a href="#cb17-16"></a>  <span class="fu">ggtitle</span>(<span class="st">'Plot 4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-6_dabe55b66f727a5fc8936bc7cb339215">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major
+1   21     STEM
+2   20 non-STEM
+3   20     STEM
+4   23     STEM
+5   19 non-STEM
+6   20 non-STEM
+7   18     STEM
+8   23 non-STEM
+9   19     STEM
+10  21 non-STEM</code></pre>
+</div>
 </div>
 </section>
-<section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators" class="slide level2">
-<h2>Now use patchwork to arrange the plots using math-like operators</h2>
+<section id="logical-combinations-using" class="slide level2">
+<h2>Logical combinations: Using <code>&amp;</code></h2>
 <ul>
-<li><p>See the text and <a href="https://patchwork.data-imaginist.com/index.html">here</a> for further details and limitless options.</p></li>
-<li><p>Legends can be combined in common <code>guide area()</code> as shown <a href="https://r4ds.hadley.nz/communication#sec-themes">here</a></p></li>
+<li>Using the <code>&amp;</code> AND operator</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-19_22ea4f056e7dd008f445f327fd87cdbc">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(p1 <span class="sc">+</span> p2)<span class="sc">/</span>p3<span class="sc">/</span>p4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-7_32eac16fdb1113bcaab32432344e3c47">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">&amp;</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-8_2b0b8b67963cc30f05d9d1702e6aec2c">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major Result
+1   21     STEM   TRUE
+2   20 non-STEM  FALSE
+3   20     STEM  FALSE
+4   23     STEM   TRUE
+5   19 non-STEM  FALSE
+6   20 non-STEM  FALSE
+7   18     STEM  FALSE
+8   23 non-STEM  FALSE
+9   19     STEM  FALSE
+10  21 non-STEM  FALSE</code></pre>
+</div>
+</div>
 </section>
-<section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators-output" class="slide level2 output-location-slide"><h2>Now use patchwork to arrange the plots using math-like operators</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-19_22ea4f056e7dd008f445f327fd87cdbc">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-19-1.png" width="960"></p>
-</div>
-</div></section><section id="colors" class="slide level2">
-<h2>Colors</h2>
+<section id="logical-combinations-using-1" class="slide level2">
+<h2>Logical combinations: Using <code>|</code></h2>
 <ul>
-<li>Start with a simple plot and add color</li>
+<li>Using the <code>|</code> OR operator</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-20_547f2198c314d8614c1569a5561d152c">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-9_b83fc32687912a9c633832d43ac2ec5a">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">|</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-10_de67bd3565de0e812c4eddcb94c25d8d">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major Result
+1   21     STEM   TRUE
+2   20 non-STEM  FALSE
+3   20     STEM   TRUE
+4   23     STEM   TRUE
+5   19 non-STEM  FALSE
+6   20 non-STEM  FALSE
+7   18     STEM   TRUE
+8   23 non-STEM   TRUE
+9   19     STEM   TRUE
+10  21 non-STEM   TRUE</code></pre>
+</div>
+</div>
 </section>
-<section id="colors-output" class="slide level2 output-location-slide"><h2>Colors</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-20_547f2198c314d8614c1569a5561d152c">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-20-1.png" width="960"></p>
-</div>
-</div></section><section id="brew-colors" class="slide level2">
-<h2>Brew colors</h2>
-<ul>
-<li>Many interesting palettes and color schemes to try
-<ul>
-<li>Check the documentation</li>
-<li>Go to <a href="https://colorbrewer2.org/">Color Brewer 2.0</a></li>
-</ul></li>
-<li>Keep visibility and accessibility in mind</li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-21_6934794d2b2f9f70803b779b796b63e7">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv)) <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="boolean-algebra-in-a-nutshell" class="slide level2">
+<h2>Boolean Algebra in a Nutshell</h2>
 
+<img data-src="https://r4ds.hadley.nz/diagrams/transform.png" class="r-stretch quarto-figure-center"></section>
+<section id="the-less-often-used-exclusive-or-xor" class="slide level2">
+<h2>The Less Often Used exclusive OR: <code>xor()</code></h2>
+<ul>
+<li>Using the <code>xor()</code> function</li>
+</ul>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-11_72a811fac5843813c837c5e136105449">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">xor</span>(age <span class="sc">&gt;</span> <span class="dv">20</span>, major <span class="sc">==</span> <span class="st">"STEM"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-12_4500b35fad67a4390c00f7897e0d57d5">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major Result
+1   21     STEM  FALSE
+2   20 non-STEM  FALSE
+3   20     STEM   TRUE
+4   23     STEM  FALSE
+5   19 non-STEM  FALSE
+6   20 non-STEM  FALSE
+7   18     STEM   TRUE
+8   23 non-STEM   TRUE
+9   19     STEM   TRUE
+10  21 non-STEM   TRUE</code></pre>
+</div>
+</div>
 </section>
-<section id="brew-colors-output" class="slide level2 output-location-slide"><h2>Brew colors</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-21_6934794d2b2f9f70803b779b796b63e7">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-21-1.png" width="960"></p>
+<section id="combining-several-logicals-with-any-and-all" class="slide level2">
+<h2>Combining several logicals with <code>any()</code> and <code>all()</code>?</h2>
+<p>Add binary variable for study abroad participation and living on campus:</p>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-13_0eb088dbcf58c43a6ccd3c9e61babbae">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major abroad oncampus
+1   21     STEM    Yes      Yes
+2   20 non-STEM    Yes      Yes
+3   20     STEM     No      Yes
+4   23     STEM    Yes      Yes
+5   19 non-STEM    Yes       No
+6   20 non-STEM    Yes      Yes
+7   18     STEM    Yes      Yes
+8   23 non-STEM    Yes      Yes
+9   19     STEM    Yes       No
+10  21 non-STEM    Yes      Yes</code></pre>
 </div>
-</div></section><section id="specifying-colors-manually" class="slide level2">
-<h2>Specifying colors manually</h2>
-<ul>
-<li>I found a colorblind safe custom palette <a href="https://colorbrewer2.org/#type=qualitative&amp;scheme=Dark2&amp;n=3">here</a></li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-22_b831bc70cf8097f6afed262eb9a42503">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="|1-2,6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Manually specified color palette using HTML color codes</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>mycolors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1b9e77"</span>, <span class="st">"#d95f02"</span>, <span class="st">"#7570b3"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))<span class="sc">+</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> mycolors) <span class="sc">+</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">24</span>)) <span class="co"># increase base font size of current theme</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
+</section>
+<section id="combining-several-logicals-with-any-and-all-1" class="slide level2">
+<h2>Combining several logicals with <code>any()</code> and <code>all()</code>?</h2>
+<p>Add binary variable for study abroad participation and living on campus:</p>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-14_59fcd23103ebd1417dda5a2eb29bc588">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major abroad oncampus anytrue
+1   21     STEM    Yes       No    TRUE
+2   20 non-STEM    Yes      Yes    TRUE
+3   20     STEM    Yes       No    TRUE
+4   23     STEM    Yes      Yes    TRUE
+5   19 non-STEM    Yes       No    TRUE
+6   20 non-STEM    Yes      Yes    TRUE
+7   18     STEM    Yes       No    TRUE
+8   23 non-STEM     No       No    TRUE
+9   19     STEM    Yes      Yes    TRUE
+10  21 non-STEM    Yes      Yes    TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="combining-several-logicals-with-any-and-all-2" class="slide level2">
+<h2>Combining several logicals with <code>any()</code> and <code>all()</code></h2>
+<p>Add binary variable for study abroad participation and living on campus:</p>
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-15_1c0c104fe39161d4893ee285e2b523b6">
+<div class="cell-output cell-output-stdout">
+<pre><code>   age    major abroad oncampus alltrue
+1   21     STEM    Yes       No   FALSE
+2   20 non-STEM    Yes      Yes   FALSE
+3   20     STEM    Yes      Yes   FALSE
+4   23     STEM    Yes      Yes   FALSE
+5   19 non-STEM    Yes      Yes   FALSE
+6   20 non-STEM    Yes      Yes   FALSE
+7   18     STEM    Yes      Yes   FALSE
+8   23 non-STEM    Yes       No   FALSE
+9   19     STEM     No      Yes   FALSE
+10  21 non-STEM    Yes      Yes   FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="warnings" class="slide level2" data-background-color="teal">
+<h2>Warnings</h2>
+<ol type="1">
+<li><p>The <code>any()</code> and <code>or()</code> logical combinations are <strong>only</strong> to be used in <code>summarize()</code>.</p></li>
+<li><p>The logical operators <code>&amp;&amp;</code> and <code>||</code> are used only in programming, not in typical data science applications.</p></li>
+</ol>
+</section>
+<section id="na-values" class="slide level2">
+<h2>NA values</h2>
+<iframe data-external="1" src="https://www.youtube.com/embed/IoyvvEWHodk?start=7" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <div class="footer footer-default">
 
 </div>
-</section><section id="specifying-colors-manually-output" class="slide level2 output-location-slide"><h2>Specifying colors manually</h2><div class="cell output-location-slide" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-22_b831bc70cf8097f6afed262eb9a42503">
-<div class="cell-output-display">
-<p><img data-src="Logical_Vectors_Ch12_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></p>
-</div>
-</div></section></section>
+</section></section>
     </div>
   </div>
 
