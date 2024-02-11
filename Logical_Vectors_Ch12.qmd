@@ -248,9 +248,6 @@ That doesn't look right either. What's going on?
 2.  The logical operators `&&` and `||` are used only in programming,
     not in typical data science applications.
 
-## NA values
-
-{{< video https://youtu.be/IoyvvEWHodk start="7" >}}
 
 ## The mystery of NAs
 
