@@ -442,19 +442,16 @@ Introduction to Data Science
 <ul>
 <li><p>All flights out of Chicago O’Hare and Midway airports in 2020</p></li>
 <li><p>250,004 cases and 19 variables.</p></li>
-<li><p>Same arrival and delay variables as NYC <code>flights</code> data</p></li>
-<li><p>Binary R data file</p>
-<ul>
-<li><code>chi_flights.rda</code> in <code>data</code> folder of <code>inclass265</code>.</li>
-</ul></li>
+<li><p>Same variables as NYC <code>flights</code> data</p></li>
+<li><p>csv accessed from my cloud space</p></li>
 </ul>
 </section>
 <section id="chiflights2020-1" class="slide level2 smaller">
 <h2><code>chiflights2020</code></h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-2_8be9cfc58bf2263f1749a4ab8cef5004">
+<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/eval- false_e1f7e9fa6c3c50812b6e2751290a7c6c">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Put this in the first R chunk in your Quarto file </span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co"># or at the command line</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># chiflights2020 &lt;- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>chiflights2020 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="fu">glimpse</span>(chiflights2020)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 250,004

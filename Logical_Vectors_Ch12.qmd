@@ -27,13 +27,9 @@ editor:
 #| include: false
 #| #| eval: true
 library(tidyverse)
-library(scales)
-library(ggrepel)
-library(patchwork)
 library(ggthemes)
 library(palmerpenguins)
 chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
-mammals <- read_csv("data/mammals.csv")
 ```
 
 ## Outline
@@ -82,18 +78,18 @@ mammals <- read_csv("data/mammals.csv")
 
 -   250,004 cases and 19 variables.
 
--   Same arrival and delay variables as NYC `flights` data
+-   Same variables as NYC `flights` data
 
--   Binary R data file
+-   csv accessed from my cloud space
 
-    -   `chi_flights.rda` in `data` folder of `inclass265`.
 
 ## `chiflights2020` {.smaller}
 
 ```{r}
+#|  eval: false
 # Put this in the first R chunk in your Quarto file 
 # or at the command line
-# chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
+chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
 glimpse(chiflights2020)
 ```
 
@@ -248,7 +244,6 @@ That doesn't look right either. What's going on?
 2.  The logical operators `&&` and `||` are used only in programming,
     not in typical data science applications.
 
-
 ## The mystery of NAs
 
 -   Missing values are contagious. See these logical tests.
@@ -328,7 +323,6 @@ df |>
 -   For an `|` to be TRUE, **at least one** condition has to be knowably
     TRUE
 
-
 # Using Logicals to work with the Chicago Flights data
 
 ## Outline for missing parts
@@ -337,13 +331,14 @@ Focus on Chicago flights data
 
 ### Filters
 
-* Use simple filters
-* Use `is.na()` examples (and as part of other conditions say, before March and after March)
+-   Use simple filters
+-   Use `is.na()` examples (and as part of other conditions say, before
+    March and after March)
 
 ### Summarize
 
-* Use to count number and proportion with certain conditions
-* Other summarize examples
+-   Use to count number and proportion with certain conditions
+-   Other summarize examples
 
 ## Simple Filtering
 
@@ -376,7 +371,8 @@ chiflights2020 |>
 
 ## Complex Filtering
 
-Find all the flights that left from O'Hare (ORD) before noon destined for Orlando (MCO) and arrived more than one hour late.
+Find all the flights that left from O'Hare (ORD) before noon destined
+for Orlando (MCO) and arrived more than one hour late.
 
 ```{r}
 chiflights2020 |> 
@@ -395,9 +391,11 @@ chiflights2020 |>
   filter(origin == "MDW", dest %in% florida_dest) |> 
   select(year, month, day, origin, dest)
 ```
-## Filtering with %in% with NAs {.smaller} 
 
-Find all flights to Florida that were either canceled or left on the hour
+## Filtering with %in% with NAs {.smaller}
+
+Find all flights to Florida that were either canceled or left on the
+hour
 
 ```{r}
 chiflights2020 |> 
@@ -405,13 +403,12 @@ chiflights2020 |>
   select(time_hour ,dep_time, dest)  
 ```
 
-# Using logicals with `summarize()` 
+# Using logicals with `summarize()`
 
 ## Logical summaries {.smaller}
 
-Check if `any()` or `all()` conditions are true for the `group_by()` group:
-    + During which hour spans were any or all flights out of O'Hare?
-
+Check if `any()` or `all()` conditions are true for the `group_by()`
+group: + During which hour spans were any or all flights out of O'Hare?
 
 ```{r}
 chiflights2020 |> 
@@ -424,11 +421,10 @@ chiflights2020 |>
 
 ```
 
-
-
 ## Numerical Summaries Using Logical Vectors {.smaller}
 
-Find all the days where more than half of the non-cancelled flights were delayed in departing:
+Find all the days where more than half of the non-cancelled flights were
+delayed in departing:
 
 ```{r}
 chiflights2020 |> 
@@ -445,9 +441,12 @@ chiflights2020 |>
 
 ## Complex Filtering {.smaller}
 
-Find all the dates on which more than half of the flights were either cancelled or delayed in departing
+Find all the dates on which more than half of the flights were either
+cancelled or delayed in departing
 
-    *     Assume `dep_delay` missing means the flight was cancelled
+```         
+*     Assume `dep_delay` missing means the flight was cancelled
+```
 
 ```{r}
 chiflights2020 |> 
@@ -463,8 +462,8 @@ chiflights2020 |>
 
 ## Conditional transformation: `ifelse()` for simpler cases
 
-* Create a simple `morning_departure` binary variable:
-* NA values persist
+-   Create a simple `morning_departure` binary variable:
+-   NA values persist
 
 ```{r}
 #| output-location: column
@@ -475,15 +474,12 @@ chiflights2020 |>
   count(morning) 
 ```
 
-
-
-
-## Conditional transformation: `case_when()`  {.smaller}
+## Conditional transformation: `case_when()` {.smaller}
 
 Use `case_when()` for more complicated transformations (beware of NAs)
 
-Create a new `timeofday` variable
-    * Value assigned based on first TRUE condition
+Create a new `timeofday` variable \* Value assigned based on first TRUE
+condition
 
 ```{r}
 #| output-location: column
@@ -503,4 +499,3 @@ chiflights2020 |>
   ) |> 
   count(fct_inorder(timeofday)) # put times of day in order
 ```
-
