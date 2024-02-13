@@ -9,6 +9,7 @@ execute:
   warning: false
 ---
 
+
 ## Setup for Work
 
 For our work with numbers, let's first load the **tidyverse** and some data.
