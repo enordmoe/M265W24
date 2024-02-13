@@ -2,11 +2,10 @@
 title: "Data Science Project Assignment"
 format: 
     html: 
+      theme: minty
       toc: true
       toc-depth: 2
-      fig-height: 4
-      fig-width: 9
-editor: visual
+      editor: visual
 execute: 
   eval: false
 ---
