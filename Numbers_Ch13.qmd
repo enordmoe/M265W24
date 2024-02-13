@@ -1,5 +1,5 @@
 ---
-title: "Chapter 12: Logical Vectors"
+title: "Chapter 13: Numbers"
 author: "Introduction to Data Science"
 format:
   revealjs:
@@ -25,7 +25,7 @@ editor:
 ```{r}
 #| label: setup
 #| include: false
-#| #| eval: true
+#| eval: true
 library(tidyverse)
 library(ggthemes)
 library(palmerpenguins)
@@ -34,11 +34,19 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ## Outline
 
--   Definition
--   Comparisons and complications
--   Boolean operations in data science
--   Using logical in data summaries
--   Conditional (transformation) love
+-   Defining numeric vectors
+-   Parsing numbers
+
+
+## Parsing Options
+
+* Why is parsing needed?
+
+    + Non-standard numeric ()
+
+* Difference between `parse_number()` and `parse_double()`
+
+
 
 ------------------------------------------------------------------------
 
@@ -230,7 +238,6 @@ That doesn't look right. Let's see if we have better luck with `all()`.
 abroad <- ifelse(runif(10)>.2,"Yes","No")
 oncampus <- ifelse(runif(10)>.2,"Yes","No")
 data.frame(age, major, abroad, oncampus, alltrue = all(age>20, major=="STEM", abroad=="Yes", oncampus=="Yes"))
-
 ```
 
 . . .
