@@ -457,7 +457,11 @@ See the [Data Transformation with dplyr](https://rstudio.github.io/cheatsheets/h
 
 ## Variability of Flight Times
 
-**Question**: \* Which 5 destinations from O'Hare have the greatest variability in `air_time`? Use the `IQR()` and only destinations with at least 100 flights. \* What do these destinations have in common?
+**Question**:
+
+1.  Which 5 destinations from O'Hare have the greatest variability in `air_time`? Use the `IQR()` and only destinations with at least 100 flights.
+
+2.  What do these destinations have in common?
 
 ```{r}
 chiflights2020 |> 
@@ -466,10 +470,14 @@ chiflights2020 |>
   summarize(iqr_air= IQR(air_time, na.rm = TRUE), n = n()) |> 
   filter(n >= 100) |> 
   arrange(desc(iqr_air)) # |> 
-  slice(1:5)
+  # slice(1:5)
   
 ```
 
 ::: callout-tip
 What modifications could you consider to answer other questions? Is there a relative measure that could be helpful?
 :::
+
+## More Practice 
+
+**Question**: Which destination in the **chiflights2020** dataset shows the greatest variation in air speed? Try measuring variation in at least two different ways to see if you get similar results.
