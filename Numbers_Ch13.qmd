@@ -1,25 +1,15 @@
 ---
 title: "Chapter 13: Numbers"
-author: "Introduction to Data Science"
-format:
-  revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
-    callouts:
-      quote:
-        title: Quote
-        icon: quote
-editor: 
-  markdown: 
-    wrap: 72
+subtitle: "Introduction to Data Science"
+author: "MATH 265"
+format: 
+  html:
+      theme: materia
+editor: visual
+toc: true
+execute: 
+  warning: false
+  eval: false #comment this line to see all output
 ---
 
 ```{r}
@@ -32,478 +22,454 @@ library(palmerpenguins)
 chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
 ```
 
-## Outline
+# Outline
 
--   Defining numeric vectors
--   Parsing numbers
+-   Going from strings to numbers
+-   Fun with `count()`
+-   Numeric transformations and `mutate()`
+-   More ways to `mutate()`
+-   Numeric summaries
 
+# Going from strings to numbers
 
-## Parsing Options
+## Making Numbers
 
-* Why is parsing needed?
+-   Usually numbers are integer or double types
 
-    + Non-standard numeric ()
+-   After importing or pivoting, they may be classified as character strings
 
-* Difference between `parse_number()` and `parse_double()`
+-   Use number parsing functions to convert
 
+    -   `parse_double()` to simply convert numbers written as strings
 
+    -   `parse_number()` to extract numeric content from character strings
 
-------------------------------------------------------------------------
+## Parsing Examples {.smaller}
 
-## Logical Vectors: The Essentials {.smaller}
+Use \`parse_double() for numbers written as strings:
 
-::: incremental
-1.  **Logical vectors** are those that can take on only TRUE, FALSE and
-    NA values.
+```{r}
+vector1 <- c("1.23e-3", "4.56e2", "7.89e4", "1.23e-5", "6.78e8")
+vector1
+parse_double(vector1)
+```
 
-    -   They can indicate presence or absence of a trait (some binary
-        variables are logicals).
+Use `parse_number()` for strings with non-numeric text:
 
-    -   They result from logical operations
+```{r}
+vector2 <- c("$10.50", "€20.75", "¥30.00", "£40.25", "$50.99")
+vector2
+parse_number(vector2)
+```
 
-2.  **Logical operations** include *comparisons* (e.g., `<`, `==`, etc.)
-    and *Boolean algebra* operations such as `&` and `|`.
+But what about this?
 
-3.  Logical vectors underlie our use of the `filter()` function.
+```{r}
+vector3 <- c("a1", "27.3%", "$42.12", "part4", "abc")
+vector3
+parse_number(vector3)
+```
 
-4.  Logical vectors are also used in **conditional operations**, such as
-    creating new variables via `mutate()` based on certain conditions.
+# Fun with `count()`
 
-    -   Logical operations also allow for combining logical conditions
-        to enable more complex filtering and creation of variables based
-        on multiple characteristics.
+## What are the most popular destinations out of Chicago?
 
-5.  Data summaries can be produced relying on careful and sometimes
-    creative use of statistical operations combined with logical
-    variables, e.g. `summarize(number_seniors = sum(age >= 65)`
+Let's use the `chiflights2020` data to see the most popular flights out of Chicago:
+
+-   In alpha order using `count()`:
+
+```{r}
+chiflights2020 |>  count(dest)
+```
+
+-   In frequency order using `sort` option
+
+```{r}
+chiflights2020 |>  count(dest, sort = TRUE)
+
+```
+
+::: callout-note
+Add `print(n = Inf)` at the end of the pipe (or `View()`) to see them all (at the console). This is generally not recommended but sometimes useful for checking purposes.
 :::
 
-# The Chicago Flights Data Set
+## Other `count()` variants
 
-## `chiflights2020`
+**Question**: What was the total airtime for each plane flying out of Chicago?
 
--   All flights out of Chicago O'Hare and Midway airports in 2020
-
--   250,004 cases and 19 variables.
-
--   Same variables as NYC `flights` data
-
--   csv accessed from my cloud space
-
-
-## `chiflights2020` {.smaller}
+**Answer:** Use a weighted count as shown below.
 
 ```{r}
-#|  eval: false
-# Put this in the first R chunk in your Quarto file 
-# or at the command line
-chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
-glimpse(chiflights2020)
+chiflights2020 |> 
+  count(tailnum, wt = air_time, sort = TRUE) # finds the planes with the most time in the air.
 ```
 
-## Logical Vectors {.smaller}
-
-::: columns
-::: {.column width="50%"}
--   Simplest vectors of all: `TRUE`, `FALSE`, or `NA`
-
--   Starting point in R data parsing workflow
-
--   Much more useful that you might expect.
-
--   A random logical vector:
-
-```{r,echo=FALSE}
-sample(c(TRUE, FALSE), 10, replace = TRUE)
-```
+::: callout-caution
+The column labeled `n` actually contains the **total minutes** over the year 2020 rather than the number of flights.
 :::
 
-::: {.column width="50%"}
-![](https://www.random.org/analysis/dilbert.jpg){fig-alt="Random number generator"
-fig-align="center"}
+## Reminder: Other `summarize()` options
+
+-   If you want more than just frequencies, use `group_by()` and other summary functions.
+
+-   What is the typical and longest arrival delay from Chicago to each destination?
+
+```{r}
+chiflights2020 |> 
+  group_by(dest) |> 
+  summarize(
+    n = n(),
+    med_delay = median(arr_delay, na.rm = TRUE),
+    max_delay = max(arr_delay, na.rm = TRUE) 
+  ) |> 
+  arrange(desc(max_delay))
+```
+
+## How many airlines go from O'Hare to each destination?
+
+```{r}
+chiflights2020 |> 
+  filter(origin == "ORD") |> 
+  group_by(dest) |> 
+  summarize(
+    n = n(),
+    n_carriers = n_distinct(carrier)
+  ) |> 
+  arrange(desc(n_carriers)) # which are the destinations served by the most carriers?
+```
+
+::: {.callout-tip collapse="true"}
+## Try it yourself
+
+**Question**: How can you use `count()` to count the number rows with a missing value for a given variable?
 :::
+
+# Numeric transformations and `mutate()`
+
+## Numeric transformations: recycling rules
+
+-   Transformation functions work well with `mutate()` because output is the same length as the input.
+
+-   **Recycling rules:** when left and right sides of arithmetic operations differ in length, R handles mismatch by *recycling* the shorter vector.
+
+![](https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D){fig-align="right" width="200"}
+
+## Recycling rules: simple examples
+
+1.  Adding a constant to a vector:
+
+```{r}
+xvec <- c(1, 2, 3, 4, 5)
+xvec + 10
+```
+
+2.  Adding two vectors of different lengths:
+
+```{r}
+xvec1 <- c(1, 2, 3) # length 3
+xvec2 <- c(10, 20, 30, 40, 50) # length 5
+xvec3 <- c(10, 20, 30, 40, 50, 60) # length 6
+xvec1 + xvec2  # causes a warning
+xvec1 + xvec3  # recycles without warning
+```
+
+3.  Multiplying (or dividing) a vector by a shorter vector:
+
+```{r}
+xvec1 <- c(1, 2, 3, 4, 5)
+xvec2 <- c(10, 20)
+xvec1 * xvec2
+xvec1/xvec2
+```
+
+::: callout-warning
+-   Avoid relying on recycling to handle operations between mismatched length vectors!
+-   Use only for operations involving a vector and a constant.
 :::
 
-## The Danger of Logic
+## Computing "Relative" Flight Time
 
-![](https://imgs.xkcd.com/comics/logic_boat.png){fig-alt="Logic boat"
-fig-align="center"}
-
-## Sample logical vector
-
--   Generate a vector called `age` of random student ages:
+Use recycling to get a "relative" flight time for each `origin`-`dest` pair:
 
 ```{r}
-#| echo: false
-age <- sample(18:23, size = 10, replace = TRUE)
-age
+chiflights2020 |> 
+  select(day, month, hour, origin, dest,air_time) |> 
+  group_by(origin, dest) |> 
+  mutate(
+    rel_air_time = air_time/mean(air_time, na.rm = TRUE)
+  ) 
 ```
 
--   Test each of the 10 individuals to see if they're older than 20
+**Interpret:** a flight with relative flight time of 1.10 took 10% longer than the average for that route.
 
-    -   The result is a **logical vector**
+::: callout-note
+Note the use of `mutate()` rather than `summarize()` with `group_by()` so the relative calculations are done for each row **within** the `origin`-`dest` pair.
+:::
 
-    ```{r}
-    age > 20
-    ```
+## Calculating the minimum and maximum
 
-## Logical connections {.smaller}
-
--   Use logical operators to combine logicals as follows.
-
--   Age and Major of each of the 10 students:
+Question: For each flight, find the maximum of the departure delay and flight delay.
 
 ```{r}
-#| echo: false
-major <- sample(c("STEM","non-STEM"), size = 10, replace = TRUE)
-data.frame(age, major)
+chiflights2020 |> 
+  mutate(
+    maxdelay = max(dep_delay, arr_delay, na.rm = TRUE)
+  ) |> 
+  select(year:day, dep_delay, arr_delay, maxdelay)
 ```
 
-## Logical combinations: Using `&`
+::: {.callout-warning collapse="true"}
+## Warning about max and min
 
--   Using the `&` AND operator
+**Danger**: Don't confuse the `max()` and `min()` functions for `summarize()` with the parallel `pmax()` and `pmin()` functions for `mutate()`. Without warning you will get nonsensical results!
+:::
+
+## Calculating the minimum and maximum correctly
+
+Question: For each flight, find the maximum of the departure delay and flight delay.
+
+Once again, using the correct `pmax()` function:
 
 ```{r}
-#| eval: false
-age > 20 & major == "STEM"
+chiflights2020 |> 
+  mutate(
+    maxdelay = pmax(dep_delay, arr_delay, na.rm = TRUE)
+  ) |> 
+  select(year:day, dep_delay, arr_delay, maxdelay)
 ```
 
-```{r}
-#| echo: false
-data.frame(age= age, major=major, Result = age>20 & major == "STEM")
-```
+## Other vectorized functions to use with `mutate()`
 
-## Logical combinations: Using `|`
+-   Offsets
+    -   `lag()`, `lead()`
+-   Cumulating functions
+    -   `cummax()`, `cummean()`, cumsum()\`, etc.
+-   Ranking
+    -   `row_number()`, `min_rank()`, `cume_dist()`, etc.
 
--   Using the `|` OR operator
-
-```{r}
-#| eval: false
-age > 20 | major == "STEM"
-```
-
-```{r}
-#| echo: false
-data.frame(age= age, major=major, Result = age>20 | major == "STEM")
-```
-
-## Boolean Algebra in a Nutshell
-
-![](https://r4ds.hadley.nz/diagrams/transform.png){fig-align="center"}
-
-## The Less Often Used exclusive OR: `xor()`
-
--   Using the `xor()` function
-
-```{r}
-#| eval: false
-xor(age > 20, major == "STEM")
-```
-
-```{r}
-#| echo: false
-data.frame(age = age, major = major, Result = xor(age>20, major == "STEM"))
-```
-
-## Combining several logicals with `any()` and `all()`?
-
-Add binary variable for study abroad participation and living on campus:
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.3,"Yes","No")
-data.frame(age, major, abroad, oncampus)
-```
-
-## Combining several logicals with `any()`?
-
-Add binary variable for study abroad participation and living on campus:
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.3,"Yes","No")
-data.frame(age, major, abroad, oncampus, anytrue = any(age>20, major=="STEM", abroad=="Yes", oncampus=="No"))
-```
-
-. . .
-
-That doesn't look right. Let's see if we have better luck with `all()`.
-
-## Combining several logicals with `all()?`
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.2,"Yes","No")
-data.frame(age, major, abroad, oncampus, alltrue = all(age>20, major=="STEM", abroad=="Yes", oncampus=="Yes"))
-```
-
-. . .
-
-That doesn't look right either. What's going on?
-
-## Warnings {background-color="teal"}
-
-1.  The `any()` and `or()` logical combinations are **only** to be used
-    in `summarize()`.
-
-2.  The logical operators `&&` and `||` are used only in programming,
-    not in typical data science applications.
-
-## The mystery of NAs
-
--   Missing values are contagious. See these logical tests.
-
-```{r}
-NA < 25
-```
-
-```{r}
-10 == NA
-```
-
-```{r}
-# We don't know what we don't know
-NA == NA 
-```
-
-## Wisdom on NAs
+## Modular arithmetic refresher
 
 ::: callout-tip
-## The unknown unknowns
+## Try it yourself
 
-"Reports that say that something *hasn't* happened are always
-interesting to me, because as we know, there are \*\*known knowns\*8;
-there are things we know we know. We also know there are **known
-unknowns**; that is to say we know there are some things we do not know.
-But there are also **unknown unknowns**-the ones we don't know we don't
-know. And if one looks throughout the history of our country and other
-free countries, it is the latter category that tends to be the difficult
-ones."
+**Question:** What does each line in the code chunk below do?
 :::
 
-::: aside
-Donald Rumsfeld, former Secretary of Defense (and Data Scientist?)
+```{r}
+chiflights2020 |> 
+  group_by(hour = sched_dep_time %/% 100) |> 
+  summarize(prop_cancelled = mean(is.na(dep_time)), n = n()) |> 
+  filter(hour > 1) |> 
+  ggplot(aes(x = hour, y = prop_cancelled)) +
+  geom_line(color = "#2B9AF3") + 
+  geom_point(aes(size = n))
+```
+
+## Converting Numeric Variables to Categorical
+
+**Problem:** Convert departure hour into a categorical variable with intervals corresponding to morning, midday, and evening
+
+```{r}
+chiflights2020 |> 
+  mutate(deptime_of_day = cut(hour, breaks = c(0, 11, 15, 24))) |> 
+  select(hour, deptime_of_day)
+```
+
+To know about cutting up variables:
+
+-   Breaks do not need to be evenly space
+-   Endpoint conventions can be set using keywords
+-   Values outside the breaks will be set to NA.
+-   Labels can be assigned using `labels =` .
+
+::: callout-note
+We already saw this kind of function with the helper functions `cut_number()`, `cut_width()`, etc in `ggplot()`.
 :::
 
-## R4DS example illustrates why
+## Cumulating
+
+**Problem:** For the route from O'hare to Detroit on American Airlines, find and plot the average delay up to the time of the flight for each flight:
 
 ```{r}
-# We don't know how tall Olds was
-height_olds <- NA
-height_olds
+chiflights2020 |> 
+  filter(origin == "ORD", dest == "DTW") |> 
+  select(time_hour, dep_delay) |> 
+  mutate(avg_delay_so_far = cummean(dep_delay)) |> 
+  ggplot(aes(x = time_hour, y = avg_delay_so_far)) +
+  geom_line(color = "#173576")
+
 ```
 
+What went wrong?
+
+::: {.callout-warning collapse="true"}
+## Warning!
+
+Did you forget to remove the flights with missing departure times?
+:::
+
+## Cumulating corrected
+
+We need to explicitly remove the flights with missing departure delays:
+
 ```{r}
-# We don't know how tall Upton was
-height_upton <- NA
-height_upton
+chiflights2020 |> 
+  filter(origin == "ORD", dest == "DTW", !is.na(dep_delay)) |> 
+  select(time_hour, dep_delay) |> 
+  mutate(avg_delay_so_far = cummean(dep_delay)) |> 
+  ggplot(aes(x = time_hour, y = avg_delay_so_far)) +
+  geom_line(color = "#173576")
+
 ```
 
+What anomalies may be be due to Covid? Why?
+
+## Practice
+
+::: callout-tip
+## Try it yourself
+
+1.  Use `mutate()` with appropriate functions to convert `dep_time` (e.g. 541, 903) to a variable whose value represents minutes since midnight.
+
+2.  Round `dep_time` and `arr_time` to the nearest five minutes.
+:::
+
+# More ways to `mutate()`
+
+## Ranks
+
+-   Often we are interested in the "rank" of a variable's value rather than it's absolute number (e.g., 3rd highest grossing movie of the month).
+
+-   Several different ranking functions can be used with `mutate()`
+
+    -   `row_number()`, `min_rank()`, `dense_rank()`
+
+## Ranks Example
+
+Create a small dataset and sort it by the variable of interest:
+
 ```{r}
-# Were Olds and Upton the same height?
-height_olds == height_upton
+df <- tibble(
+  Name = c("Jia", "Yuki", "Aarav", "Sofia", "Mohammed", "Priya", "Liam", "Chen", "Amira"),
+  Score = c(85, 92, 78, 85, 94, 78, 85, 92, 78)
+) |> 
+  arrange(desc(Score))
+df
 ```
 
--   We don't know (unless we have a picture of them together?)
--   We can't say `NA == NA` because `NA` typically indicates
-    uncertainty.
-
-## Boolean and Missing Values {.smaller}
-
-Combining logicals with missing (NA) values can be
-[treacherous]{style="color: red;"} as this example from R4DS
-illustrates:
+Now attach rankings:
 
 ```{r}
-df <- tibble(x = c(TRUE, FALSE, NA))
-
-df |> 
+df <- df %>%
   mutate(
-    and = x & NA,
-    or = x | NA
+    dense_rank = dense_rank(Score),
+    row_number = row_number(Score),
+    min_rank = min_rank(Score),
+    avg_rank = rank(Score, ties.method = "average") # Base R ranking function
   )
+df
 ```
 
--   For an `&` to be TRUE, **both** conditions have to be knowably TRUE
--   For an `|` to be TRUE, **at least one** condition has to be knowably
-    TRUE
+-   `dense_rank()` assigns ranks to values in a vector, starting from 1, without any gaps between ranks
 
-# Using Logicals to work with the Chicago Flights data
+    -   tied values get the same rank, but the next rank is increased by 1.
 
-## Outline for missing parts
+-   `min_rank()` assigns ranks with lowest starting from 1.
 
-Focus on Chicago flights data
+    -   tied values all get the same (minimum) rank; the next rank is increased by the number tied at the previous value
 
-### Filters
+-   `row_number()` assigns ranks with lowest starting from 1.
 
--   Use simple filters
--   Use `is.na()` examples (and as part of other conditions say, before
-    March and after March)
+    -   no consideration of ties, just ranks in order found (unstable as a ranking mechanism)
 
-### Summarize
+-   `rank(, ties.method = "average")` assigns ranks with lowest starting from 1
 
--   Use to count number and proportion with certain conditions
--   Other summarize examples
+    -   tied values all get the same (average) rank; the next rank is increased to account for the number tied at the previous value
 
-## Simple Filtering
+::: callout-tip
+By default, smallest values get the smallest ranks. This can be reversed using `desc()` as with `arrrange()`
+:::
 
-Filter all flights leaving Midway (MDW)
+## Offsets
+
+In many contexts, especially data collected sequentially over times (e.g., economics, public health, etc.), it is common to need to `lag()` cases (or `lead()`) or to compute differences in the values of sequential pairs
+
+-   Examples:
+
+    -   time series models for forecasting future values of a series often depend on previous values of the series
+
+    -   medical studies may focus on changes in blood chemistry levels from previous checks
+
+## Offsets Examples
+
+Create a simple dataset to illustrate:
 
 ```{r}
-chiflights2020 |> 
-  filter(origin == "MDW")
+# Create a sample tribble
+df <- tribble(
+  ~date,       ~value,
+  "2024-01-01", 10,
+  "2024-01-02", 15,
+  "2024-01-03", 12,
+  "2024-01-04", 18,
+  "2024-01-05", 20
+)
+df
 ```
 
-## Simple Filtering
-
-Filter cancelled flights
+Now compute lags, leads and differences.
 
 ```{r}
-chiflights2020 |> 
-  filter(is.na(dep_delay))
-```
-
-## Simple Filtering
-
-Flights that "made up time" in flight:
-
-```{r}
-chiflights2020 |> 
-  filter(arr_delay < dep_delay) |> 
-  select(time_hour, dep_delay, arr_delay) |> 
-  arrange(desc(dep_delay)) # put longest delays first
-```
-
-## Complex Filtering
-
-Find all the flights that left from O'Hare (ORD) before noon destined
-for Orlando (MCO) and arrived more than one hour late.
-
-```{r}
-chiflights2020 |> 
-  filter(origin == "ORD", dep_time < 1200, dest == "MCO", arr_delay > 60)
-```
-
-## Filtering with %in% {.smaller}
-
-All flights leaving Midway headed for Florida destinations:
-
-```{r}
-florida_dest <- c("DAB", "FLL", "RSW", "VPS", "GNV", "JAX", "EYW", "MLB", "MIA", 
-"MCO", "ECP", "PNS", "PGD", "SFB", "SRQ", "PIE", "TLH", "TPA", 
-"PBI") # from Wikipedia
-chiflights2020 |> 
-  filter(origin == "MDW", dest %in% florida_dest) |> 
-  select(year, month, day, origin, dest)
-```
-
-## Filtering with %in% with NAs {.smaller}
-
-Find all flights to Florida that were either canceled or left on the
-hour
-
-```{r}
-chiflights2020 |> 
-  filter(dest %in% florida_dest, dep_time %in% c(NA, seq(0,2400,100))) |> 
-  select(time_hour ,dep_time, dest)  
-```
-
-# Using logicals with `summarize()`
-
-## Logical summaries {.smaller}
-
-Check if `any()` or `all()` conditions are true for the `group_by()`
-group: + During which hour spans were any or all flights out of O'Hare?
-
-```{r}
-chiflights2020 |> 
-  group_by(year, month, day) |> 
-  summarize(
-    all_long_delayed = all(dep_delay >= 30, na.rm = TRUE),
-    any_long_delayed = any(dep_delay >= 30, na.rm = TRUE),
-    .groups = "drop"
-  ) 
-
-```
-
-## Numerical Summaries Using Logical Vectors {.smaller}
-
-Find all the days where more than half of the non-cancelled flights were
-delayed in departing:
-
-```{r}
-chiflights2020 |> 
-  group_by(year, month, day) |> 
-  summarize(
-    num_flights = n(),
-    num_cancelled = sum(is.na(dep_time)),
-    num_delayed = sum(dep_delay>0, na.rm = TRUE),
-    prop_delayed = mean(dep_delay>0, na.rm = TRUE),
-   .groups = "drop"
-    ) |> 
-  filter(prop_delayed > 0.5) 
-```
-
-## Complex Filtering {.smaller}
-
-Find all the dates on which more than half of the flights were either
-cancelled or delayed in departing
-
-```         
-*     Assume `dep_delay` missing means the flight was cancelled
-```
-
-```{r}
-chiflights2020 |> 
-  mutate(flight_date = date(time_hour)) |>  # extrac using date() 
-  group_by(flight_date) |> 
-  summarize(
-    num_flights = n(),
-    num_late_or_cancelled = sum(dep_delay > 0| is.na(dep_delay)),
-    prop_late_or_cancelled = mean(dep_delay > 0| is.na(dep_delay))
-  ) |> 
-  filter(prop_late_or_cancelled > 0.5) 
-```
-
-## Conditional transformation: `ifelse()` for simpler cases
-
--   Create a simple `morning_departure` binary variable:
--   NA values persist
-
-```{r}
-#| output-location: column
-chiflights2020 |> 
+df <- df %>%
   mutate(
-    morning = ifelse((dep_time < 1200), "morning", "non-morning")
-    ) |> 
-  count(morning) 
+    lag_value = lag(value),
+    lead_value = lead(value),
+    diff_prev = value - lag_value # Use lag to compute difference
+  )
+df
+
 ```
 
-## Conditional transformation: `case_when()` {.smaller}
+::: callout-note
+## What do we mean by offset?
 
-Use `case_when()` for more complicated transformations (beware of NAs)
+An offset is simply shifting (say time) forward or backward so after lagging or leading, the new variable values are *offset* from the previous values.
+:::
 
-Create a new `timeofday` variable \* Value assigned based on first TRUE
-condition
+::: callout-caution
+## Missing values
+
+Note that the process of lagging and leading inevitably produce NA values since we cannot simply invent past and future observations!
+:::
+
+# Numeric Summaries
+
+## Funtions used with `summarize()`
+
+-   Measures of center
+    -   Mean, median
+-   Measures of position
+    -   Minimum, maximum, percentiles, $n$th largest
+-   Measures of spread
+    -   IQR, standard deviation
+
+See the [Data Transformation with dplyr](https://rstudio.github.io/cheatsheets/html/data-transformation.html) cheatsheet for details.
+
+## Variability of Flight Times
+
+**Question**: \* Which 5 destinations from O'Hare have the greatest variability in `air_time`? Use the `IQR()` and only destinations with at least 100 flights. \* What do these destinations have in common?
 
 ```{r}
-#| output-location: column
 chiflights2020 |> 
-  mutate(
-    timeofday = case_when(
-      is.na(dep_time)      ~ "cancelled",
-      dep_time < 0300       ~ "late night",
-      dep_time < 0700       ~ "early morning",
-      dep_time < 1100       ~ "morning",
-      dep_time < 1400       ~ "midday",
-      dep_time < 1700       ~ "afternoon",
-      dep_time < 2200       ~ "evening",
-      dep_time < 2400       ~ "late night"
-    ),
-    .keep = "used"
-  ) |> 
-  count(fct_inorder(timeofday)) # put times of day in order
+  filter(origin == "ORD") |> 
+  group_by(dest) |> 
+  summarize(iqr_air= IQR(air_time, na.rm = TRUE), n = n()) |> 
+  filter(n >= 100) |> 
+  arrange(desc(iqr_air)) # |> 
+  slice(1:5)
+  
 ```
+
+::: callout-tip
+What modifications could you consider to answer other questions? Is there a relative measure that could be helpful?
+:::
