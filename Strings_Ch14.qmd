@@ -55,7 +55,6 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ![](figures/activity_roster.png)
 
-
 ## Detecting Strings Using **stringr** `str_()` Functions
 
 ```{r}
@@ -64,8 +63,8 @@ states <- c("Arizona", "California", "Florida", "Georgia", "Indiana", "Louisiana
 "Michigan", "Minnesota", "Nevada", "New Jersey", "Texas")
 ```
 
+Detect text in a vector of the states that have hosted the super bowl:
 
-Detect text in a vector of the states that have hosted the super bowl:  
 ```{r}
 states
 ```
@@ -77,16 +76,14 @@ str_detect(states, "ana")
 str_detect(states, "ANA")
 ```
 
-
-## `str_replace()` 
+## `str_replace()`
 
 ```{r}
 str_replace(states, "ana", "X")
 str_replace_all(states, "i", "X")
 ```
 
-
-## `str_sub()` and `str_count()` 
+## `str_sub()` and `str_count()`
 
 ```{r}
 str_sub(states, 2, 4)
@@ -95,36 +92,35 @@ str_count(states, "e")
 
 and many more...
 
-## Strings  
+## Strings
 
-Get to know your [Stringr cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
+Get to know your [Stringr
+cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
 
 ![](figures/cheat_string_image.png)
 
+## \# [What about more challenging string problems?]{style="color: white;"} {background-color="#FE961C"}
 
-# <span style="color: white;">What about more challenging string problems?</span> {background-color="#FE961C"}
----
 ## Regular expressions to the rescue!
 
 ![](https://imgs.xkcd.com/comics/regular_expressions.png)
 
+## Regular Expressions
 
+-   Regular expressions or *regexps* concisely describe patterns in
+    strings
 
-## Regular Expressions 
+-   They are powerful but can also be cryptic and confusing
 
-* Regular expressions or *regexps* concisely describe patterns in strings  
+-   Using just the right *regexp* can
 
-* They are powerful but can also be cryptic and confusing  
+    -   save lots of time and effort cleaning data
 
-* Using just the right *regexp* can   
+    -   help to tame very messy data
 
-    + save lots of time and effort cleaning data  
-    
-    + help to tame very messy data
-    
-* You don't need to know everything!  
+-   You don't need to know everything!
 
-* Try the resources on Moodle
+-   Try the resources on Moodle
 
 ## Use `str_view()` to verify regexps
 
@@ -142,6 +138,23 @@ str_view(states, "^[ML]")
 Source:https://xkcd.com/1638/
 :::
 
-##  <span style="color: white;">Practice makes purrfect</span>{background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cute_grey_kitten.jpg/800px-Cute_grey_kitten.jpg"}
+## [Practice makes purrfect]{style="color: white;"} {background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cute_grey_kitten.jpg/800px-Cute_grey_kitten.jpg"}
 
+# Coda
 
+## Help with regexp
+
+-   Getting just the right regexp command to do the job can be
+    challenging!
+-   Not a bad use of AI
+-   But specify your query carefully and test carefully that it does
+    what you want!
+
+## The Question
+
+In the R tidyverse, how to use a regexp to find all words that start
+with "B" and end with "e"?
+
+## The Answer
+
+![](images/clipboard-501901405.png)
