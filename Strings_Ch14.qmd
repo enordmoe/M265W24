@@ -1,0 +1,147 @@
+---
+title: "Chapter 14: Strings"
+author: "Introduction to Data Science"
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| #| eval: true
+library(tidyverse)
+chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
+```
+
+## Outline
+
+-   Numbers review
+
+-   Strings
+
+-   Quick intro to Regular expressions
+
+# What is a string? {background-image="https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/Spool_of_string.jpg/544px-Spool_of_string.jpg" background-size="cover"}
+
+## No, really what is a string in data science? {background-image="figures/stringr.png" background-size="200px"}
+
+## What are strings and why do we care about them?
+
+::: incremental
+-   Untidy data may contain problematic strings, hidden characters
+
+-   Scraping from web sources often requires locating, removing or
+    replacing strings
+:::
+
+## Strings in the Wild
+
+![](figures/activity_roster.png)
+
+
+## Detecting Strings Using **stringr** `str_()` Functions
+
+```{r}
+#| echo: false
+states <- c("Arizona", "California", "Florida", "Georgia", "Indiana", "Louisiana", 
+"Michigan", "Minnesota", "Nevada", "New Jersey", "Texas")
+```
+
+
+Detect text in a vector of the states that have hosted the super bowl:  
+```{r}
+states
+```
+
+## `str_detect()`
+
+```{r}
+str_detect(states, "ana")
+str_detect(states, "ANA")
+```
+
+
+## `str_replace()` 
+
+```{r}
+str_replace(states, "ana", "X")
+str_replace_all(states, "i", "X")
+```
+
+
+## `str_sub()` and `str_count()` 
+
+```{r}
+str_sub(states, 2, 4)
+str_count(states, "e")
+```
+
+and many more...
+
+## Strings  
+
+Get to know your [Stringr cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
+
+![](figures/cheat_string_image.png)
+
+
+# <span style="color: white;">What about more challenging string problems?</span> {background-color="#FE961C"}
+---
+## Regular expressions to the rescue!
+
+![](https://imgs.xkcd.com/comics/regular_expressions.png)
+
+
+
+## Regular Expressions 
+
+* Regular expressions or *regexps* concisely describe patterns in strings  
+
+* They are powerful but can also be cryptic and confusing  
+
+* Using just the right *regexp* can   
+
+    + save lots of time and effort cleaning data  
+    
+    + help to tame very messy data
+    
+* You don't need to know everything!  
+
+* Try the resources on Moodle
+
+## Use `str_view()` to verify regexps
+
+```{r}
+#starts with M or L
+str_detect(states, "^[ML]")
+str_view(states, "^[ML]")
+```
+
+## regexp: It's not just another \\-er flick!
+
+![](https://imgs.xkcd.com/comics/backslashes.png)
+
+::: aside
+Source:https://xkcd.com/1638/
+:::
+
+##  <span style="color: white;">Practice makes purrfect</span>{background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Cute_grey_kitten.jpg/800px-Cute_grey_kitten.jpg"}
+
+
