@@ -99,7 +99,7 @@ cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
 
 ![](figures/cheat_string_image.png)
 
-## \# [What about more challenging string problems?]{style="color: white;"} {background-color="#FE961C"}
+##  [What about more challenging string problems?]{style="color: white;"} {background-color="#FE961C"}
 
 ## Regular expressions to the rescue!
 

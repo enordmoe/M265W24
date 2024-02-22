@@ -1,0 +1,368 @@
+---
+title: "Chapter 15 Factors"
+subtitle: "MATH 265"
+author: "Eric Nordmoe"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css","scrollingbox.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "macros.js"
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+
+# Outline
+
+* Types of variables  
+
+* What are factors?  
+
+* Ordering levels  
+
+* Collapsing 
+
+---
+
+# Scraping Review  
+
+* Go to `yelp.com` 
+
+* Look for **restaurants** in the city of your choice
+
+* Identify the CSS selectors you would use to get the following variables:  
+
+  + Name of restaurant  
+  
+  + Number of reviews 
+  
+  + Neighborhood  
+  
+---
+
+# Reminder: Type of Variables
+
+Seven data types in R
+
+* `int` : integer  
+
+* `dbl`: for double-precision, or real numbers  
+
+* `chr`:  character vectors, or strings  
+
+* `dttm`: date-times (a date + a time)  
+
+* `lgl`: logical contains only TRUE or FALSE values    
+
+* **`fctr`: factors used to represent categorical variables**   
+
+* `date`: dates
+
+---
+
+# Factors  
+
+* Used to represent categorical variables 
+
+* Two broad kinds of `factors` 
+  + Nominal: no natural ordering  
+      - e.g., gender, nationality, race, marital status, religion, ethnicity  
+      
+  + Ordinal: categories have a natural underlying order  
+      - e.g. ,education levels, liking, overall rating, level of approval
+
+---
+# Creating a Factor in R: From scratch
+
+* Input data and levels separately
+
+```{r}
+zodiac <- c("Pig", "Dog", "Rabbit", "Rat")
+# Sorting not useful 
+sort(zodiac)
+zodiac_levels <- c("Rat", "Ox", "Tiger", "Rabbit", "Dragon", 
+  "Snake", "Horse", "Sheep", "Monkey", "Rooster", "Dog", "Pig")
+zodiac_fac <- factor(zodiac, levels = zodiac_levels)
+zodiac_fac
+```
+
+---
+class: inverse, center, middle
+
+# Learning from Factors in the Wild
+
+---
+
+## Kaggle State of Data Science Survey
+
+* Comprehensive industry survey conducted in 2017  
+
+* Over 16,000 responses  
+
+* Not all respondents were shown all questions  
+
+    + Job related questions for employed data scientists
+    
+    + Learning related questions for students
+    
+* [`multipleChoiceResponses.csv`](https://www.kaggle.com/kaggle/kaggle-survey-2017?select=multipleChoiceResponses.csv) contains over 16K rows and 228 variables
+
+.footnote[
+**Source**: Kaggle https://www.kaggle.com/kaggle/kaggle-survey-2017
+]
+
+
+---
+## Data codebook in `schema.csv`  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/kaggle_schema_lg.png')
+```
+---
+## Import and Glimpse the Data
+
+.scroll-box-20[
+```{r, message = FALSE}
+ks_data <- read_csv(file = "kaggle-survey-2017_data/multipleChoiceResponses.csv")
+glimpse(ks_data)
+```
+]
+
+Lots of data problems we'll set aside for later...
+
+---
+# First, inspect your factor  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/inspect_factors.png')
+```
+
+---
+# Inspecting the Country Variable
+
+.scroll-box-20[
+```{r}
+# First, convert to a factor, letting R choose levels:  
+ks_data <-  ks_data %>% 
+  mutate(Country = factor(Country)) 
+# Show unique levels
+fct_unique(ks_data$Country)
+```
+]
+---
+# Get frequencies of categories
+
+```{r}
+# Note that we don't need a special command for this
+ks_data %>% count(Country)
+```
+
+---
+## Let's get  a quick graph  
+
+```{r, fig.height = 5}
+ggplot(ks_data, aes(x = Country)) +
+  geom_bar() + 
+  coord_flip()
+```
+
+---
+## Forcats commands for reordering levels  
+
+* Reorder by frequency of categories:
+
+```{r, out.width = '80%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_infreq.png')
+```
+
+* Reorder by level of another variable:
+
+```{r, out.width = '80%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_reorder.png')
+```
+
+---
+## Let's reorder by frequency 
+
+```{r, fig.height = 5}
+ggplot(ks_data, aes(x = fct_infreq(Country))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+---
+## Reversing the Order of the Levels of a Factor
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_rev.png')
+```
+
+
+---
+## Put bars in order from highest to lowest
+
+```{r, fig.height = 5}
+ggplot(ks_data, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip() 
+```
+
+---
+## Remove the NA values for now 
+
+
+```{r, fig.height = 5}
+ks_data2 <- ks_data %>% drop_na(Country)
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+---
+## Recoding Levels  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_recode.png')
+```
+
+---
+## Clean Up and Shorten a Few Labels
+
+* The name for China has an extra space and an apostrophe 
+
+* Put in common abbreviations for UK and USA
+
+* Combine "Taiwan" with "Republic of China":
+
+```{r}
+ks_data2 <- ks_data2 %>% mutate(Country =
+  fct_recode(Country, 
+      "China" =  "People 's Republic of China",
+      "USA" = "United States", 
+      "UK" = "United Kingdom", 
+      "Taiwan" = "Republic of China"
+))
+
+```
+
+---
+## Clean Up and Shorten a Few Labels: Redraw the Plot 
+
+```{r, fig.height = 5}
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(Country)))) +
+  geom_bar() + 
+  coord_flip()
+```
+
+---
+## Factors for aggregating levels  
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_lump.png')
+```
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_collapse.png')
+```
+
+---
+## Factors for aggregating levels (cont'd)
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_other.png')
+```
+
+---
+## Lump smaller countries together to focus on the largest 
+
+```{r, fig.height = 4}
+ks_data2 <- mutate(ks_data2, top_country = fct_lump(Country, prop = .01))
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_country)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents",
+       title = "Largest responding")
+```
+
+---
+## Group together by continent 
+
+```{r}
+ks_data2 <- ks_data2 %>% mutate(top_continents =
+  fct_collapse(top_country, 
+      Oceania = c("Australia"), 
+      South_America = c("Brazil"),
+      Europe = c("France", "Germany", "Italy", "Netherlands",
+                  "Poland", "Spain", "UK", "Ukraine"),
+      North_America = c("Canada", "USA"), 
+      Asia = c("India", "Japan", "China",
+               "Singapore", "South Korea", "Taiwan")))
+```
+
+---
+### Graph counts for top continents after collapsing
+
+```{r, fig.height = 4}
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_continents)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents", 
+       title = "Largest responding")
+```
+
+
+---
+## Challenge: Graph average age for top countries
+
+```{r, fig.height = 4}
+ks_data2 %>% group_by(top_country) %>% 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) %>%
+ggplot(aes(x = top_country, y = mean_age)) + 
+geom_point() + 
+  coord_flip()
+```
+
+---
+## Order Factor by another variable
+
+```{r, out.height = '100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/fct_reorder.png')
+```
+
+
+---
+## Challenge: Graph average age for top countries
+
+```{r, fig.height = 3.5}
+ks_data2 %>% group_by(top_country) %>% 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) %>%
+ggplot(aes(x = fct_reorder(top_country, mean_age), y = mean_age)) + 
+geom_point() + 
+  coord_flip()
+```
+
+* Oldest respondents in Europe and youngest in Asia? 
+
+---
+class:inverse, center, middle
+
+# Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest
+
+
+
+
+
+
