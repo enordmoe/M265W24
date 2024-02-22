@@ -150,7 +150,7 @@ ks_data |> count(Country)
 ```
 
 
-## Let's get  a quick graph  
+## Let's get a quick graph  
 
 ```{r}
 ggplot(ks_data, aes(y = Country)) +
