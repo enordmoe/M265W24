@@ -87,6 +87,17 @@ zodiac_fac <- factor(zodiac, levels = zodiac_levels)
 zodiac_fac
 ```
 
+## Comparing Number, Character and Factor Types {.smaller}
+
+| Characteristic         | Numeric                                   | Character                                  | Factor                                     |
+|------------------------|-------------------------------------------|--------------------------------------------|--------------------------------------------|
+| Representation of Data | Numbers                                   | Text                                       | Categories/Levels                          |
+| Internal Representation| Stored as numbers                         | Stored as text strings                     | Stored as integers and labels             |
+| Operations             | Mathematical operations                   | Concatenation (e.g., `paste()`)            | Statistical analysis and plotting         |
+| Level of Measurement   | Interval or ratio                         | Nominal                                    | Nominal or ordinal depending on context   |
+| Handling Missing Values| `NA`                                      | `""` or `NA`                               | `NA` but sometimes special categories                                      |
+
+
 
 
 # Learning from Factors in the Wild
