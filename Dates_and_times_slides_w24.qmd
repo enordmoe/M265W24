@@ -1,0 +1,210 @@
+---
+title: "Chapter 17: Dates and Times"
+author: Introduction to Data Science
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| eval: true
+library(tidyverse)
+library(nycflights13)
+```
+
+## Outline
+
+-   Factors review
+
+-   Problems with dates and times
+
+-   Parsing functions
+
+-   Intervals, periods, and durations
+
+## Factors Review {.smaller}
+
+::: incremental
+-   Be careful about piping with factors. Why?
+
+-   What is the difference between `fct_count()` and `fct_unique()`?
+
+-   Compare and contrast `fct_infreq()` and `fct_reorder()`?
+
+-   Income is recorded in 20 narrow categories but I want to regroup to
+    have just 4 categories. What `fct_xxx()` function should I use?
+
+-   How do you tell R to drop empty factor levels that do not occur in
+    the data?
+
+    -   How could this happen?
+:::
+
+## Dates and Time?
+
+::: columns
+::: {.column width="50%"}
+![](figures/dates.jpeg){alt="Dates Image"}
+:::
+
+::: {.column width="50%"}
+![](figures/thyme.jpeg){alt="Thyme Image"}
+:::
+:::
+
+# Dates and Times are Challenging!
+
+::: incremental
+-   Many formats for writing times
+
+-   Leap years (and leap seconds!)
+
+-   Irregular months
+
+-   Time zones
+
+-   Daylight savings time (when is a day not a day?)
+:::
+
+## Those tricky dates...
+
+```{r}
+parse_date("March 21st, 1992")
+parse_date("12th of Jan, 2016")
+```
+
+## Those tricky dates...
+
+```{r}
+parse_date("1942Jan03")
+parse_date("July041776 0930")
+```
+
+------------------------------------------------------------------------
+
+## **lubridate** to the rescue
+
+![](figures/data_sci_superhero.png)
+
+## Parsing functions
+
+**lubridate** has a series of smart functions for parsing dates that do
+better than `parse_date()`:
+
+-   Dates only:
+    -   `ymd()`, `dmy()`, ...
+-   Dates and times:
+    -   `ymd_hms()`, `dmy_hms()`, `dmy_h()`, `ydm_h()`
+-   See the Cheat Sheet and help files for more functions and details
+
+## **lubridate** parsing functions
+
+```{r}
+mdy("March 21st, 1992")
+```
+
+. . .
+
+```{r}
+dmy("12th of Jan, 2016")
+```
+
+. . .
+
+```{r}
+ymd("1942Jan03")
+```
+
+. . .
+
+```{r}
+mdy_hm("July041776 0930")
+```
+
+## Difficult Questions about Dates and Times
+
+### Why are these questions difficult?
+
+-   What day is one year after January 1, 2019?
+
+-   What day is one month after February 15, 2019 (or 2024?)?
+
+-   What time is 60 minutes after 1:30 am on March 10, 2019?
+
+    -   What is the last day of February?
+
+## **lubridate** has several ways of dealing with these problems {.smaller}
+
+-   Answers depend on the starting point
+
+```{r}
+dmy("01-Jan-2019") + years(1)
+dmy("01-Jan-2019") + days(365)
+```
+
+. . .
+
+-   Leap year gives different results
+
+```{r}
+dmy("01-Jan-2020") + years(1)
+dmy("01-Jan-2020") + days(365)
+```
+
+## **lubridate** has several ways of dealing with these problems
+
+```{r}
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") 
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + minutes(60)
+dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + dminutes(60)
+```
+
+## Timespans in **lubridate** {.smaller}
+
+-   **Periods**: track changes in clock times ignoring irregularities
+
+    -   `minutes()`, `years()`, etc.
+    -   No `months()` because they're too irregular
+
+. . .
+
+-   **Durations:** track the passage of physical time
+
+    -   `dminutes()`, `dhours()`, `dweeks()`, etc.
+    -    Underlying object stored in seconds
+
+. . .
+
+-   **Intervals**: represent specific intervals of the timeline, bounded
+    by start and end date-times
+
+. . . 
+
+Can be very confusing $\Rightarrow$ see **lubridate** [Cheat
+Sheet](https://rstudio.github.io/cheatsheets/lubridate.pdf) for helpful examples
+
+## Other useful functions: Rounding date-times
+
+```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('figures/rounding_dates.png')
+```
+
+# [Your turn: Complete the tutorial in inclass265]{style="color: white;"} {background-color="#FE961C"}

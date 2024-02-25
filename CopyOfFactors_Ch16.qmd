@@ -1,0 +1,325 @@
+---
+title: "Chapter 16: Factors"
+author: Introduction to Data Science
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r}
+#| label: setup
+#| include: false
+#| eval: true
+library(tidyverse)
+```
+
+
+## Outline
+
+* Types of variables  
+
+* What are factors?  
+
+* Ordering levels  
+
+* Collapsing 
+
+
+## Reminder: Type of Variables
+
+Seven data types in R
+
+* `int` : integer  
+
+* `dbl`: for double-precision, or real numbers  
+
+* `chr`:  character vectors, or strings  
+
+* `dttm`: date-times (a date + a time)  
+
+* `lgl`: logical contains only TRUE or FALSE values    
+
+* **`fctr`: factors used to represent categorical variables**   
+
+* `date`: dates
+
+
+## Factors  
+
+* Used to represent categorical variables 
+
+* Two broad kinds of `factors` 
+  + Nominal: no natural ordering  
+      - e.g., gender, nationality, race, marital status, religion, ethnicity  
+      
+  + Ordinal: categories have a natural underlying order  
+      - e.g. ,education levels, liking, overall rating, level of approval
+
+
+## Creating a Factor in R: From scratch
+
+* Input data and levels separately
+
+```{r}
+zodiac <- c("Pig", "Dog", "Rabbit", "Rat")
+# Sorting not useful 
+sort(zodiac)
+zodiac_levels <- c("Rat", "Ox", "Tiger", "Rabbit", "Dragon", 
+  "Snake", "Horse", "Sheep", "Monkey", "Rooster", "Dog", "Pig")
+zodiac_fac <- factor(zodiac, levels = zodiac_levels)
+zodiac_fac
+```
+
+## Comparing Number, Character and Factor Types {.smaller}
+
+| Characteristic         | Numeric                                   | Character                                  | Factor                                     |
+|------------------------|-------------------------------------------|--------------------------------------------|--------------------------------------------|
+| Representation of Data | Numbers                                   | Text                                       | Categories/Levels                          |
+| Internal Representation| Stored as numbers                         | Stored as text strings                     | Stored as integers and labels             |
+| Operations             | Mathematical operations                   | Concatenation (e.g., `paste()`)            | Statistical analysis and plotting         |
+| Level of Measurement   | Interval or ratio                         | Nominal                                    | Nominal or ordinal depending on context   |
+| Handling Missing Values| `NA`                                      | `""` or `NA`                               | `NA` but sometimes special categories                                      |
+
+
+
+
+# Learning from Factors in the Wild
+
+
+
+## Kaggle State of Data Science Survey
+
+* Comprehensive industry survey conducted in 2017  
+
+* Over 16,000 responses  
+
+* Not all respondents were shown all questions  
+
+    + Job related questions for employed data scientists
+    
+    + Learning related questions for students
+    
+* [`multipleChoiceResponses.csv`](https://www.kaggle.com/kaggle/kaggle-survey-2017?select=multipleChoiceResponses.csv) contains over 16K rows and 228 variables
+
+::: aside
+**Source**: Kaggle https://www.kaggle.com/kaggle/kaggle-survey-2017
+:::
+
+
+## Data codebook in `schema.csv`  {.smaller}
+
+![](figures/kaggle_schema_lg.png)
+
+
+## Import and Glimpse the Data
+
+```{r}
+ks_data <- read_csv(file = "kaggle-survey-2017_data/multipleChoiceResponses.csv")
+glimpse(ks_data)
+```
+
+
+Lots of data problems we'll set aside for later...
+
+## First, inspect your factor  
+
+![](figures/inspect_factors.png)
+
+## Inspecting the Country Variable
+
+```{r}
+# First, convert to a factor, letting R choose levels:  
+ks_data <-  ks_data |> 
+  mutate(Country = factor(Country)) 
+# Show unique levels
+fct_unique(ks_data$Country)
+```
+
+
+## Get frequencies of categories
+
+```{r}
+# Note that we don't need a special command for this
+ks_data |> count(Country)
+```
+
+
+## Let's get a quick graph  
+
+```{r}
+ggplot(ks_data, aes(y = Country)) +
+  geom_bar() 
+```
+
+
+## Forcats commands for reordering levels  
+
+* Reorder by frequency of categories:
+
+![](figures/fct_infreq.png)
+
+* Reorder by level of another variable:
+
+![](figures/fct_reorder.png)
+
+## Let's reorder by frequency 
+
+```{r}
+ggplot(ks_data, aes(y = fct_infreq(Country))) +
+  geom_bar() 
+```
+
+
+## Reversing the Order of the Levels of a Factor
+
+![](figures/fct_rev.png)
+
+
+## Put bars in order from highest to lowest
+
+```{r}
+ggplot(ks_data, aes(y = fct_rev(fct_infreq(Country)))) +
+  geom_bar()
+```
+
+
+## Remove the NA values for now 
+
+
+```{r}
+ks_data2 <- ks_data |>  drop_na(Country)
+ggplot(ks_data2, aes(y = fct_rev(fct_infreq(Country)))) +
+  geom_bar() 
+```
+
+## Recoding Levels  
+
+![](figures/fct_recode.png)
+
+## Clean Up and Shorten a Few Labels
+
+* The name for China has an extra space and an apostrophe 
+
+* Put in common abbreviations for UK and USA
+
+* Combine "Taiwan" with "Republic of China":
+
+```{r}
+ks_data2 <- ks_data2 |> 
+  mutate(Country =
+      fct_recode(Country, 
+          "China" =  "People 's Republic of China",
+          "USA" = "United States", 
+          "UK" = "United Kingdom", 
+          "Taiwan" = "Republic of China"
+))
+```
+
+
+## Clean Up and Shorten a Few Labels: Redraw the Plot 
+
+```{r}
+ggplot(ks_data2, aes(y = fct_rev(fct_infreq(Country)))) +
+  geom_bar()
+```
+
+## Factors for aggregating levels  
+
+![](figures/fct_lump.png)
+
+## Factors for aggregating levels (cont'd)
+
+![](figures/fct_other.png)
+
+
+## Lump smaller countries together to focus on the largest 
+
+```{r}
+ks_data2 <- mutate(ks_data2, top_country = fct_lump(Country, prop = .01))
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_country)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents",
+       title = "Largest responding")
+```
+
+## Group together by continent 
+
+```{r}
+ks_data2 <- ks_data2 |>  mutate(top_continents =
+  fct_collapse(top_country, 
+      Oceania = c("Australia"), 
+      South_America = c("Brazil"),
+      Europe = c("France", "Germany", "Italy", "Netherlands",
+                  "Poland", "Spain", "UK", "Ukraine"),
+      North_America = c("Canada", "USA"), 
+      Asia = c("India", "Japan", "China",
+               "Singapore", "South Korea", "Taiwan")))
+```
+
+
+## Graph counts for top continents after collapsing
+
+```{r}
+ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_continents)))) + 
+  geom_bar() + 
+  coord_flip() +
+  labs(x = "", y = "Number of Respondents", 
+       title = "Largest responding")
+```
+
+
+
+## Challenge: Graph average age for top countries
+
+```{r}
+ks_data2 |>  group_by(top_country) |> 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) |> 
+ggplot(aes(x = top_country, y = mean_age)) + 
+geom_point() + 
+  coord_flip()
+```
+
+
+## Order Factor by another variable
+
+![](figures/fct_reorder.png)
+
+
+## Challenge: Graph average age for top countries
+
+```{r}
+ks_data2 |> 
+  group_by(top_country) |> 
+  summarise(mean_age = mean(Age, na.rm=TRUE)) |> 
+ggplot(aes(y = fct_reorder(top_country, mean_age), x = mean_age)) + 
+geom_point() 
+```
+
+* Oldest respondents in Europe and youngest in Asia? 
+
+
+# [Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest]{style="color: white;"} {background-color="#FE961C"}
+
+
+
+
+
+
