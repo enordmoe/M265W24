@@ -1,0 +1,244 @@
+---
+title: "Chapter 18: Missing Values"
+author: Introduction to Data Science
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| eval: true
+library(tidyverse)
+chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
+```
+
+## Outline
+
+-   A Scary Data Set
+
+-   Explicit Missing Values
+
+-   Implicity Missing Values
+
+-   Factors Revisited
+
+## Missing Data is Everywhere (???)
+
+### MCAR vs MAR vs MNAR
+
+![](images/41iI8ttkkcL._AC_UF1000,1000_QL80_.jpg){fig-align="center"}
+
+## A Scary Data Set: Math Enrollments 1.0
+
+![](images/enroll_v1.png){fig-align="center"}
+
+## Scary Data 2.0
+
+![](images/clipboard-2144953751.png)
+
+# What does this have to do with missing data?
+
+## Import the Enrollment Data
+
+```{r}
+math_enroll <- read_csv("data/math_enroll.csv")
+head(math_enroll, n = 20)
+```
+
+## Explicit Missing Values
+
+-   After importing the data, all the missing values show up
+    *explicitly* as NA values.
+
+-   Often occur due as a side effect of the data entry method
+
+## Impute by Last Observation Carried Forward (LOCF)
+
+-   Easy to do with `fill()` command from **tidyr** package
+
+-   Inputs: columns and direction
+
+## Last Observation Carried Forward Example {.smaller}
+
+```{r}
+math_enroll |> 
+  fill(1:2)
+```
+
+But what about the quarterly totals in column 7?
+
+## Filling downward and upward
+
+```{r}
+#| code-line-numbers: "|2|3|4|"
+math_enroll |>
+  rename(qrt_total = `...7`) |>  #Deal with the non-syntactic name
+  fill(1:2) |> 
+  fill(qrt_total, .direction = "up") 
+```
+
+-   Can also use "updown" or "downup"
+
+## Fixed values
+
+-   Fix NA values that should have nonmissing codes using `coalesce()`
+
+-   Example: How many siblings do you have?
+
+```{r}
+x <- c(1, 4,NA, 5, 7, NA, 2, NA)
+coalesce(x, 0)
+```
+
+-   Often, a nonresponse could simply mean zero (or some other value)
+
+## Fixed values: Example 1 {.smaller}
+
+-   A specific numerical code may be used for NAs in your data.
+
+-   Easy to fix with the if-then shortcut `na_if()`
+
+```{r}
+# Replace specific value with NA
+df1 <- tibble(x = c(1, 2, 3, 4, 5, 6),
+              y = c(10, 999, NA, 40, 50, 999))
+df1
+df1 |> 
+  mutate(y = na_if(y, 999))  # Replace 20 with NA in column y
+```
+
+## Fixed values: Example 2
+
+-   Replace "NA" with NA in column name
+
+```{r}
+df2 <- tibble(name = c("Alice", "Bob", "Charlie", "NA"),
+              age = c(25, NA, 30, 35))
+df2 |> 
+  mutate(name = na_if(name, "NA"))  
+```
+
+## NaNs {.smaller}
+
+Some "missing" values occur due to math problems!
+
+```{r}
+#| warning: true
+0 / 0 
+0 * Inf
+Inf - Inf
+sqrt(-1)
+log(-10)
+```
+
+-   Warning or not, these are not numbers.
+
+-   Could happen during grouping or subsetting when an unexpected sample
+    size of zero results
+
+-   Better to identify the cause rather than simply treat it as NA.
+
+------------------------------------------------------------------------
+
+::: {.callout-tip icon="false"}
+# Explicit vs Implicit Missing Values
+
+An explicit missing value is the presence of an absence.\
+An implicit missing value is the absence of a presence.
+:::
+
+::: {style="text-align: right"}
+Source: [R for Data
+Science](https://r4ds.hadley.nz/missing-values#sec-missing-implicit)
+:::
+
+## Implicit Missing Values
+
+-   Missing entire rows of the data set
+
+```{r}
+stocks <- tibble(
+  year  = c(2020, 2020, 2020, 2020, 2021, 2021, 2021),
+  qtr   = c(   1,    2,    3,    4,    2,    3,    4),
+  price = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+```
+
+-   Explicit missing data in 4th quarter of 2020
+
+-   Implicit missing data in 1st quarter of 2021
+
+## Leatherback Sea Turtle Nesting Data
+
+![](images/clipboard-2155623770.png){fig-align="center"}
+
+## Leatherback Sea Turtle Nesting Data
+
+Causes of implicit missing data
+
+-   Turtle PIT tag not scanned properly
+
+-   Turtle nests on a different beach
+
+-   Years between nesting cycles
+
+Remedies for implicit missing data
+
+-   Very context-dependent
+
+## Remedies for implicit missing data
+
+1.  Make explicit by pivoting
+2.  Use of `complete()` function to populate with NA values
+
+## Missing Chicago flight data
+
+Empty factor levels because of non-existent flights
+
+-   Bar chart of carriers for three destinations from Chicago.
+
+```{r}
+#| output-location: slide
+chiflights2020 |> 
+  mutate(carrier = factor(carrier)) |> 
+  filter(dest == "LGA"| dest == "DTW" | dest == "SFO") |> 
+  ggplot(aes(x = carrier, fill = carrier)) +
+  geom_bar() +
+  facet_grid(dest~.) 
+```
+
+## Missing Chicago flight data
+
+Show all airlines whether they flew to these destinations or not using
+`drop = FALSE`:
+
+```{r}
+#| code-line-numbers: "|6"
+#| output-location: slide
+chiflights2020 |> 
+  mutate(carrier = factor(carrier)) |> 
+  filter(dest == "LGA"| dest == "DTW" | dest == "SFO") |> 
+  ggplot(aes(x = carrier, fill = carrier)) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE) +
+  facet_grid(dest~.) 
+
+```
