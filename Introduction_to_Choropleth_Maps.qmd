@@ -1,0 +1,76 @@
+---
+title: "Introduction to Choropleth Maps"
+author: Introduction to Data Science
+format:
+  revealjs:
+    theme: default 
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| eval: true
+library(tidyverse)
+```
+
+## Choropleth Maps
+
+-   **Choropleth map**: map in which areas are shaded to represent the
+    quantity of a statistical variable (or transformation thereof)
+
+-   Etymology: area + multitude
+
+    -   often used to represent population density
+
+## Examples: Flu Incidence by State
+
+![](https://s.w-x.co/util/image/w/flugettingworse.jpg?v=at&w=485&h=273)
+
+::: aside
+Source: CDC
+:::
+
+## Examples: Singapore Property Prices by Neighborhood
+
+### [Interactive Heat Map](https://www.srx.com.sg/heat-map)
+
+## Examples
+
+![](http://2.bp.blogspot.com/-C1Sc-8q_yWw/T_RV9Pe-m1I/AAAAAAAABPY/KA2E-vu8OO4/s1600/twitterbeerchurchfixed.jpg')
+
+::: aside
+Source: Floatingsheep.org
+:::
+
+## R Package **maps**
+
+You can make heat maps with the R package **maps**!
+
+-   Use `geom_polygon()` to draw and shade maps.
+
+    -   Check out
+        [Rcolors](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)
+        for choices.\
+    -   Or [R color
+        cheatsheet](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf)
+        if you're really ambitious
+
+-   Use `geom_points()` to add specific points to your maps.
+
+-   See the tutorial for details.
