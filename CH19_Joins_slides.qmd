@@ -188,7 +188,7 @@ x |> inner_join(y, join_by(key))
 
 ## The Perils of Duplicate Keys
 
-![](figures/duplicate_keys.png')
+![](figures/duplicate_keys.png)
 
 **Note**: When you join duplicated keys, you get all possible
 combinations!
