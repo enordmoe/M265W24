@@ -1,41 +1,31 @@
 ---
-title: "Untitled"
+title: "Introduction to Data Science"
+author: "MATH 265"
 format:
-  revealjs: 
-    theme: default
-editor: visual
+  revealjs:
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,message=FALSE,warning=FALSE)
-```
-
-```{r, echo=F,message=FALSE}
+```{r, echo=F, message = FALSE}
 library(tidyverse)
 ```
 
-## Quarto
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+## What is Data Science? 
 
-## Bullets
+### A Picture is Worth 1000 Words
 
-When you click the **Render** button a document will be generated that includes:
 
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
+```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
+knitr::include_graphics('https://r4ds.hadley.nz/diagrams/data-science/base.png')
 ```
-
-# What is Data Science?
-
-## A Picture is Worth 1000 Words
-
-![](https://r4ds.hadley.nz/diagrams/data-science/base.png){fig-align="center"}
-
