@@ -1,0 +1,97 @@
+---
+title: "Introduction to Quarto and GitHub with R"
+author: "MATH 265"
+format:
+  revealjs:
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, echo=F, message = FALSE}
+library(tidyverse)
+```
+
+
+## Outcomes for Today
+
+* Learn about Quarto documents in RStudio
+
+* Use Quarto to create a simple document to be pushed to a GitHub repository
+
+* Get RStudio to talk to GitHub
+
+
+# Let's talk about Quarto {background-color="#FAD9C7"}
+
+## Quarto documents  {.smaller}
+
+**Quarto** is an open source scientific and technical publishing system.
+
+* The input file (`qmd`) can contain code chunks, text content, LaTeX mathematical formatting commands.
+  - Code chunks can be R, Python, Julia and Observable JavaScript
+  - Visual editor built into RStudio
+
+. . . 
+
+
+* Produces dynamic reports including text, code, tables, equations, citations, cross references, output, figures and advanced layouts.
+  - Many document types: articles, presentations, dashboards, websites, books, etc.
+  - Multiple output formats such as HTML, MS Word, and many more
+  - Many style themes available to change the look and feel of the document
+
+. . . 
+  
+
+* Emphasis is on sharability, reproducibility, and versatility  
+
+::: aside 
+Source: [Quarto.org](https://quarto.org/)
+:::
+
+
+# The Quarto Document Process  
+
+![](figs/quarto_process_fig1.png)
+
+::: aside
+Source: [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/html/quarto.html)
+:::
+
+## The Quarto Document Process with Details  
+
+![](figs/quarto_process_fig2.png)
+
+::: aside
+Source:  [Quarto Cheat Sheet](https://rstudio.github.io/cheatsheets/html/quarto.html)
+:::
+
+
+## Reproducibility  
+
+Value of reproducibility: 
+
+* Transparency of research
+
+* Verification of code
+
+* Longer term
+    - use code/analysis for new or updated data
+    - extend/modify analysis for other settings/data
+    
+
+
+# Getting Started with GitHub and RStudio Server   {background-color="#FAD9C7"}
+
+

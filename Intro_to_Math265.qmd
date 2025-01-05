@@ -106,7 +106,9 @@ width="10%"}
 -   **ggformula** syntax for graphics (as used in MATH 260)
 :::
 
-# Version Control and Collaboration
+# Version Control and Collaboration {background-color="#FAD9C7"}
+
+
 
 ## You already know a little about version control if you've used ...
 
@@ -174,7 +176,7 @@ Source: [Data Science in a Box](https://datasciencebox.org/)
 ![](img/phd_comics_vc.gif){fig-align="center"}
 
 ::: incremental
--   Document project
+-   Document projects
 -   Facilitate team collaboration
 -   Share work
 :::
