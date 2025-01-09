@@ -1,5 +1,5 @@
 ---
-title: "Chapter 17: Dates and Times"
+title: "Chapter 17: Dates and Times update"
 author: Introduction to Data Science
 format:
   revealjs:
