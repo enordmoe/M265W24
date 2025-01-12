@@ -1,19 +1,26 @@
 ---
 title: "Data Transformation Part I"
 subtitle: "Introduction to Data Science"
-author: "Eric Nordmoe"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
+
+
 
 ```{r}
 #| label: setup
@@ -111,7 +118,8 @@ ggplot(dTA = mpg) +
   geom_smooth(method = "lm)
 ```
 
-# Working with Data in R
+
+# Working with Data in R  {background-color="#FAD9C7"}
 
 ## Variable Types
 
@@ -149,7 +157,7 @@ heroes
 Source: https://www.kaggle.com/datasets/claudiodavi/superhero-set
 :::
 
-# A Grammar for Data Wrangling
+# A Grammar for Data Wrangling {background-color="#FAD9C7"}
 
 ## Transformation Overview
 
@@ -250,4 +258,6 @@ Use these operators to specify logical conditions when working with rows
     -   OR: `|`
     -   NOT: `!`
 
-# Examples
+# Examples {background-color="#FAD9C7"}
+
+See **inclass265** repository on GitHub: `practice_data_transf_pt1.qmd`
