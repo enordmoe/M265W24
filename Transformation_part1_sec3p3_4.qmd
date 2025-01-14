@@ -1,19 +1,23 @@
 ---
 title: "Data Transformation Part II"
 subtitle: "Introduction to Data Science"
-author: "Eric Nordmoe"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      eval: false
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
@@ -34,6 +38,7 @@ heroes <- read_csv(file = "data/heroes.csv",
 )
 ```
 
+
 ## Review from Previous Class
 
 1.  Compare `arrange()` and `filter()`
@@ -45,6 +50,77 @@ heroes <- read_csv(file = "data/heroes.csv",
 2.  Compare `filter()` and `distinct()`
 
     -   How are they similar? different?
+    
+## Data Transformation Review: Find the errors
+
+**Chunk 1**
+
+```{r}
+#| eval: false
+filter(mpg, hwy > 30 & drv = "f")
+```
+
+. . .
+
+
+**Chunk 2**
+
+```{r}
+#| eval: false
+arrange(mpg, descending(hwy))
+```
+
+. . .
+
+**Chunk 3**
+
+```{r}
+#| eval: false
+distinct(mpg, drv hwy)
+```
+
+## Data Transformation Review: Correct the Code
+
+**Question 1**
+
+Fix the filtering logic to return rows where the `hwy` variable is greater than 30 for cars with either "f" or "4" as the `drv` type.
+
+```{r}
+#| eval: false
+filter(mpg, hwy > 30 & drv == "f" | "4")
+```
+
+## Data Transformation Review: Correct the Code (cont'd)
+
+**Question 2**
+
+Fix the following to sort **mpg** by `manufacturer` in ascending order and `hwy` in descending order.
+```{r}
+#| eval: false
+arrange(manufacturer, desc(mpg$hwy))
+```
+
+## Data Transformation Review: Correct the Code (cont'd)
+
+**Question 3**
+
+Modify the following to correctly filter for rows where cyl is either 4, 6, or 8.
+
+```{r}
+#| eval: false
+filter(mpg, cyl = c(4, 6, 8))
+```
+
+## Data Transformation Review: Correct the Code (cont'd)
+
+**Question 4**
+
+Correct the code to find all unique combinations of class and hwy, and remove rows with NA values in hwy.
+
+```{r}
+#| eval: false
+distinct(mpg, class, hwy, na.rm = TRUE)
+```
 
 ## Review: Kinds of Transformation
 
@@ -166,6 +242,7 @@ Source: Data Transformation with `dplyr`: CHEAT SHEET
 -   *Expressed* as a set of nested functions:
 
 ```{r}
+#| eval: false
 park(drive(start_car(find("keys")), to = "campus"))
 ```
 
@@ -174,6 +251,7 @@ park(drive(start_car(find("keys")), to = "campus"))
 -   Written code using pipes is easier to read:
 
 ```{r}
+#| eval: false
 find("keys") |> 
   start_car() |> 
   drive(to = "campus") |> 
