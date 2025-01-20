@@ -8,9 +8,9 @@
 <link href="Sec4_Data_Tidying_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Sec4_Data_Tidying_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="Sec4_Data_Tidying_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.52">
 
-  <meta name="author" content="Eric Nordmoe">
+  <meta name="author" content="MATH 265">
   <title>Data Tidying</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -70,7 +70,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -84,7 +84,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -391,14 +392,14 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
   <h1 class="title">Data Tidying</h1>
   <p class="subtitle">Introduction to Data Science</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Eric Nordmoe 
+MATH 265 
 </div>
 </div>
 </div>
@@ -412,12 +413,12 @@ Eric Nordmoe
 <section id="first-create-a-toy-data-set" class="slide level2">
 <h2>First, Create a Toy Data Set</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>),</span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="at">z =</span> <span class="fu">c</span>(<span class="st">"K"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"K"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-2"><a href=""></a>  <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb1-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>),</span>
+<span id="cb1-4"><a href=""></a>  <span class="at">z =</span> <span class="fu">c</span>(<span class="st">"K"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"K"</span>)</span>
+<span id="cb1-5"><a href=""></a>)</span>
+<span id="cb1-6"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
       x y     z    
@@ -434,15 +435,15 @@ Eric Nordmoe
 <h2>What does it do? Part 1</h2>
 <p><strong>Chunk 1</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">group_by</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">group_by</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
 <p><strong>Chunk 2</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">arrange</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href=""></a>  <span class="fu">arrange</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -450,17 +451,17 @@ Eric Nordmoe
 <h2>What does it do? Part 2</h2>
 <p><strong>Chunk 3</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
 <p><strong>Chunk 4</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href=""></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -468,25 +469,25 @@ Eric Nordmoe
 <h2>What does it do? Part 3</h2>
 <p><strong>Chunk 5</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="whats-the-difference" class="slide level2">
 <h2>What’s the difference?</h2>
 <p><strong>Chunk A</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href=""></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><strong>Chunk B</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">mutate</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">group_by</span>(y, z) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -496,18 +497,18 @@ Eric Nordmoe
 <div class="fragment">
 <p><strong>Chunk 1</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>starwars  <span class="sc">|&gt;</span>  </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">select</span>(name, mass, species) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">mutate</span>(<span class="at">mass_norm =</span> mass <span class="sc">/</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>starwars  <span class="sc">|&gt;</span>  </span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">select</span>(name, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">mass_norm =</span> mass <span class="sc">/</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <p><strong>Chunk 2</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>starwars <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">select</span>(name, mass, species) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">mutate</span>(<span class="at">mass_norm =</span> mass <span class="sc">/</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>starwars <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">select</span>(name, mass, species) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">group_by</span>(species) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">mass_norm =</span> mass <span class="sc">/</span> <span class="fu">mean</span>(mass, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section></section>
@@ -519,12 +520,12 @@ Eric Nordmoe
 <section id="tidying-data-sparks-joy" class="slide level2">
 <h2>Tidying data sparks joy!</h2>
 
-<img data-src="figures/tidying_up_cover.jpg" alt="marie kondo" class="r-stretch quarto-figure-center"></section>
+<img data-src="figures/tidying_up_cover.jpg" class="quarto-figure quarto-figure-center r-stretch" alt="marie kondo"></section>
 <section id="get-to-know-the-data-tidying-with-tidyr-cheat-sheet" class="slide level2">
 <h2>Get to Know the Data Tidying with <code>tidyr</code> Cheat Sheet</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="figures/tidy_cheat.png" alt="tidy cheat sheet" width="516"></p>
+<p><img data-src="figures/tidy_cheat.png" class="quarto-figure quarto-figure-center" alt="tidy cheat sheet" width="516"></p>
 </figure>
 </div>
 
@@ -535,7 +536,7 @@ Eric Nordmoe
 <h2>Tidy Data</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png" alt="tidy cheat sheet" width="800"></p>
+<p><img data-src="https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png" class="quarto-figure quarto-figure-center" alt="tidy cheat sheet" width="800"></p>
 </figure>
 </div>
 <ul>
@@ -580,8 +581,8 @@ Eric Nordmoe
 <section id="sample-datasets-table1" class="slide level2">
 <h2>Sample Datasets: <code>table1</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Tidy Dataset</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="co"># Tidy Dataset</span></span>
+<span id="cb12-2"><a href=""></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   country      year  cases population
@@ -598,9 +599,9 @@ Eric Nordmoe
 <section id="sample-datasets-table4a-cases" class="slide level2">
 <h2>Sample Datasets: <code>table4a</code> Cases</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Untidy Dataset</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#  "Cases" variable spread across multiple columns</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>table4a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># Untidy Dataset</span></span>
+<span id="cb14-2"><a href=""></a><span class="co">#  "Cases" variable spread across multiple columns</span></span>
+<span id="cb14-3"><a href=""></a>table4a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   country     `1999` `2000`
@@ -614,9 +615,9 @@ Eric Nordmoe
 <section id="sample-datasets-table4b-populations" class="slide level2">
 <h2>Sample Datasets: <code>table4b</code> Populations</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Untidy Dataset</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#  "Population" variable spread across multiple columns</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>table4b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># Untidy Dataset</span></span>
+<span id="cb16-2"><a href=""></a><span class="co">#  "Population" variable spread across multiple columns</span></span>
+<span id="cb16-3"><a href=""></a>table4b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   country         `1999`     `2000`
@@ -630,10 +631,10 @@ Eric Nordmoe
 <section id="sample-datasets-table2" class="slide level2">
 <h2>Sample Datasets: <code>table2</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Untidy Dataset</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="co"># Variables appear in rows</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="co"># Cases spread across multiple rows</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="co"># Untidy Dataset</span></span>
+<span id="cb18-2"><a href=""></a><span class="co"># Variables appear in rows</span></span>
+<span id="cb18-3"><a href=""></a><span class="co"># Cases spread across multiple rows</span></span>
+<span id="cb18-4"><a href=""></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 4
    country      year type            count
@@ -680,7 +681,7 @@ Eric Nordmoe
 <p>Pivoting <strong>table4a</strong> TB cases into a longer, tidy form</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png" alt="pivot longer" width="800"></p>
+<p><img data-src="https://d33wubrfki0l68.cloudfront.net/3aea19108d39606bbe49981acda07696c0c7fcd8/2de65/images/tidy-9.png" class="quarto-figure quarto-figure-center" alt="pivot longer" width="800"></p>
 </figure>
 </div>
 <ul>
@@ -694,12 +695,12 @@ Eric Nordmoe
 <section id="pivot_longer-example" class="slide level2 smaller">
 <h2><code>pivot_longer()</code> Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>table4a <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb20-3"><a href="#cb20-3"></a>    <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">1999</span><span class="st">`</span>, <span class="st">`</span><span class="at">2000</span><span class="st">`</span>), </span>
-<span id="cb20-4"><a href="#cb20-4"></a>    <span class="at">names_to =</span> <span class="st">"year"</span>, </span>
-<span id="cb20-5"><a href="#cb20-5"></a>    <span class="at">values_to =</span> <span class="st">"cases"</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>table4a <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb20-3"><a href=""></a>    <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">1999</span><span class="st">`</span>, <span class="st">`</span><span class="at">2000</span><span class="st">`</span>), </span>
+<span id="cb20-4"><a href=""></a>    <span class="at">names_to =</span> <span class="st">"year"</span>, </span>
+<span id="cb20-5"><a href=""></a>    <span class="at">values_to =</span> <span class="st">"cases"</span></span>
+<span id="cb20-6"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>Referring to sample <code>table4a</code> :</p>
@@ -734,13 +735,13 @@ Eric Nordmoe
 <li>Make a toy data set</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="sc">~</span>student,  <span class="sc">~</span>height8, <span class="sc">~</span>height12, <span class="sc">~</span>height18,</span>
-<span id="cb21-3"><a href="#cb21-3"></a>   <span class="st">"Arjun"</span>,  <span class="dv">49</span>,  <span class="dv">61</span>, <span class="dv">70</span>,</span>
-<span id="cb21-4"><a href="#cb21-4"></a>   <span class="st">"Basil"</span>,  <span class="dv">53</span>,  <span class="dv">63</span>, <span class="dv">69</span>,</span>
-<span id="cb21-5"><a href="#cb21-5"></a>   <span class="st">"Chen"</span>,  <span class="dv">51</span>,  <span class="dv">62</span>, <span class="dv">73</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>)</span>
-<span id="cb21-7"><a href="#cb21-7"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb21-2"><a href=""></a>  <span class="sc">~</span>student,  <span class="sc">~</span>height8, <span class="sc">~</span>height12, <span class="sc">~</span>height18,</span>
+<span id="cb21-3"><a href=""></a>   <span class="st">"Arjun"</span>,  <span class="dv">49</span>,  <span class="dv">61</span>, <span class="dv">70</span>,</span>
+<span id="cb21-4"><a href=""></a>   <span class="st">"Basil"</span>,  <span class="dv">53</span>,  <span class="dv">63</span>, <span class="dv">69</span>,</span>
+<span id="cb21-5"><a href=""></a>   <span class="st">"Chen"</span>,  <span class="dv">51</span>,  <span class="dv">62</span>, <span class="dv">73</span></span>
+<span id="cb21-6"><a href=""></a>)</span>
+<span id="cb21-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 4
   student height8 height12 height18
@@ -757,12 +758,12 @@ Eric Nordmoe
 <li>Apply pivot_longer()</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1-2|3|4|5|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb23-3"><a href="#cb23-3"></a>    <span class="at">cols =</span> <span class="sc">!</span>student, <span class="co">#Note use of ! for all other columns</span></span>
-<span id="cb23-4"><a href="#cb23-4"></a>    <span class="at">names_to =</span> <span class="st">"age"</span>, </span>
-<span id="cb23-5"><a href="#cb23-5"></a>    <span class="at">values_to =</span> <span class="st">"height"</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1-2|3|4|5|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href=""></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb23-3"><a href=""></a>    <span class="at">cols =</span> <span class="sc">!</span>student, <span class="co">#Note use of ! for all other columns</span></span>
+<span id="cb23-4"><a href=""></a>    <span class="at">names_to =</span> <span class="st">"age"</span>, </span>
+<span id="cb23-5"><a href=""></a>    <span class="at">values_to =</span> <span class="st">"height"</span></span>
+<span id="cb23-6"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 3
   student age      height
@@ -785,13 +786,13 @@ Eric Nordmoe
 <li>Further tidying of the data</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="|6-7|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb25-3"><a href="#cb25-3"></a>    <span class="at">cols =</span> <span class="sc">!</span>student, <span class="co">#Note use of ! for all other columns</span></span>
-<span id="cb25-4"><a href="#cb25-4"></a>    <span class="at">names_to =</span> <span class="st">"age"</span>, </span>
-<span id="cb25-5"><a href="#cb25-5"></a>    <span class="at">values_to =</span> <span class="st">"height"</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>    ) <span class="sc">|&gt;</span> </span>
-<span id="cb25-7"><a href="#cb25-7"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">parse_number</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="|6-7|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href=""></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb25-3"><a href=""></a>    <span class="at">cols =</span> <span class="sc">!</span>student, <span class="co">#Note use of ! for all other columns</span></span>
+<span id="cb25-4"><a href=""></a>    <span class="at">names_to =</span> <span class="st">"age"</span>, </span>
+<span id="cb25-5"><a href=""></a>    <span class="at">values_to =</span> <span class="st">"height"</span></span>
+<span id="cb25-6"><a href=""></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">parse_number</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 3
   student   age height
@@ -824,7 +825,7 @@ Eric Nordmoe
 <li>Observations spread across rows</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 4
    country      year type            count
@@ -847,11 +848,11 @@ Eric Nordmoe
 <section id="the-widening-of-table2" class="slide level2 smaller">
 <h2>The Widening of <code>table2</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>table2 <span class="sc">|&gt;</span> </span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb29-3"><a href="#cb29-3"></a>    <span class="at">names_from =</span> type,</span>
-<span id="cb29-4"><a href="#cb29-4"></a>    <span class="at">values_from =</span> count</span>
-<span id="cb29-5"><a href="#cb29-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>table2 <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb29-3"><a href=""></a>    <span class="at">names_from =</span> type,</span>
+<span id="cb29-4"><a href=""></a>    <span class="at">values_from =</span> count</span>
+<span id="cb29-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   country      year  cases population
@@ -882,20 +883,20 @@ Eric Nordmoe
 <section id="example-return-to-the-growth-charts" class="slide level2 smaller">
 <h2>Example: Return to the Growth Charts</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Transpose this table</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="sc">~</span>student,  <span class="sc">~</span>age, <span class="sc">~</span>height,</span>
-<span id="cb31-4"><a href="#cb31-4"></a>   <span class="st">"Arjun"</span>,  <span class="dv">8</span>, <span class="dv">49</span>, </span>
-<span id="cb31-5"><a href="#cb31-5"></a>   <span class="st">"Arjun"</span>,  <span class="dv">12</span>, <span class="dv">61</span>, </span>
-<span id="cb31-6"><a href="#cb31-6"></a>   <span class="st">"Arjun"</span>,  <span class="dv">18</span>, <span class="dv">70</span>,</span>
-<span id="cb31-7"><a href="#cb31-7"></a>   <span class="st">"Basil"</span>,  <span class="dv">8</span>, <span class="dv">53</span>, </span>
-<span id="cb31-8"><a href="#cb31-8"></a>   <span class="st">"Basil"</span>,  <span class="dv">12</span>, <span class="dv">63</span>, </span>
-<span id="cb31-9"><a href="#cb31-9"></a>   <span class="st">"Basil"</span>,  <span class="dv">18</span>, <span class="dv">69</span>,</span>
-<span id="cb31-10"><a href="#cb31-10"></a>   <span class="st">"Chen"</span>,  <span class="dv">8</span>, <span class="dv">51</span>, </span>
-<span id="cb31-11"><a href="#cb31-11"></a>   <span class="st">"Chen"</span>,  <span class="dv">12</span>, <span class="dv">62</span>, </span>
-<span id="cb31-12"><a href="#cb31-12"></a>   <span class="st">"Chen"</span>,  <span class="dv">18</span>, <span class="dv">73</span></span>
-<span id="cb31-13"><a href="#cb31-13"></a>  )</span>
-<span id="cb31-14"><a href="#cb31-14"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Transpose this table</span></span>
+<span id="cb31-2"><a href=""></a>df2 <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb31-3"><a href=""></a>  <span class="sc">~</span>student,  <span class="sc">~</span>age, <span class="sc">~</span>height,</span>
+<span id="cb31-4"><a href=""></a>   <span class="st">"Arjun"</span>,  <span class="dv">8</span>, <span class="dv">49</span>, </span>
+<span id="cb31-5"><a href=""></a>   <span class="st">"Arjun"</span>,  <span class="dv">12</span>, <span class="dv">61</span>, </span>
+<span id="cb31-6"><a href=""></a>   <span class="st">"Arjun"</span>,  <span class="dv">18</span>, <span class="dv">70</span>,</span>
+<span id="cb31-7"><a href=""></a>   <span class="st">"Basil"</span>,  <span class="dv">8</span>, <span class="dv">53</span>, </span>
+<span id="cb31-8"><a href=""></a>   <span class="st">"Basil"</span>,  <span class="dv">12</span>, <span class="dv">63</span>, </span>
+<span id="cb31-9"><a href=""></a>   <span class="st">"Basil"</span>,  <span class="dv">18</span>, <span class="dv">69</span>,</span>
+<span id="cb31-10"><a href=""></a>   <span class="st">"Chen"</span>,  <span class="dv">8</span>, <span class="dv">51</span>, </span>
+<span id="cb31-11"><a href=""></a>   <span class="st">"Chen"</span>,  <span class="dv">12</span>, <span class="dv">62</span>, </span>
+<span id="cb31-12"><a href=""></a>   <span class="st">"Chen"</span>,  <span class="dv">18</span>, <span class="dv">73</span></span>
+<span id="cb31-13"><a href=""></a>  )</span>
+<span id="cb31-14"><a href=""></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 3
   student   age height
@@ -915,11 +916,11 @@ Eric Nordmoe
 <section id="the-widening-of-df2-part-1" class="slide level2">
 <h2>The Widening of <code>df2</code>: Part 1</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>df2 <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb33-3"><a href="#cb33-3"></a>    <span class="at">names_from =</span> age,</span>
-<span id="cb33-4"><a href="#cb33-4"></a>    <span class="at">values_from =</span> height</span>
-<span id="cb33-5"><a href="#cb33-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb33-3"><a href=""></a>    <span class="at">names_from =</span> age,</span>
+<span id="cb33-4"><a href=""></a>    <span class="at">values_from =</span> height</span>
+<span id="cb33-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 4
   student   `8`  `12`  `18`
@@ -939,12 +940,12 @@ Eric Nordmoe
 <li>A handy solution:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="|4|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>df2 <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb35-3"><a href="#cb35-3"></a>    <span class="at">names_from =</span> age,</span>
-<span id="cb35-4"><a href="#cb35-4"></a>    <span class="at">names_prefix =</span> <span class="st">"ChildAge"</span>,</span>
-<span id="cb35-5"><a href="#cb35-5"></a>    <span class="at">values_from =</span> height</span>
-<span id="cb35-6"><a href="#cb35-6"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="|4|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb35-3"><a href=""></a>    <span class="at">names_from =</span> age,</span>
+<span id="cb35-4"><a href=""></a>    <span class="at">names_prefix =</span> <span class="st">"ChildAge"</span>,</span>
+<span id="cb35-5"><a href=""></a>    <span class="at">values_from =</span> height</span>
+<span id="cb35-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 4
   student ChildAge8 ChildAge12 ChildAge18
@@ -961,7 +962,7 @@ Eric Nordmoe
 <li>Dataset about Medicare and Medicaid Services patient experiences</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">glimpse</span>(cms_patient_experience)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">glimpse</span>(cms_patient_experience)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 500
 Columns: 5
@@ -981,11 +982,11 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
 <section id="a-first-attempt-at-widening" class="slide level2 smaller">
 <h2>A First Attempt at Widening</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>cms_patient_experience <span class="sc">|&gt;</span> </span>
-<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb39-3"><a href="#cb39-3"></a>    <span class="at">names_from =</span> measure_cd,</span>
-<span id="cb39-4"><a href="#cb39-4"></a>    <span class="at">values_from =</span> prf_rate</span>
-<span id="cb39-5"><a href="#cb39-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>cms_patient_experience <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb39-3"><a href=""></a>    <span class="at">names_from =</span> measure_cd,</span>
+<span id="cb39-4"><a href=""></a>    <span class="at">values_from =</span> prf_rate</span>
+<span id="cb39-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 500 × 9
    org_pac_id org_nm           measure_title CAHPS_GRP_1 CAHPS_GRP_2 CAHPS_GRP_3
@@ -1011,16 +1012,16 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
 <section id="uniquely-identifying-the-rows" class="slide level2 smaller">
 <h2>Uniquely Identifying the Rows</h2>
 
-<img data-src="figures/cms_wider_annot.png" alt="annotated cms data" class="r-stretch quarto-figure-center"></section>
+<img data-src="figures/cms_wider_annot.png" class="quarto-figure quarto-figure-center r-stretch" alt="annotated cms data"></section>
 <section id="a-better-attempt-at-widening" class="slide level2 smaller">
 <h2>A Better Attempt at Widening</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41" data-code-line-numbers="|3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>cms_patient_experience <span class="sc">|&gt;</span> </span>
-<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb41-3"><a href="#cb41-3"></a>    <span class="at">id_cols =</span> <span class="fu">starts_with</span>(<span class="st">"org"</span>),</span>
-<span id="cb41-4"><a href="#cb41-4"></a>    <span class="at">names_from =</span> measure_cd,</span>
-<span id="cb41-5"><a href="#cb41-5"></a>    <span class="at">values_from =</span> prf_rate</span>
-<span id="cb41-6"><a href="#cb41-6"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41" data-code-line-numbers="|3|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>cms_patient_experience <span class="sc">|&gt;</span> </span>
+<span id="cb41-2"><a href=""></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb41-3"><a href=""></a>    <span class="at">id_cols =</span> <span class="fu">starts_with</span>(<span class="st">"org"</span>),</span>
+<span id="cb41-4"><a href=""></a>    <span class="at">names_from =</span> measure_cd,</span>
+<span id="cb41-5"><a href=""></a>    <span class="at">values_from =</span> prf_rate</span>
+<span id="cb41-6"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 95 × 8
    org_pac_id org_nm CAHPS_GRP_1 CAHPS_GRP_2 CAHPS_GRP_3 CAHPS_GRP_5 CAHPS_GRP_8
@@ -1058,8 +1059,10 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
 <li class="fragment"><p>Start simple and move on to more challenging data</p></li>
 </ul>
 </div>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
+</div>
 </div>
 </section></section>
     </div>
@@ -1088,14 +1091,13 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
       // https://revealjs.com/config/
       Reveal.initialize({
 'controlsAuto': true,
-'previewLinksAuto': true,
-'smaller': false,
+'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":false,"theme":"whiteboard"},
+'chalkboard': {"buttons":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1116,7 +1118,7 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1249,7 +1251,7 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1345,18 +1347,7 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1388,11 +1379,50 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1402,8 +1432,17 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1417,7 +1456,11 @@ $ prf_rate      &lt;dbl&gt; 63, 87, 86, 57, 85, 24, 59, 85, 83, 63, 88, 22, 49, 
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {

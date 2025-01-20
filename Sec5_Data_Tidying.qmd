@@ -1,19 +1,25 @@
 ---
 title: "Data Tidying"
 subtitle: "Introduction to Data Science"
-author: "Eric Nordmoe"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
+
 
 ```{r}
 #| label: setup
@@ -143,7 +149,7 @@ starwars |>
   mutate(mass_norm = mass / mean(mass, na.rm = TRUE))
 ```
 
-# Data Tidying
+# Data Tidying  {background-color="#FAD9C7"}
 
 ## Tidying data sparks joy!
 
@@ -244,7 +250,7 @@ Once you understand the data, you may need to resolve one of the following probl
 2.  One observation might be scattered across multiple rows.
     -   Table 2 because observation is Country-Year combination
 
-# `pivot_longer()`
+# `pivot_longer()`  {background-color="#FAD9C7"}
 
 ## Pivoting Longer
 
@@ -338,7 +344,7 @@ df |>
 
 -   More on `parse_number()` later in the term
 
-# `pivot_wider()`
+# `pivot_wider()`  {background-color="#FAD9C7"}
 
 ## Recall `table2`
 
