@@ -1,19 +1,25 @@
 ---
 title: "Chapter 7: Data Import"
 subtitle: "Introduction to Data Science"
-author: "Eric Nordmoe"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
+
 
 ```{r}
 #| label: setup
@@ -36,7 +42,7 @@ Some R data types:
 
 -   and others we'll focus on later like factors, times and dates
 
-# Demo: Examples of less friendly data sets
+# Demo: Examples of less friendly data sets  {background-color="#FAD9C7"}
 
 <!-- Duke basketball data and Anna R.'s Activity Roster Data, Math Department classes -->
 
@@ -132,7 +138,7 @@ Source: [Data Import Cheat Sheet](https://rstudio.github.io/cheatsheets/html/dat
 -   Many R functions for parsing vectors: `parse_number()`, `parse_datetime()`, etc.
 -   More on this later
 
-## **readr** Strategy for Parsing Files
+## **readr** Strategy for Parsing Files {.smaller}
 
 -   Guesses variable types based on first 1,000 rows (default)
 
@@ -142,6 +148,9 @@ Source: [Data Import Cheat Sheet](https://rstudio.github.io/cheatsheets/html/dat
     2.  Numbers\
     3.  Dates and Times\
     4.  Leaves as a character if all of the above fail.
+    
+. . . 
+
 
 -   Performs well except when...
 
@@ -193,7 +202,7 @@ hfidata <-
 
 ```
 
-# Data Entry {.smaller}
+## Data Entry {.smaller}
 
 -   R has quick data entry tools useful for creating small data sets and testing data import code
 
