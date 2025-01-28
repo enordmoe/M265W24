@@ -1,23 +1,25 @@
 ---
 title: "Chapter 9: Visualization with Layers"
 subtitle: "Part 1"
-author: "Introduction to Data Science"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
 editor: 
   markdown: 
     wrap: 72
 ---
+
 
 ```{r}
 #| label: setup
@@ -56,10 +58,14 @@ Answers:
 # use built-in text file called fwf-sample.txt
 fwf_sample <- readr_example("fwf-sample.txt")
 writeLines(read_lines(fwf_sample))
+# Guess based on position of empty columns
+read_fwf(fwf_sample, fwf_empty(fwf_sample, col_names = c("first", "last", "state", "ssn")))
 # A vector of field widths
 read_fwf(fwf_sample, fwf_widths(c(20, 10, 12), c("name", "state", "ssn")))
-# Paired vectors of start and end positions
-read_fwf(fwf_sample, fwf_positions(c(1, 30), c(20, 42), c("name", "ssn")))
+# Named arguments with start and end positions
+read_fwf(fwf_sample, fwf_cols(name = c(1, 20), ssn = c(30, 42)))
+read_fwf(fwf_sample, fwf_cols(first_name = c(1, 5), ssn = c(30, 42)))
+
 ```
 
 ## Find the Problem
@@ -91,6 +97,46 @@ Answers:
 5.  Second column is recognized as logical because of t and f.
 6.  One character variable with the non-syntactic name `a;b`
 :::
+
+## Fixing Data Import Errors
+
+Q: Identify the problems in the following inline CSVs and suggest fixes:
+
+```{r}
+#| eval: false
+read_csv("Name,Age,Score\nJohn,25,90\nAlice,30")
+read_csv("Name,Age,Score\nJohn,25,90\nAlice,N/A,85")
+read_csv("Name,Age,Score\nJohn;25;90\nAlice;30;85")
+read_csv("Name,Age,Score\nJohn,25\n,30,85")
+```
+
+::: notes
+Answers:
+
+1. First example: Alice's row is missing a value in the `Score` column. R will fill this with `NA`, but you should verify the source data.
+2. Second example: `N/A` is not automatically recognized as `NA`. Use the `na = "N/A"` argument to handle this.
+3. Third example: The delimiter is `;`, not `,`. Use `read_delim(file, delim = ";")`.
+4. Fourth example: The first row is missing a name, creating potential issues with alignment. Ensure the data source has consistent formatting.
+:::
+
+## Real-World Application
+
+::: incremental
+- Imagine you’re working with a dataset containing temperature readings, stored in a file named `weather_data.csv`, with columns for city, date, and temperature. The file has no column headers. How would you:
+    - Import the file and assign appropriate column names?
+    - Correctly input the date column if stored as `YYYYMMDD`?
+    - Handle temperatures stored as `"unknown"`?
+:::
+
+::: notes
+Answers:
+
+1. Import without headers: `read_csv("weather_data.csv", col_names = FALSE)`.
+2. Assign column names: `colnames(data) <- c("City", "Date", "Temperature")`.
+3. Parse the date: `mutate(data, Date = parse_date(Date, format = "%Y%m%d"))`.
+4. Handle `"unknown"`: Use `na = "unknown"` when importing the file.
+:::
+
 
 ## Outline
 
@@ -152,7 +198,9 @@ R](https://r-unimelb.gitbook.io/rbook/putting-the-r-in-art/ggplot2-and-the-gramm
 
 ![](img/r-ladies.png){width="390"}
 
-## Introduction to ggplot2
+# Introduction to ggplot2  {background-color="#FAD9C7"}
+
+## Basics of ggplot2
 
 -   **ggplot2** implements the grammar of graphics
 
@@ -223,7 +271,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
 
 
 
-# Exploring aesthetics with the Palmer Penguins
+# Exploring aesthetics with the Palmer Penguins  {background-color="#FAD9C7"}
 
 ## Data: Palmer Penguins
 
@@ -246,6 +294,21 @@ glimpse(penguins)
 ------------------------------------------------------------------------
 
 ::: panel-tabset
+## Code
+
+```{r}
+#| eval: false
+ggplot(data = penguins, 
+       mapping = aes(x = bill_depth_mm, y = bill_length_mm,
+                     color = species)) +
+  geom_point() +
+  labs(title = "Bill depth and length",
+       subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+       x = "Bill depth (mm)", y = "Bill length (mm)",
+       color = "Species") + 
+  scale_color_viridis_d()
+```
+
 ## Plot
 
 ```{r}
@@ -261,23 +324,10 @@ ggplot(data = penguins,
   scale_color_viridis_d()
 ```
 
-## Code
 
-```{r}
-#| eval: false
-ggplot(data = penguins, 
-       mapping = aes(x = bill_depth_mm, y = bill_length_mm,
-                     color = species)) +
-  geom_point() +
-  labs(title = "Bill depth and length",
-       subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
-       x = "Bill depth (mm)", y = "Bill length (mm)",
-       color = "Species") + 
-  scale_color_viridis_d()
-```
 :::
 
-# Aesthetics examples
+# Aesthetics examples  {background-color="#FAD9C7"}
 
 ## Color
 
@@ -412,7 +462,7 @@ ggplot(penguins,
   scale_colour_colorblind()
 ```
 
-# Faceting with the `mpg` data
+# Faceting with the `mpg` data {background-color="#FAD9C7"}
 
 ## Faceting
 
@@ -675,3 +725,23 @@ Two facet commands:
     -   Use `(. ~ colvar)` or `(rowvar ~ .)` for 1d sequence of panels
     -   Consider discretizing (e.g., `cut_number()`) for faceting with
         continuous variables
+
+
+## Key Concepts {.smaller}
+
+- **Grammar of Graphics**: ggplot2 builds plots layer by layer using aesthetics, geoms, scales, and themes.
+- **Aesthetic Mappings**: Use `aes()` to map variables to features like `color`, `shape`, `size`, and `alpha` for flexible customization.
+- **Faceting**:
+  - **`facet_wrap()`**: Creates a grid of plots based on a single variable or combinations of variables.
+  - **`facet_grid()`**: Forms a structured matrix of plots by combinations of rows and columns.
+- **Mapping vs Setting**:
+  - **Mapping**: Link plot features to variables in `aes()`.
+  - **Setting**: Apply fixed values outside `aes()` (e.g., `geom_point(size = 2)`).
+- **Special Scales**: Use tools like `scale_color_viridis_d()` for colorblind-friendly palettes and better accessibility.
+
+
+## Best Practices {.smaller}
+
+- Use **discrete variables** for faceting or discretize continuous variables with tools like `cut_number()`.
+- Avoid faceting with continuous variables unless binned into meaningful groups.
+- Layer geoms (e.g., `geom_point()` + `geom_smooth()`) to add context to your plots.
