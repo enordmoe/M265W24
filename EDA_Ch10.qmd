@@ -1,19 +1,20 @@
 ---
 title: "Chapter 10: Exploratory Data Analysis"
 subtitle: "Introduction to Data Science"
-author: "Eric Nordmoe"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
 editor: 
   markdown: 
     wrap: 72
@@ -27,6 +28,45 @@ library(tidyverse)
 library(fueleconomy)
 library(ggthemes)
 ```
+
+## Review Questions
+
+::: incremental
+1.  What is the difference between setting an aesthetic property inside
+    `aes()` versus outside of it in a ggplot function? Provide an
+    example.
+    
+    <br>
+2.  Why does mapping a categorical variable to the `shape` aesthetic
+    sometimes result in a warning?
+:::
+
+## Review Questions part 2
+
+::: incremental
+3. What does `geom_smooth()` do in a plot, and how can you modify it to display separate lines for different groups in the data?  
+
+    <br>
+
+4. What is the difference between `facet_wrap()` and `facet_grid()`, and when would you use each?
+
+:::
+
+
+## Review Questions part 3
+
+::: incremental
+5. What is a statistical transformation in ggplot2? Give an example of a geom that requires one and explain why.
+
+    <br>
+
+
+6. Explain the role of position adjustments in ggplot2. How do `"dodge"`, `"fill"`, and `"jitter"` affect the appearance of a plot?
+
+
+:::
+
+
 
 ## EDA Cycle
 
@@ -144,7 +184,7 @@ ggplot(diamonds, aes(x = carat)) +
 
 -   To show the proportions (relative frequency), use the `after_stat()`
     function as shown.
--   `The`count\` contains the frequency for each interval
+-   The `count` contains the frequency for each interval
 
 ```{r}
 ggplot(diamonds, aes(x = carat, y = after_stat(count / sum(count)))) + 
@@ -269,5 +309,3 @@ ggplot(cardata, aes(x = hwy, y = fct_rev(factor(year)), fill = factor(year))) +
 ggplot(smaller) +
   geom_boxplot(aes(x = carat, y = price, group = cut_width(carat, 0.25, boundary = 0)))
 ```
-
-
