@@ -35,8 +35,9 @@ library(ggthemes)
 1.  What is the difference between setting an aesthetic property inside
     `aes()` versus outside of it in a ggplot function? Provide an
     example.
-    
+
     <br>
+
 2.  Why does mapping a categorical variable to the `shape` aesthetic
     sometimes result in a warning?
 :::
@@ -44,29 +45,26 @@ library(ggthemes)
 ## Review Questions part 2
 
 ::: incremental
-3. What does `geom_smooth()` do in a plot, and how can you modify it to display separate lines for different groups in the data?  
+3.  What does `geom_smooth()` do in a plot, and how can you modify it to
+    display separate lines for different groups in the data?
 
     <br>
 
-4. What is the difference between `facet_wrap()` and `facet_grid()`, and when would you use each?
-
+4.  What is the difference between `facet_wrap()` and `facet_grid()`,
+    and when would you use each?
 :::
-
 
 ## Review Questions part 3
 
 ::: incremental
-5. What is a statistical transformation in ggplot2? Give an example of a geom that requires one and explain why.
+5.  What is a statistical transformation in ggplot2? Give an example of
+    a geom that requires one and explain why.
 
     <br>
 
-
-6. Explain the role of position adjustments in ggplot2. How do `"dodge"`, `"fill"`, and `"jitter"` affect the appearance of a plot?
-
-
+6.  Explain the role of position adjustments in ggplot2. How do
+    `"dodge"`, `"fill"`, and `"jitter"` affect the appearance of a plot?
 :::
-
-
 
 ## EDA Cycle
 
@@ -107,6 +105,8 @@ Understand:
 ggplot(vehicles, aes(x = make)) + 
   geom_bar()
 ```
+
+. . .
 
 -   Consider only the common makes?
 
