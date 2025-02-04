@@ -8,9 +8,9 @@
 <link href="Communication_Ch11_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Communication_Ch11_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="Communication_Ch11_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.52">
 
-  <meta name="author" content="Introduction to Data Science">
+  <meta name="author" content="MATH 265">
   <title>Chapter 11: Communication</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -70,7 +70,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -84,7 +84,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -391,13 +392,14 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
   <h1 class="title">Chapter 11: Communication</h1>
+  <p class="subtitle">Introduction to Data Science</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Introduction to Data Science 
+MATH 265 
 </div>
 </div>
 </div>
@@ -442,15 +444,15 @@ Introduction to Data Science
 </div>
 </section>
 <section>
-<section id="exploring-mammals-data" class="title-slide slide level1 center">
+<section id="exploring-mammals-data" class="title-slide slide level1 center" data-background-color="#ff961c">
 <h1>Exploring Mammals Data</h1>
 
 </section>
 <section id="a-first-look-at-the-data" class="slide level2 smaller">
 <h2>A first look at the data</h2>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-2_e6dbf1b97f283971bc9cf6ff69266e78">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mammals <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mammals.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">glimpse</span>(mammals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>mammals <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mammals.csv"</span>)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">glimpse</span>(mammals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 96
 Columns: 5
@@ -479,16 +481,20 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <div class="tab-content">
 <div id="tabset-1-1">
 <p>Start with a simple scatterplot and smoother:</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-3_0e9f42f381806618d306aeb2e362553d">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-3"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2">
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-4_8bf603b01faddbeb63ab06f6afba6da5">
+<div class="cell">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-4-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -501,23 +507,27 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Code</a></li><li><a href="#tabset-2-2">Plot</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1">
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-5_96186c4baaec9aabdef79cfc24903a6a">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="|4-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">subtitle =</span> <span class="st">"Who are the exceptions?"</span>,</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="at">caption =</span> <span class="st">"Source: Ramsey, F.L. and Schafer, D.W. (2013)"</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="|4-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb4-4"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
+<span id="cb4-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
+<span id="cb4-7"><a href=""></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
+<span id="cb4-8"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"Who are the exceptions?"</span>,</span>
+<span id="cb4-9"><a href=""></a>    <span class="at">caption =</span> <span class="st">"Source: Ramsey, F.L. and Schafer, D.W. (2013)"</span></span>
+<span id="cb4-10"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-2-2">
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-6_a67e542e59844e7142d2fa05d89455fd">
+<div class="cell">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-6-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -526,26 +536,30 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </section>
 <section id="identify-the-unusual-points" class="slide level2">
 <h2>Identify the unusual points</h2>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-7_d2542ca03913a5c9a23a51fdf875dc78">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|1-2, 6|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|1-2, 6|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
+<span id="cb5-3"><a href=""></a></span>
+<span id="cb5-4"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-6"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb5-8"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-9"><a href=""></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
+<span id="cb5-10"><a href=""></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
+<span id="cb5-11"><a href=""></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
+<span id="cb5-12"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
+<span id="cb5-13"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="identify-the-unusual-points-output" class="slide level2 output-location-slide"><h2>Identify the unusual points</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-7_d2542ca03913a5c9a23a51fdf875dc78">
+<section id="identify-the-unusual-points-output" class="slide level2 output-location-slide"><h2>Identify the unusual points</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="label-the-points" class="slide level2 smaller">
 <h2>Label the points</h2>
@@ -553,35 +567,39 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li>Use <code>geom_label_repel()</code> or <code>geom_text_repel()</code> from the <strong>ggrepel</strong> package for smart positioning of the labels</li>
 <li>Lots of fine tuning options</li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-8_c5cd2e876bfbbb067f4b71fb2180181d">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, </span>
-<span id="cb6-7"><a href="#cb6-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">geom_label_repel</span>(<span class="at">data =</span> extreme_points, <span class="fu">aes</span>(<span class="at">label =</span> Species)) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">labs</span>(</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="|6-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>extreme_points <span class="ot">&lt;-</span>mammals <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href=""></a>  <span class="fu">filter</span>(Body <span class="sc">&lt;</span> <span class="dv">1000</span>, Brain <span class="sc">&gt;</span> <span class="dv">1000</span>)</span>
+<span id="cb6-3"><a href=""></a></span>
+<span id="cb6-4"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb6-5"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-6"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> extreme_points, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, </span>
+<span id="cb6-7"><a href=""></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href=""></a>  <span class="fu">geom_label_repel</span>(<span class="at">data =</span> extreme_points, <span class="fu">aes</span>(<span class="at">label =</span> Species)) <span class="sc">+</span></span>
+<span id="cb6-9"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb6-10"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-11"><a href=""></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
+<span id="cb6-12"><a href=""></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
+<span id="cb6-13"><a href=""></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
+<span id="cb6-14"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
+<span id="cb6-15"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="label-the-points-output" class="slide level2 smaller output-location-slide"><h2>Label the points</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-8_c5cd2e876bfbbb067f4b71fb2180181d">
+<section id="label-the-points-output" class="slide level2 smaller output-location-slide"><h2>Label the points</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="pointing-out-the-small-brain-mammal" class="slide level2">
 <h2>Pointing out the Small Brain Mammal</h2>
 <p>We use filter to identify the mammal.</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-9_319ee64f7afe7d42abac3aede6d59790">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(Body <span class="sc">&gt;</span> <span class="dv">1000</span>, Brain <span class="sc">&lt;</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>mammals <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">filter</span>(Body <span class="sc">&gt;</span> <span class="dv">1000</span>, Brain <span class="sc">&lt;</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
   Species      Brain  Body Gestation Litter
@@ -593,28 +611,32 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <section id="pointing-out-the-small-brain-mammal-1" class="slide level2 smaller">
 <h2>Pointing out the Small Brain Mammal</h2>
 <p>Then manually position the annotation.</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_4b5fd4544887290cf50b3f9c1f4c9c29">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|10-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-5"><a href="#cb9-5"></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6"></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>)<span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">xmin =</span> <span class="dv">1250</span>, <span class="at">xmax =</span> <span class="dv">1550</span>, </span>
-<span id="cb9-11"><a href="#cb9-11"></a>           <span class="at">ymin =</span> <span class="dv">300</span>, <span class="at">ymax =</span> <span class="dv">800</span>) <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"segment"</span>, <span class="at">x =</span> <span class="dv">1850</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">xend =</span> <span class="dv">1550</span>, <span class="at">yend =</span> <span class="dv">800</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>           <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Hippos can</span><span class="sc">\n</span><span class="st">hardly hide!"</span>, <span class="at">x =</span> <span class="dv">1875</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb9-15"><a href="#cb9-15"></a>           <span class="at">hjust =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|10-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span></span>
+<span id="cb9-4"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-5"><a href=""></a>    <span class="at">x =</span> <span class="st">"Body Weight (kg)"</span>,</span>
+<span id="cb9-6"><a href=""></a>    <span class="at">y =</span> <span class="st">"Brain Weight (g)"</span>,</span>
+<span id="cb9-7"><a href=""></a>    <span class="at">title =</span> <span class="st">"Heavier mammals have more massive brains"</span>,</span>
+<span id="cb9-8"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"The larger than expected are highlighted"</span></span>
+<span id="cb9-9"><a href=""></a>)<span class="sc">+</span></span>
+<span id="cb9-10"><a href=""></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">xmin =</span> <span class="dv">1250</span>, <span class="at">xmax =</span> <span class="dv">1550</span>, </span>
+<span id="cb9-11"><a href=""></a>           <span class="at">ymin =</span> <span class="dv">300</span>, <span class="at">ymax =</span> <span class="dv">800</span>) <span class="sc">+</span></span>
+<span id="cb9-12"><a href=""></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"segment"</span>, <span class="at">x =</span> <span class="dv">1850</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">xend =</span> <span class="dv">1550</span>, <span class="at">yend =</span> <span class="dv">800</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb9-13"><a href=""></a>           <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
+<span id="cb9-14"><a href=""></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Hippos can</span><span class="sc">\n</span><span class="st">hardly hide!"</span>, <span class="at">x =</span> <span class="dv">1875</span>, <span class="at">y =</span> <span class="dv">1500</span>, <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb9-15"><a href=""></a>           <span class="at">hjust =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="pointing-out-the-small-brain-mammal-1-output" class="slide level2 smaller output-location-slide"><h2>Pointing out the Small Brain Mammal</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-10_4b5fd4544887290cf50b3f9c1f4c9c29">
+<section id="pointing-out-the-small-brain-mammal-1-output" class="slide level2 smaller output-location-slide"><h2>Pointing out the Small Brain Mammal</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="lets-reconsider" class="slide level2">
 <h2>Let’s reconsider</h2>
@@ -632,18 +654,22 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <ul>
 <li>Take logs and plot the logged data</li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-11_9640d6c2d7459e2a2f8d5198abf22eef">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>mammals <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">mutate</span>(<span class="at">logbody =</span> <span class="fu">log10</span>(Body), <span class="at">logbrain =</span> <span class="fu">log10</span>(Brain)) <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> logbody, <span class="at">y =</span> logbrain)) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>mammals <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">logbody =</span> <span class="fu">log10</span>(Body), <span class="at">logbrain =</span> <span class="fu">log10</span>(Brain)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> logbody, <span class="at">y =</span> logbrain)) <span class="sc">+</span></span>
+<span id="cb10-4"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="transform-the-data-output" class="slide level2 output-location-slide"><h2>Transform the data</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-11_9640d6c2d7459e2a2f8d5198abf22eef">
+<section id="transform-the-data-output" class="slide level2 output-location-slide"><h2>Transform the data</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="transform-the-scales" class="slide level2">
 <h2>Transform the scales</h2>
@@ -651,34 +677,42 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li><p>Now we can see the linear relatinship but our audience might not understand the logged scale</p></li>
 <li><p>Let <strong>ggplot2</strong> transform the scale instead</p></li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-12_8d7c3583b4aea5a039857b0094864c16">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)  <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F)  <span class="sc">+</span></span>
+<span id="cb11-4"><a href=""></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
+<span id="cb11-5"><a href=""></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="transform-the-scales-output" class="slide level2 output-location-slide"><h2>Transform the scales</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-12_8d7c3583b4aea5a039857b0094864c16">
+<section id="transform-the-scales-output" class="slide level2 output-location-slide"><h2>Transform the scales</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-12-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="maybe-customize-the-labels-in-comma-format" class="slide level2">
 <h2>Maybe customize the labels in comma format?</h2>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-13_f0015f4a17cc8f0f8f45f35aafa1a7b7">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6"></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb12-3"><a href=""></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href=""></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
+<span id="cb12-5"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
+<span id="cb12-6"><a href=""></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="maybe-customize-the-labels-in-comma-format-output" class="slide level2 output-location-slide"><h2>Maybe customize the labels in comma format?</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-13_f0015f4a17cc8f0f8f45f35aafa1a7b7">
+<section id="maybe-customize-the-labels-in-comma-format-output" class="slide level2 output-location-slide"><h2>Maybe customize the labels in comma format?</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="use-theme-to-enhance-the-appearance" class="slide level2">
 <h2>Use <code>theme()</code> to enhance the appearance</h2>
@@ -691,8 +725,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </ul>
 </div><div class="column" style="width:50%;">
 <p><img data-src="https://r4ds.hadley.nz/images/visualization-themes.png" alt="theme() gallery"></p>
-</div>
-</div>
+</div></div>
 </section>
 <section id="experiment-with-theme-options" class="slide level2">
 <h2>Experiment with <code>theme()</code> options</h2>
@@ -701,23 +734,27 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li><p>Default base size is 11 point</p></li>
 <li><p>The result is much easier to read.</p></li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-14_94d84a7e3bfd2166b6d76343e4054707">
-<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6"></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>) <span class="sc">+</span> </span>
-<span id="cb13-7"><a href="#cb13-7"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Brain)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-3"><a href=""></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span> </span>
+<span id="cb13-4"><a href=""></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">comma_format</span>()) <span class="sc">+</span></span>
+<span id="cb13-5"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Body weight (kg)"</span>,</span>
+<span id="cb13-6"><a href=""></a>       <span class="at">y =</span> <span class="st">"Brain weight (g)"</span>) <span class="sc">+</span> </span>
+<span id="cb13-7"><a href=""></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-</section><section id="experiment-with-theme-options-output" class="slide level2 output-location-slide"><h2>Experiment with <code>theme()</code> options</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-14_94d84a7e3bfd2166b6d76343e4054707">
+</section><section id="experiment-with-theme-options-output" class="slide level2 output-location-slide"><h2>Experiment with <code>theme()</code> options</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section></section>
 <section>
-<section id="question-do-heavier-mammals-have-longer-gestation-periods" class="title-slide slide level1 center">
+<section id="question-do-heavier-mammals-have-longer-gestation-periods" class="title-slide slide level1 center" data-background-color="#ff961c">
 <h1>Question: Do heavier mammals have longer gestation periods?</h1>
 
 </section>
@@ -726,31 +763,39 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <ul>
 <li>As before, we put <code>Body</code> weight on a log scale</li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-15_e7b84114e790707113ff5756588a2134">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">scale_x_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-3"><a href=""></a>  <span class="fu">scale_x_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="plot-the-data-output" class="slide level2 output-location-slide"><h2>Plot the data</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-15_e7b84114e790707113ff5756588a2134">
+<section id="plot-the-data-output" class="slide level2 output-location-slide"><h2>Plot the data</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="zoom-in" class="slide level2">
 <h2>Zoom in</h2>
 <p>We use <code>coord_cartesian()</code> to zoom in on the data</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-16_0a83832040843195901fc965193b02be">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-3"><a href=""></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
+<span id="cb15-4"><a href=""></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="zoom-in-output" class="slide level2 output-location-slide"><h2>Zoom in</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-16_0a83832040843195901fc965193b02be">
+<section id="zoom-in-output" class="slide level2 output-location-slide"><h2>Zoom in</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="add-tick-marks-and-reduce-clutter" class="slide level2">
 <h2>Add Tick Marks and Reduce Clutter</h2>
@@ -758,22 +803,26 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li><p>If we wanted more detail on the Y-axis, we could add more tick labels but</p></li>
 <li><p>Reduce some of the other “clutter” with <code>theme_minimal()</code> and turning off minor tick lines.</p></li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-17_f855e322e20fd7ad9c8e5f1baa835533">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>)) <span class="sc">+</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">400</span>, <span class="dv">50</span>), <span class="at">minor_breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">ggplot</span>(mammals, <span class="fu">aes</span>(<span class="at">x =</span> Body, <span class="at">y =</span> Gestation)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href=""></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb16-3"><a href=""></a>  <span class="fu">scale_x_log10</span>()<span class="sc">+</span></span>
+<span id="cb16-4"><a href=""></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">400</span>)) <span class="sc">+</span></span>
+<span id="cb16-5"><a href=""></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">400</span>, <span class="dv">50</span>), <span class="at">minor_breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb16-6"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-</section><section id="add-tick-marks-and-reduce-clutter-output" class="slide level2 output-location-slide"><h2>Add Tick Marks and Reduce Clutter</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-17_f855e322e20fd7ad9c8e5f1baa835533">
+</section><section id="add-tick-marks-and-reduce-clutter-output" class="slide level2 output-location-slide"><h2>Add Tick Marks and Reduce Clutter</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section></section>
 <section>
-<section id="layout" class="title-slide slide level1 center">
+<section id="layout" class="title-slide slide level1 center" data-background-color="#ff961c">
 <h1>Layout</h1>
 
 </section>
@@ -789,30 +838,30 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </ul>
 </section></section>
 <section>
-<section id="round-up-the-penguins" class="title-slide slide level1 center">
+<section id="round-up-the-penguins" class="title-slide slide level1 center" data-background-color="#CFE4FA">
 <h1>Round up the Penguins!</h1>
 
 </section>
 <section id="create-some-plots-and-save-them" class="slide level2 smaller">
 <h2>Create some plots and save them</h2>
 <p>Note that by default R assumes the first argument to <code>aes()</code> is <code>x</code> and the second is <code>y</code>.</p>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-18_07246dda28b4300c4f634f115c640da6">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_depth_mm, bill_length_mm)) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 1'</span>)</span>
-<span id="cb17-4"><a href="#cb17-4"></a></span>
-<span id="cb17-5"><a href="#cb17-5"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(flipper_length_mm, body_mass_g, <span class="at">group =</span> species)) <span class="sc">+</span> </span>
-<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 2'</span>)</span>
-<span id="cb17-8"><a href="#cb17-8"></a></span>
-<span id="cb17-9"><a href="#cb17-9"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-10"><a href="#cb17-10"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_length_mm, flipper_length_mm, <span class="at">color =</span> sex)) <span class="sc">+</span> </span>
-<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 3'</span>)</span>
-<span id="cb17-12"><a href="#cb17-12"></a></span>
-<span id="cb17-13"><a href="#cb17-13"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
-<span id="cb17-14"><a href="#cb17-14"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(body_mass_g)) <span class="sc">+</span> </span>
-<span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>island) <span class="sc">+</span> </span>
-<span id="cb17-16"><a href="#cb17-16"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_depth_mm, bill_length_mm)) <span class="sc">+</span> </span>
+<span id="cb17-3"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 1'</span>)</span>
+<span id="cb17-4"><a href=""></a></span>
+<span id="cb17-5"><a href=""></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
+<span id="cb17-6"><a href=""></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(flipper_length_mm, body_mass_g, <span class="at">group =</span> species)) <span class="sc">+</span> </span>
+<span id="cb17-7"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 2'</span>)</span>
+<span id="cb17-8"><a href=""></a></span>
+<span id="cb17-9"><a href=""></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
+<span id="cb17-10"><a href=""></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(bill_length_mm, flipper_length_mm, <span class="at">color =</span> sex)) <span class="sc">+</span> </span>
+<span id="cb17-11"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 3'</span>)</span>
+<span id="cb17-12"><a href=""></a></span>
+<span id="cb17-13"><a href=""></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(penguins) <span class="sc">+</span> </span>
+<span id="cb17-14"><a href=""></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(body_mass_g)) <span class="sc">+</span> </span>
+<span id="cb17-15"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>island) <span class="sc">+</span> </span>
+<span id="cb17-16"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Plot 4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators" class="slide level2">
@@ -821,29 +870,37 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li><p>See the text and <a href="https://patchwork.data-imaginist.com/index.html">here</a> for further details and limitless options.</p></li>
 <li><p>Legends can be combined in common <code>guide area()</code> as shown <a href="https://r4ds.hadley.nz/communication#sec-themes">here</a></p></li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-19_e7e89b7c5577e4f25deeb0c325dbe359">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(p1 <span class="sc">+</span> p2)<span class="sc">/</span>p3<span class="sc">/</span>p4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>(p1 <span class="sc">+</span> p2)<span class="sc">/</span>p3<span class="sc">/</span>p4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators-output" class="slide level2 output-location-slide"><h2>Now use patchwork to arrange the plots using math-like operators</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-19_e7e89b7c5577e4f25deeb0c325dbe359">
+<section id="now-use-patchwork-to-arrange-the-plots-using-math-like-operators-output" class="slide level2 output-location-slide"><h2>Now use patchwork to arrange the plots using math-like operators</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-19-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="colors" class="slide level2">
 <h2>Colors</h2>
 <ul>
 <li>Start with a simple plot and add color</li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-20_7f4ca870e7653ab8db2f91591c7502b1">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="colors-output" class="slide level2 output-location-slide"><h2>Colors</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-20_7f4ca870e7653ab8db2f91591c7502b1">
+<section id="colors-output" class="slide level2 output-location-slide"><h2>Colors</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-20-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="brew-colors" class="slide level2">
 <h2>Brew colors</h2>
@@ -855,37 +912,45 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 </ul></li>
 <li>Keep visibility and accessibility in mind</li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-21_30971ca086042cb8d1739dcbc73f7c33">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv)) <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href=""></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="brew-colors-output" class="slide level2 output-location-slide"><h2>Brew colors</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-21_30971ca086042cb8d1739dcbc73f7c33">
+<section id="brew-colors-output" class="slide level2 output-location-slide"><h2>Brew colors</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-21-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="specifying-colors-manually" class="slide level2">
 <h2>Specifying colors manually</h2>
 <ul>
 <li>I found a colorblind safe custom palette <a href="https://colorbrewer2.org/#type=qualitative&amp;scheme=Dark2&amp;n=3">here</a></li>
 </ul>
-<div class="cell" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-22_0e74a4b3808afff1ad9a4e5075757d90">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="|1-2,6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Manually specified color palette using HTML color codes</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>mycolors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1b9e77"</span>, <span class="st">"#d95f02"</span>, <span class="st">"#7570b3"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))<span class="sc">+</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> mycolors) <span class="sc">+</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">24</span>)) <span class="co"># increase base font size of current theme</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="|1-2,6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># Manually specified color palette using HTML color codes</span></span>
+<span id="cb21-2"><a href=""></a>mycolors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1b9e77"</span>, <span class="st">"#d95f02"</span>, <span class="st">"#7570b3"</span>)</span>
+<span id="cb21-3"><a href=""></a></span>
+<span id="cb21-4"><a href=""></a><span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> drv))<span class="sc">+</span></span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> mycolors) <span class="sc">+</span></span>
+<span id="cb21-7"><a href=""></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">24</span>)) <span class="co"># increase base font size of current theme</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="specifying-colors-manually-output" class="slide level2 output-location-slide"><h2>Specifying colors manually</h2><div class="cell output-location-slide" data-hash="Communication_Ch11_cache/revealjs/unnamed-chunk-22_0e74a4b3808afff1ad9a4e5075757d90">
+<section id="specifying-colors-manually-output" class="slide level2 output-location-slide"><h2>Specifying colors manually</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="Communication_Ch11_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="communication-tldr-version-revisited" class="slide level2 smaller">
 <h2>Communication: TLDR version Revisited</h2>
@@ -898,8 +963,10 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
 <li><p>Use <strong>themes</strong> to customize or standardize the looks of your plots (from default to minimalist to classic).</p></li>
 <li><p>Use <strong>layout</strong> tools to organize multiple plot displays and consolidate legend information.</p></li>
 </ol>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
+</div>
 </div>
 </section></section>
     </div>
@@ -928,14 +995,13 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
       // https://revealjs.com/config/
       Reveal.initialize({
 'controlsAuto': true,
-'previewLinksAuto': true,
-'smaller': false,
+'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":false,"theme":"whiteboard"},
+'chalkboard': {"buttons":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -956,7 +1022,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1089,7 +1155,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1185,18 +1251,7 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1228,11 +1283,50 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1242,8 +1336,17 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1257,7 +1360,11 @@ $ Litter    &lt;dbl&gt; 1.0, 4.6, 3.0, 1.5, 1.5, 1.0, 1.2, 1.0, 1.0, 1.0, 1.0, 1
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {

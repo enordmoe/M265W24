@@ -1,28 +1,30 @@
 ---
 title: "Chapter 11: Communication"
-author: "Introduction to Data Science"
+subtitle: "Introduction to Data Science"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
 editor: 
   markdown: 
     wrap: 72
 ---
 
+
 ```{r}
 #| label: setup
 #| include: false
 #| #| eval: true
-library(tidyverse)
 library(tidyverse)
 library(scales)
 library(ggrepel)
@@ -80,7 +82,7 @@ Strategies to enhance the effectiveness of your visualizations:
     consolidate legend information.
 :::
 
-# Exploring Mammals Data
+# Exploring Mammals Data  {background-color="#ff961c"}
 
 ## A first look at the data {.smaller}
 
@@ -328,7 +330,7 @@ ggplot(mammals, aes(x = Body, y = Brain)) +
 ```
 
 
-# Question: Do heavier mammals have longer gestation periods?
+# Question: Do heavier mammals have longer gestation periods?  {background-color="#ff961c"}
 
 ## Plot the data
 
@@ -371,7 +373,7 @@ ggplot(mammals, aes(x = Body, y = Gestation)) +
   theme_minimal()
 ```
 
-# Layout
+# Layout  {background-color="#ff961c"}
 
 
 ## Arranging Plots
@@ -383,7 +385,7 @@ ggplot(mammals, aes(x = Body, y = Gestation)) +
 
 * The **patchwork** package provides a highly flexible way to do this
 
-# Round up the Penguins!
+# Round up the Penguins!  {background-color="#CFE4FA"}
 
 ## Create some plots and save them {.smaller}
 
