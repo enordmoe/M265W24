@@ -36,7 +36,6 @@ mammals <- read_csv("data/mammals.csv")
 
 ## Outline
 
--   New outline here and overview
 -   Annotations
 -   Scales
 -   Themes
