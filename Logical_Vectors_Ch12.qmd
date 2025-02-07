@@ -1,22 +1,25 @@
 ---
 title: "Chapter 12: Logical Vectors"
-author: "Introduction to Data Science"
+subtitle: "Introduction to Data Science"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
-    callouts:
-      quote:
-        title: Quote
-        icon: quote
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  warning: false
+  echo: true
+  cache: true
+callouts:
+  quote:
+    title: Quote
+    icon: quote
 editor: 
   markdown: 
     wrap: 72
@@ -70,7 +73,7 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
     variables, e.g. `summarize(number_seniors = sum(age >= 65)`
 :::
 
-# The Chicago Flights Data Set
+# The Chicago Flights Data Set {background-color="#ff961c"}
 
 ## `chiflights2020`
 
@@ -81,7 +84,6 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 -   Same variables as NYC `flights` data
 
 -   csv accessed from my cloud space
-
 
 ## `chiflights2020` {.smaller}
 
@@ -95,7 +97,7 @@ glimpse(chiflights2020)
 
 ## Logical Vectors {.smaller}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 -   Simplest vectors of all: `TRUE`, `FALSE`, or `NA`
 
@@ -114,12 +116,11 @@ sample(c(TRUE, FALSE), 10, replace = TRUE)
 ![](https://www.random.org/analysis/dilbert.jpg){fig-alt="Random number generator"
 fig-align="center"}
 :::
-:::
+:::::
 
 ## The Danger of Logic
 
-![](https://imgs.xkcd.com/comics/logic_boat.png){fig-alt="Logic boat"
-fig-align="center"}
+![](https://imgs.xkcd.com/comics/logic_boat.png){fig-align="center"}
 
 ## Sample logical vector
 
@@ -127,7 +128,7 @@ fig-align="center"}
 
 ```{r}
 #| echo: false
-age <- sample(18:23, size = 10, replace = TRUE)
+age <-c(23, 23, 19, 22, 23, 20, 22, 23, 18, 20)
 age
 ```
 
@@ -147,7 +148,8 @@ age
 
 ```{r}
 #| echo: false
-major <- sample(c("STEM","non-STEM"), size = 10, replace = TRUE)
+major <- c("STEM", "STEM", "non-STEM", "STEM", "STEM", "STEM", "non-STEM", 
+"non-STEM", "STEM", "non-STEM")
 data.frame(age, major)
 ```
 
@@ -183,67 +185,8 @@ data.frame(age= age, major=major, Result = age>20 | major == "STEM")
 
 ![](https://r4ds.hadley.nz/diagrams/transform.png){fig-align="center"}
 
-## The Less Often Used exclusive OR: `xor()`
 
--   Using the `xor()` function
 
-```{r}
-#| eval: false
-xor(age > 20, major == "STEM")
-```
-
-```{r}
-#| echo: false
-data.frame(age = age, major = major, Result = xor(age>20, major == "STEM"))
-```
-
-## Combining several logicals with `any()` and `all()`?
-
-Add binary variable for study abroad participation and living on campus:
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.3,"Yes","No")
-data.frame(age, major, abroad, oncampus)
-```
-
-## Combining several logicals with `any()`?
-
-Add binary variable for study abroad participation and living on campus:
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.3,"Yes","No")
-data.frame(age, major, abroad, oncampus, anytrue = any(age>20, major=="STEM", abroad=="Yes", oncampus=="No"))
-```
-
-. . .
-
-That doesn't look right. Let's see if we have better luck with `all()`.
-
-## Combining several logicals with `all()?`
-
-```{r}
-#| echo: false
-abroad <- ifelse(runif(10)>.2,"Yes","No")
-oncampus <- ifelse(runif(10)>.2,"Yes","No")
-data.frame(age, major, abroad, oncampus, alltrue = all(age>20, major=="STEM", abroad=="Yes", oncampus=="Yes"))
-
-```
-
-. . .
-
-That doesn't look right either. What's going on?
-
-## Warnings {background-color="teal"}
-
-1.  The `any()` and `or()` logical combinations are **only** to be used
-    in `summarize()`.
-
-2.  The logical operators `&&` and `||` are used only in programming,
-    not in typical data science applications.
 
 ## The mystery of NAs
 
@@ -324,11 +267,11 @@ df |>
 -   For an `|` to be TRUE, **at least one** condition has to be knowably
     TRUE
 
-# Using Logicals to work with the Chicago Flights data
+# Using Logicals to work with the Chicago Flights data  {background-color="#CFE4FA"}
 
 ## Outline for missing parts
 
-Focus on Chicago flights data
+Focus on Chicago flights data 
 
 ### Filters
 
@@ -404,12 +347,14 @@ chiflights2020 |>
   select(time_hour ,dep_time, dest)  
 ```
 
-# Using logicals with `summarize()`
+# Using logicals with `summarize()`  {background-color="#ff961c"}
 
 ## Logical summaries {.smaller}
 
 Check if `any()` or `all()` conditions are true for the `group_by()`
-group: + During which hour spans were any or all flights out of O'Hare?
+group:   
+
++ During which hour spans were any or all departures out of O'Hare delayed by more than a half hour?
 
 ```{r}
 chiflights2020 |> 
@@ -427,12 +372,12 @@ chiflights2020 |>
 Find all the days where more than half of the non-cancelled flights were
 delayed in departing:
 
+
 ```{r}
 chiflights2020 |> 
   group_by(year, month, day) |> 
   summarize(
     num_flights = n(),
-    num_cancelled = sum(is.na(dep_time)),
     num_delayed = sum(dep_delay>0, na.rm = TRUE),
     prop_delayed = mean(dep_delay>0, na.rm = TRUE),
    .groups = "drop"
@@ -445,18 +390,18 @@ chiflights2020 |>
 Find all the dates on which more than half of the flights were either
 cancelled or delayed in departing
 
-```         
-*     Assume `dep_delay` missing means the flight was cancelled
-```
+* Assume `na` for `dep_delay`  means the flight was cancelled.
+
 
 ```{r}
 chiflights2020 |> 
-  mutate(flight_date = date(time_hour)) |>  # extrac using date() 
+  mutate(flight_date = date(time_hour)) |>  # extracT using date() 
   group_by(flight_date) |> 
   summarize(
     num_flights = n(),
     num_late_or_cancelled = sum(dep_delay > 0| is.na(dep_delay)),
-    prop_late_or_cancelled = mean(dep_delay > 0| is.na(dep_delay))
+    prop_late_or_cancelled = mean(dep_delay > 0| is.na(dep_delay)),
+   .groups = "drop"
   ) |> 
   filter(prop_late_or_cancelled > 0.5) 
 ```
@@ -479,8 +424,9 @@ chiflights2020 |>
 
 Use `case_when()` for more complicated transformations (beware of NAs)
 
-Create a new `timeofday` variable \* Value assigned based on first TRUE
-condition
+* Create a new `timeofday` variable   
+* Value assigned based on first TRUE
+condition  
 
 ```{r}
 #| output-location: column
@@ -500,3 +446,15 @@ chiflights2020 |>
   ) |> 
   count(fct_inorder(timeofday)) # put times of day in order
 ```
+
+
+## Summary {.smaller}
+::: incremental
+- **Logical vectors** are fundamental in data science, consisting of `TRUE`, `FALSE`, and `NA`.
+- Logical operations include **comparisons** (`>`, `==`) and **Boolean algebra** (`&`, `|`).
+- Used extensively in **filtering** (`filter()`), **summarizing** (`summarize()`), and **conditional transformations** (`mutate()` with `ifelse()` or `case_when()`).
+- Logical vectors interact with **missing values (`NA`)**, which can complicate comparisons and Boolean operations.
+- **Chicago Flights Dataset** demonstrates logical filtering, summarization, and transformation in real-world data.
+- **Summarizing**: `summarize()` can use logical conditions to compute **counts** (`sum(condition)`), **proportions** (`mean(condition)`), and **group-based logic** (`any()`, `all()`).
+
+:::

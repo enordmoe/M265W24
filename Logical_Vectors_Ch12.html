@@ -8,9 +8,9 @@
 <link href="Logical_Vectors_Ch12_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Logical_Vectors_Ch12_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="Logical_Vectors_Ch12_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.57">
 
-  <meta name="author" content="Introduction to Data Science">
+  <meta name="author" content="MATH 265">
   <title>Chapter 12: Logical Vectors</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -70,7 +70,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -84,7 +84,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -391,13 +392,14 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
   <h1 class="title">Chapter 12: Logical Vectors</h1>
+  <p class="subtitle">Introduction to Data Science</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Introduction to Data Science 
+MATH 265 
 </div>
 </div>
 </div>
@@ -433,7 +435,7 @@ Introduction to Data Science
 </div>
 </section>
 <section>
-<section id="the-chicago-flights-data-set" class="title-slide slide level1 center">
+<section id="the-chicago-flights-data-set" class="title-slide slide level1 center" data-background-color="#ff961c">
 <h1>The Chicago Flights Data Set</h1>
 
 </section>
@@ -448,11 +450,11 @@ Introduction to Data Science
 </section>
 <section id="chiflights2020-1" class="slide level2 smaller">
 <h2><code>chiflights2020</code></h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/eval- false_db3ffea123ccc76514f7cf12f75ea213">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Put this in the first R chunk in your Quarto file </span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># or at the command line</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>chiflights2020 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">glimpse</span>(chiflights2020)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># Put this in the first R chunk in your Quarto file </span></span>
+<span id="cb1-2"><a href=""></a><span class="co"># or at the command line</span></span>
+<span id="cb1-3"><a href=""></a>chiflights2020 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv"</span>)</span>
+<span id="cb1-4"><a href=""></a><span class="fu">glimpse</span>(chiflights2020)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 250,004
 Columns: 19
@@ -488,32 +490,31 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <li><p>Much more useful that you might expect.</p></li>
 <li><p>A random logical vector:</p></li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-3_142a226eb568331a8481a4d85b507ce7">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE</code></pre>
+<pre><code> [1]  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="https://www.random.org/analysis/dilbert.jpg" alt="Random number generator"></p>
+<p><img data-src="https://www.random.org/analysis/dilbert.jpg" class="quarto-figure quarto-figure-center" alt="Random number generator"></p>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 </section>
 <section id="the-danger-of-logic" class="slide level2">
 <h2>The Danger of Logic</h2>
 
-<img data-src="https://imgs.xkcd.com/comics/logic_boat.png" alt="Logic boat" class="r-stretch quarto-figure-center"></section>
+<img data-src="https://imgs.xkcd.com/comics/logic_boat.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="sample-logical-vector" class="slide level2">
 <h2>Sample logical vector</h2>
 <ul>
 <li>Generate a vector called <code>age</code> of random student ages:</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-4_3feef10c0f7834f78b668393d2b209ad">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] 21 20 20 23 19 20 18 23 19 21</code></pre>
+<pre><code> [1] 23 23 19 22 23 20 22 23 18 20</code></pre>
 </div>
 </div>
 <ul>
@@ -521,10 +522,10 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <ul>
 <li>The result is a <strong>logical vector</strong></li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-5_591644c88769b0219eb61dde3c8b9494">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>age <span class="sc">&gt;</span> <span class="dv">20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE</code></pre>
+<pre><code> [1]  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE</code></pre>
 </div>
 </div></li>
 </ul>
@@ -535,19 +536,19 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <li><p>Use logical operators to combine logicals as follows.</p></li>
 <li><p>Age and Major of each of the 10 students:</p></li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-6_3e48ccae170ec77c1ba1b7226f077728">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   age    major
-1   21     STEM
-2   20 non-STEM
-3   20     STEM
-4   23     STEM
-5   19 non-STEM
-6   20 non-STEM
-7   18     STEM
+1   23     STEM
+2   23     STEM
+3   19 non-STEM
+4   22     STEM
+5   23     STEM
+6   20     STEM
+7   22 non-STEM
 8   23 non-STEM
-9   19     STEM
-10  21 non-STEM</code></pre>
+9   18     STEM
+10  20 non-STEM</code></pre>
 </div>
 </div>
 </section>
@@ -556,22 +557,22 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <ul>
 <li>Using the <code>&amp;</code> AND operator</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-7_32eac16fdb1113bcaab32432344e3c47">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">&amp;</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">&amp;</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-8_2b0b8b67963cc30f05d9d1702e6aec2c">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   age    major Result
-1   21     STEM   TRUE
-2   20 non-STEM  FALSE
-3   20     STEM  FALSE
-4   23     STEM   TRUE
-5   19 non-STEM  FALSE
-6   20 non-STEM  FALSE
-7   18     STEM  FALSE
-8   23 non-STEM  FALSE
-9   19     STEM  FALSE
-10  21 non-STEM  FALSE</code></pre>
+1   21 non-STEM  FALSE
+2   19 non-STEM  FALSE
+3   21 non-STEM  FALSE
+4   23 non-STEM  FALSE
+5   23     STEM   TRUE
+6   18     STEM  FALSE
+7   22 non-STEM  FALSE
+8   18     STEM  FALSE
+9   20 non-STEM  FALSE
+10  21     STEM   TRUE</code></pre>
 </div>
 </div>
 </section>
@@ -580,142 +581,49 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <ul>
 <li>Using the <code>|</code> OR operator</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-9_b83fc32687912a9c633832d43ac2ec5a">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">|</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>age <span class="sc">&gt;</span> <span class="dv">20</span> <span class="sc">|</span> major <span class="sc">==</span> <span class="st">"STEM"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-10_de67bd3565de0e812c4eddcb94c25d8d">
+<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   age    major Result
-1   21     STEM   TRUE
-2   20 non-STEM  FALSE
-3   20     STEM   TRUE
-4   23     STEM   TRUE
-5   19 non-STEM  FALSE
-6   20 non-STEM  FALSE
-7   18     STEM   TRUE
-8   23 non-STEM   TRUE
-9   19     STEM   TRUE
-10  21 non-STEM   TRUE</code></pre>
+1   21 non-STEM   TRUE
+2   19 non-STEM  FALSE
+3   21 non-STEM   TRUE
+4   23 non-STEM   TRUE
+5   23     STEM   TRUE
+6   18     STEM   TRUE
+7   22 non-STEM   TRUE
+8   18     STEM   TRUE
+9   20 non-STEM  FALSE
+10  21     STEM   TRUE</code></pre>
 </div>
 </div>
 </section>
 <section id="boolean-algebra-in-a-nutshell" class="slide level2">
 <h2>Boolean Algebra in a Nutshell</h2>
 
-<img data-src="https://r4ds.hadley.nz/diagrams/transform.png" class="r-stretch quarto-figure-center"></section>
-<section id="the-less-often-used-exclusive-or-xor" class="slide level2">
-<h2>The Less Often Used exclusive OR: <code>xor()</code></h2>
-<ul>
-<li>Using the <code>xor()</code> function</li>
-</ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-11_72a811fac5843813c837c5e136105449">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">xor</span>(age <span class="sc">&gt;</span> <span class="dv">20</span>, major <span class="sc">==</span> <span class="st">"STEM"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-12_4500b35fad67a4390c00f7897e0d57d5">
-<div class="cell-output cell-output-stdout">
-<pre><code>   age    major Result
-1   21     STEM  FALSE
-2   20 non-STEM  FALSE
-3   20     STEM   TRUE
-4   23     STEM  FALSE
-5   19 non-STEM  FALSE
-6   20 non-STEM  FALSE
-7   18     STEM   TRUE
-8   23 non-STEM   TRUE
-9   19     STEM   TRUE
-10  21 non-STEM   TRUE</code></pre>
-</div>
-</div>
-</section>
-<section id="combining-several-logicals-with-any-and-all" class="slide level2">
-<h2>Combining several logicals with <code>any()</code> and <code>all()</code>?</h2>
-<p>Add binary variable for study abroad participation and living on campus:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-13_d76214a8e66cd5c031d05a5a90ffd611">
-<div class="cell-output cell-output-stdout">
-<pre><code>   age    major abroad oncampus
-1   21     STEM    Yes      Yes
-2   20 non-STEM    Yes      Yes
-3   20     STEM     No      Yes
-4   23     STEM    Yes      Yes
-5   19 non-STEM    Yes       No
-6   20 non-STEM    Yes      Yes
-7   18     STEM    Yes      Yes
-8   23 non-STEM    Yes      Yes
-9   19     STEM    Yes       No
-10  21 non-STEM    Yes      Yes</code></pre>
-</div>
-</div>
-</section>
-<section id="combining-several-logicals-with-any" class="slide level2">
-<h2>Combining several logicals with <code>any()</code>?</h2>
-<p>Add binary variable for study abroad participation and living on campus:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-14_61fffc2d2159b46112290411051dbe36">
-<div class="cell-output cell-output-stdout">
-<pre><code>   age    major abroad oncampus anytrue
-1   21     STEM    Yes       No    TRUE
-2   20 non-STEM    Yes      Yes    TRUE
-3   20     STEM    Yes       No    TRUE
-4   23     STEM    Yes      Yes    TRUE
-5   19 non-STEM    Yes       No    TRUE
-6   20 non-STEM    Yes      Yes    TRUE
-7   18     STEM    Yes       No    TRUE
-8   23 non-STEM     No       No    TRUE
-9   19     STEM    Yes      Yes    TRUE
-10  21 non-STEM    Yes      Yes    TRUE</code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>That doesn’t look right. Let’s see if we have better luck with <code>all()</code>.</p>
-</div>
-</section>
-<section id="combining-several-logicals-with-all" class="slide level2">
-<h2>Combining several logicals with <code>all()?</code></h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-15_c8b700132747514a82316366d3520d53">
-<div class="cell-output cell-output-stdout">
-<pre><code>   age    major abroad oncampus alltrue
-1   21     STEM    Yes       No   FALSE
-2   20 non-STEM    Yes      Yes   FALSE
-3   20     STEM    Yes      Yes   FALSE
-4   23     STEM    Yes      Yes   FALSE
-5   19 non-STEM    Yes      Yes   FALSE
-6   20 non-STEM    Yes      Yes   FALSE
-7   18     STEM    Yes      Yes   FALSE
-8   23 non-STEM    Yes       No   FALSE
-9   19     STEM     No      Yes   FALSE
-10  21 non-STEM    Yes      Yes   FALSE</code></pre>
-</div>
-</div>
-<div class="fragment">
-<p>That doesn’t look right either. What’s going on?</p>
-</div>
-</section>
-<section id="warnings" class="slide level2" data-background-color="teal">
-<h2>Warnings</h2>
-<ol type="1">
-<li><p>The <code>any()</code> and <code>or()</code> logical combinations are <strong>only</strong> to be used in <code>summarize()</code>.</p></li>
-<li><p>The logical operators <code>&amp;&amp;</code> and <code>||</code> are used only in programming, not in typical data science applications.</p></li>
-</ol>
-</section>
+<img data-src="https://r4ds.hadley.nz/diagrams/transform.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="the-mystery-of-nas" class="slide level2">
 <h2>The mystery of NAs</h2>
 <ul>
 <li>Missing values are contagious. See these logical tests.</li>
 </ul>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-16_b5cbb9c0bc5a168f58be9b07d98835e0">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="cn">NA</span> <span class="sc">&lt;</span> <span class="dv">25</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="cn">NA</span> <span class="sc">&lt;</span> <span class="dv">25</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-17_e60cfe4483b6dd57101a2285ea8b8b26">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="dv">10</span> <span class="sc">==</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="dv">10</span> <span class="sc">==</span> <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-18_a437024261f97c710d59c0e2869a5810">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># We don't know what we don't know</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="cn">NA</span> <span class="sc">==</span> <span class="cn">NA</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># We don't know what we don't know</span></span>
+<span id="cb16-2"><a href=""></a><span class="cn">NA</span> <span class="sc">==</span> <span class="cn">NA</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -742,25 +650,25 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 </div></aside></section>
 <section id="r4ds-example-illustrates-why" class="slide level2">
 <h2>R4DS example illustrates why</h2>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-19_535d1ecfafc5a2e3d79a2a9e3246924b">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># We don't know how tall Olds was</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>height_olds <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>height_olds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="co"># We don't know how tall Olds was</span></span>
+<span id="cb18-2"><a href=""></a>height_olds <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb18-3"><a href=""></a>height_olds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-20_766c420e4dcdf86483b48f39f62f2018">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># We don't know how tall Upton was</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a>height_upton <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a>height_upton</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="co"># We don't know how tall Upton was</span></span>
+<span id="cb20-2"><a href=""></a>height_upton <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb20-3"><a href=""></a>height_upton</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-21_28f79537d4054ae17a26aa7f46afb18c">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Were Olds and Upton the same height?</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>height_olds <span class="sc">==</span> height_upton</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="co"># Were Olds and Upton the same height?</span></span>
+<span id="cb22-2"><a href=""></a>height_olds <span class="sc">==</span> height_upton</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -773,14 +681,14 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="boolean-and-missing-values" class="slide level2 smaller">
 <h2>Boolean and Missing Values</h2>
 <p>Combining logicals with missing (NA) values can be <span style="color: red;">treacherous</span> as this example from R4DS illustrates:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-22_326a7e4798112d30d5ffc43c06b409eb">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span>))</span>
-<span id="cb29-2"><a href="#cb29-2"></a></span>
-<span id="cb29-3"><a href="#cb29-3"></a>df <span class="sc">|&gt;</span> </span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb29-5"><a href="#cb29-5"></a>    <span class="at">and =</span> x <span class="sc">&amp;</span> <span class="cn">NA</span>,</span>
-<span id="cb29-6"><a href="#cb29-6"></a>    <span class="at">or =</span> x <span class="sc">|</span> <span class="cn">NA</span></span>
-<span id="cb29-7"><a href="#cb29-7"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span>))</span>
+<span id="cb24-2"><a href=""></a></span>
+<span id="cb24-3"><a href=""></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb24-4"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-5"><a href=""></a>    <span class="at">and =</span> x <span class="sc">&amp;</span> <span class="cn">NA</span>,</span>
+<span id="cb24-6"><a href=""></a>    <span class="at">or =</span> x <span class="sc">|</span> <span class="cn">NA</span></span>
+<span id="cb24-7"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   x     and   or   
@@ -796,7 +704,7 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 </ul>
 </section></section>
 <section>
-<section id="using-logicals-to-work-with-the-chicago-flights-data" class="title-slide slide level1 center">
+<section id="using-logicals-to-work-with-the-chicago-flights-data" class="title-slide slide level1 center" data-background-color="#CFE4FA">
 <h1>Using Logicals to work with the Chicago Flights data</h1>
 
 </section>
@@ -817,9 +725,9 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="simple-filtering" class="slide level2">
 <h2>Simple Filtering</h2>
 <p>Filter all flights leaving Midway (MDW)</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-23_44770b9147f926b5e59796633524d65b">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"MDW"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href=""></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"MDW"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 60,365 × 19
     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
@@ -844,9 +752,9 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="simple-filtering-1" class="slide level2">
 <h2>Simple Filtering</h2>
 <p>Filter cancelled flights</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-24_e460dc7acf84564268842373e816cb8d">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb28-2"><a href=""></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 17,287 × 19
     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
@@ -871,11 +779,11 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="simple-filtering-2" class="slide level2">
 <h2>Simple Filtering</h2>
 <p>Flights that “made up time” in flight:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-25_42073673ec2d00322740d99a193516ee">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">filter</span>(arr_delay <span class="sc">&lt;</span> dep_delay) <span class="sc">|&gt;</span> </span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">select</span>(time_hour, dep_delay, arr_delay) <span class="sc">|&gt;</span> </span>
-<span id="cb35-4"><a href="#cb35-4"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(dep_delay)) <span class="co"># put longest delays first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href=""></a>  <span class="fu">filter</span>(arr_delay <span class="sc">&lt;</span> dep_delay) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href=""></a>  <span class="fu">select</span>(time_hour, dep_delay, arr_delay) <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(dep_delay)) <span class="co"># put longest delays first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 185,397 × 3
    time_hour           dep_delay arr_delay
@@ -897,9 +805,9 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="complex-filtering" class="slide level2">
 <h2>Complex Filtering</h2>
 <p>Find all the flights that left from O’Hare (ORD) before noon destined for Orlando (MCO) and arrived more than one hour late.</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-26_7123d0828a8d2157529822660a5ed92b">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"ORD"</span>, dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>, dest <span class="sc">==</span> <span class="st">"MCO"</span>, arr_delay <span class="sc">&gt;</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb32-2"><a href=""></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"ORD"</span>, dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>, dest <span class="sc">==</span> <span class="st">"MCO"</span>, arr_delay <span class="sc">&gt;</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 33 × 19
     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
@@ -924,13 +832,13 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="filtering-with-in" class="slide level2 smaller">
 <h2>Filtering with %in%</h2>
 <p>All flights leaving Midway headed for Florida destinations:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-27_c9d5b400b91954ca43a62a68d00df891">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>florida_dest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"DAB"</span>, <span class="st">"FLL"</span>, <span class="st">"RSW"</span>, <span class="st">"VPS"</span>, <span class="st">"GNV"</span>, <span class="st">"JAX"</span>, <span class="st">"EYW"</span>, <span class="st">"MLB"</span>, <span class="st">"MIA"</span>, </span>
-<span id="cb39-2"><a href="#cb39-2"></a><span class="st">"MCO"</span>, <span class="st">"ECP"</span>, <span class="st">"PNS"</span>, <span class="st">"PGD"</span>, <span class="st">"SFB"</span>, <span class="st">"SRQ"</span>, <span class="st">"PIE"</span>, <span class="st">"TLH"</span>, <span class="st">"TPA"</span>, </span>
-<span id="cb39-3"><a href="#cb39-3"></a><span class="st">"PBI"</span>) <span class="co"># from Wikipedia</span></span>
-<span id="cb39-4"><a href="#cb39-4"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb39-5"><a href="#cb39-5"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"MDW"</span>, dest <span class="sc">%in%</span> florida_dest) <span class="sc">|&gt;</span> </span>
-<span id="cb39-6"><a href="#cb39-6"></a>  <span class="fu">select</span>(year, month, day, origin, dest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>florida_dest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"DAB"</span>, <span class="st">"FLL"</span>, <span class="st">"RSW"</span>, <span class="st">"VPS"</span>, <span class="st">"GNV"</span>, <span class="st">"JAX"</span>, <span class="st">"EYW"</span>, <span class="st">"MLB"</span>, <span class="st">"MIA"</span>, </span>
+<span id="cb34-2"><a href=""></a><span class="st">"MCO"</span>, <span class="st">"ECP"</span>, <span class="st">"PNS"</span>, <span class="st">"PGD"</span>, <span class="st">"SFB"</span>, <span class="st">"SRQ"</span>, <span class="st">"PIE"</span>, <span class="st">"TLH"</span>, <span class="st">"TPA"</span>, </span>
+<span id="cb34-3"><a href=""></a><span class="st">"PBI"</span>) <span class="co"># from Wikipedia</span></span>
+<span id="cb34-4"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb34-5"><a href=""></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"MDW"</span>, dest <span class="sc">%in%</span> florida_dest) <span class="sc">|&gt;</span> </span>
+<span id="cb34-6"><a href=""></a>  <span class="fu">select</span>(year, month, day, origin, dest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7,637 × 5
     year month   day origin dest 
@@ -952,10 +860,10 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="filtering-with-in-with-nas" class="slide level2 smaller">
 <h2>Filtering with %in% with NAs</h2>
 <p>Find all flights to Florida that were either canceled or left on the hour</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-28_e03241c207a39ab6e3337e54ea8424b7">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">filter</span>(dest <span class="sc">%in%</span> florida_dest, dep_time <span class="sc">%in%</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2400</span>,<span class="dv">100</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">select</span>(time_hour ,dep_time, dest)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb36-2"><a href=""></a>  <span class="fu">filter</span>(dest <span class="sc">%in%</span> florida_dest, dep_time <span class="sc">%in%</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2400</span>,<span class="dv">100</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb36-3"><a href=""></a>  <span class="fu">select</span>(time_hour ,dep_time, dest)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2,026 × 3
    time_hour           dep_time dest 
@@ -975,21 +883,24 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 </div>
 </section></section>
 <section>
-<section id="using-logicals-with-summarize" class="title-slide slide level1 center">
+<section id="using-logicals-with-summarize" class="title-slide slide level1 center" data-background-color="#ff961c">
 <h1>Using logicals with <code>summarize()</code></h1>
 
 </section>
 <section id="logical-summaries" class="slide level2 smaller">
 <h2>Logical summaries</h2>
-<p>Check if <code>any()</code> or <code>all()</code> conditions are true for the <code>group_by()</code> group: + During which hour spans were any or all flights out of O’Hare?</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-29_9fb57f9673d14e832ac9b71ef92cba43">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">|&gt;</span> </span>
-<span id="cb43-3"><a href="#cb43-3"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb43-4"><a href="#cb43-4"></a>    <span class="at">all_long_delayed =</span> <span class="fu">all</span>(dep_delay <span class="sc">&gt;=</span> <span class="dv">30</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb43-5"><a href="#cb43-5"></a>    <span class="at">any_long_delayed =</span> <span class="fu">any</span>(dep_delay <span class="sc">&gt;=</span> <span class="dv">30</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb43-6"><a href="#cb43-6"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb43-7"><a href="#cb43-7"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Check if <code>any()</code> or <code>all()</code> conditions are true for the <code>group_by()</code> group:</p>
+<ul>
+<li>During which hour spans were any or all departures out of O’Hare delayed by more than a half hour?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href=""></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href=""></a>  <span class="fu">summarize</span>(</span>
+<span id="cb38-4"><a href=""></a>    <span class="at">all_long_delayed =</span> <span class="fu">all</span>(dep_delay <span class="sc">&gt;=</span> <span class="dv">30</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb38-5"><a href=""></a>    <span class="at">any_long_delayed =</span> <span class="fu">any</span>(dep_delay <span class="sc">&gt;=</span> <span class="dv">30</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb38-6"><a href=""></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb38-7"><a href=""></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 366 × 5
     year month   day all_long_delayed any_long_delayed
@@ -1011,48 +922,50 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <section id="numerical-summaries-using-logical-vectors" class="slide level2 smaller">
 <h2>Numerical Summaries Using Logical Vectors</h2>
 <p>Find all the days where more than half of the non-cancelled flights were delayed in departing:</p>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-30_974723cfc7de9a3ff973edf79c601d85">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">|&gt;</span> </span>
-<span id="cb45-3"><a href="#cb45-3"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb45-4"><a href="#cb45-4"></a>    <span class="at">num_flights =</span> <span class="fu">n</span>(),</span>
-<span id="cb45-5"><a href="#cb45-5"></a>    <span class="at">num_cancelled =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(dep_time)),</span>
-<span id="cb45-6"><a href="#cb45-6"></a>    <span class="at">num_delayed =</span> <span class="fu">sum</span>(dep_delay<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb45-7"><a href="#cb45-7"></a>    <span class="at">prop_delayed =</span> <span class="fu">mean</span>(dep_delay<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb45-8"><a href="#cb45-8"></a>   <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb45-9"><a href="#cb45-9"></a>    ) <span class="sc">|&gt;</span> </span>
-<span id="cb45-10"><a href="#cb45-10"></a>  <span class="fu">filter</span>(prop_delayed <span class="sc">&gt;</span> <span class="fl">0.5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb40-2"><a href=""></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">|&gt;</span> </span>
+<span id="cb40-3"><a href=""></a>  <span class="fu">summarize</span>(</span>
+<span id="cb40-4"><a href=""></a>    <span class="at">num_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb40-5"><a href=""></a>    <span class="at">num_delayed =</span> <span class="fu">sum</span>(dep_delay<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-6"><a href=""></a>    <span class="at">prop_delayed =</span> <span class="fu">mean</span>(dep_delay<span class="sc">&gt;</span><span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-7"><a href=""></a>   <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb40-8"><a href=""></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb40-9"><a href=""></a>  <span class="fu">filter</span>(prop_delayed <span class="sc">&gt;</span> <span class="fl">0.5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 7
-    year month   day num_flights num_cancelled num_delayed prop_delayed
-   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;int&gt;         &lt;int&gt;       &lt;int&gt;        &lt;dbl&gt;
- 1  2020     1     4         986             3         546        0.555
- 2  2020     1    11         788           414         223        0.596
- 3  2020     1    12        1004            35         565        0.583
- 4  2020     1    18         771            87         470        0.687
- 5  2020     1    23        1083            21         580        0.546
- 6  2020     2     6        1086            27         709        0.670
- 7  2020     2     9        1012           195         443        0.542
- 8  2020     2    13        1105           115         822        0.831
- 9  2020     2    26        1087             7         565        0.523
-10  2020     7    19         742             3         452        0.612</code></pre>
+<pre><code># A tibble: 10 × 6
+    year month   day num_flights num_delayed prop_delayed
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;int&gt;       &lt;int&gt;        &lt;dbl&gt;
+ 1  2020     1     4         986         546        0.555
+ 2  2020     1    11         788         223        0.596
+ 3  2020     1    12        1004         565        0.583
+ 4  2020     1    18         771         470        0.687
+ 5  2020     1    23        1083         580        0.546
+ 6  2020     2     6        1086         709        0.670
+ 7  2020     2     9        1012         443        0.542
+ 8  2020     2    13        1105         822        0.831
+ 9  2020     2    26        1087         565        0.523
+10  2020     7    19         742         452        0.612</code></pre>
 </div>
 </div>
 </section>
 <section id="complex-filtering-1" class="slide level2 smaller">
 <h2>Complex Filtering</h2>
 <p>Find all the dates on which more than half of the flights were either cancelled or delayed in departing</p>
-<pre><code>*     Assume `dep_delay` missing means the flight was cancelled</code></pre>
-<div class="cell" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-31_b1160811dc94a769ccf259c7a7d8a0ce">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb48-2"><a href="#cb48-2"></a>  <span class="fu">mutate</span>(<span class="at">flight_date =</span> <span class="fu">date</span>(time_hour)) <span class="sc">|&gt;</span>  <span class="co"># extrac using date() </span></span>
-<span id="cb48-3"><a href="#cb48-3"></a>  <span class="fu">group_by</span>(flight_date) <span class="sc">|&gt;</span> </span>
-<span id="cb48-4"><a href="#cb48-4"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb48-5"><a href="#cb48-5"></a>    <span class="at">num_flights =</span> <span class="fu">n</span>(),</span>
-<span id="cb48-6"><a href="#cb48-6"></a>    <span class="at">num_late_or_cancelled =</span> <span class="fu">sum</span>(dep_delay <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">|</span> <span class="fu">is.na</span>(dep_delay)),</span>
-<span id="cb48-7"><a href="#cb48-7"></a>    <span class="at">prop_late_or_cancelled =</span> <span class="fu">mean</span>(dep_delay <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">|</span> <span class="fu">is.na</span>(dep_delay))</span>
-<span id="cb48-8"><a href="#cb48-8"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb48-9"><a href="#cb48-9"></a>  <span class="fu">filter</span>(prop_late_or_cancelled <span class="sc">&gt;</span> <span class="fl">0.5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Assume <code>na</code> for <code>dep_delay</code> means the flight was cancelled.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">flight_date =</span> <span class="fu">date</span>(time_hour)) <span class="sc">|&gt;</span>  <span class="co"># extracT using date() </span></span>
+<span id="cb42-3"><a href=""></a>  <span class="fu">group_by</span>(flight_date) <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href=""></a>  <span class="fu">summarize</span>(</span>
+<span id="cb42-5"><a href=""></a>    <span class="at">num_flights =</span> <span class="fu">n</span>(),</span>
+<span id="cb42-6"><a href=""></a>    <span class="at">num_late_or_cancelled =</span> <span class="fu">sum</span>(dep_delay <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">|</span> <span class="fu">is.na</span>(dep_delay)),</span>
+<span id="cb42-7"><a href=""></a>    <span class="at">prop_late_or_cancelled =</span> <span class="fu">mean</span>(dep_delay <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">|</span> <span class="fu">is.na</span>(dep_delay)),</span>
+<span id="cb42-8"><a href=""></a>   <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb42-9"><a href=""></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb42-10"><a href=""></a>  <span class="fu">filter</span>(prop_late_or_cancelled <span class="sc">&gt;</span> <span class="fl">0.5</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 30 × 4
    flight_date num_flights num_late_or_cancelled prop_late_or_cancelled
@@ -1077,13 +990,13 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 <li>Create a simple <code>morning_departure</code> binary variable:</li>
 <li>NA values persist</li>
 </ul>
-<div class="cell columns column-output-location" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-32_49402555a3acfb52ef954ccd149b86de">
+<div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb50-2"><a href="#cb50-2"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb50-3"><a href="#cb50-3"></a>    <span class="at">morning =</span> <span class="fu">ifelse</span>((dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>), <span class="st">"morning"</span>, <span class="st">"non-morning"</span>)</span>
-<span id="cb50-4"><a href="#cb50-4"></a>    ) <span class="sc">|&gt;</span> </span>
-<span id="cb50-5"><a href="#cb50-5"></a>  <span class="fu">count</span>(morning) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb44-3"><a href=""></a>    <span class="at">morning =</span> <span class="fu">ifelse</span>((dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>), <span class="st">"morning"</span>, <span class="st">"non-morning"</span>)</span>
+<span id="cb44-4"><a href=""></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb44-5"><a href=""></a>  <span class="fu">count</span>(morning) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
@@ -1093,30 +1006,33 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 2 non-morning 141138
 3 &lt;NA&gt;         17271</code></pre>
 </div>
-</div>
-</div>
+</div></div>
 </section>
 <section id="conditional-transformation-case_when" class="slide level2 smaller">
 <h2>Conditional transformation: <code>case_when()</code></h2>
 <p>Use <code>case_when()</code> for more complicated transformations (beware of NAs)</p>
-<p>Create a new <code>timeofday</code> variable * Value assigned based on first TRUE condition</p>
-<div class="cell columns column-output-location" data-hash="Logical_Vectors_Ch12_cache/revealjs/unnamed-chunk-33_23a50472d7c7462e6143ba20fe8e5c11">
+<ul>
+<li>Create a new <code>timeofday</code> variable<br>
+</li>
+<li>Value assigned based on first TRUE condition</li>
+</ul>
+<div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb52-2"><a href="#cb52-2"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb52-3"><a href="#cb52-3"></a>    <span class="at">timeofday =</span> <span class="fu">case_when</span>(</span>
-<span id="cb52-4"><a href="#cb52-4"></a>      <span class="fu">is.na</span>(dep_time)      <span class="sc">~</span> <span class="st">"cancelled"</span>,</span>
-<span id="cb52-5"><a href="#cb52-5"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">0300</span>       <span class="sc">~</span> <span class="st">"late night"</span>,</span>
-<span id="cb52-6"><a href="#cb52-6"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">0700</span>       <span class="sc">~</span> <span class="st">"early morning"</span>,</span>
-<span id="cb52-7"><a href="#cb52-7"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1100</span>       <span class="sc">~</span> <span class="st">"morning"</span>,</span>
-<span id="cb52-8"><a href="#cb52-8"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1400</span>       <span class="sc">~</span> <span class="st">"midday"</span>,</span>
-<span id="cb52-9"><a href="#cb52-9"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1700</span>       <span class="sc">~</span> <span class="st">"afternoon"</span>,</span>
-<span id="cb52-10"><a href="#cb52-10"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">2200</span>       <span class="sc">~</span> <span class="st">"evening"</span>,</span>
-<span id="cb52-11"><a href="#cb52-11"></a>      dep_time <span class="sc">&lt;</span> <span class="dv">2400</span>       <span class="sc">~</span> <span class="st">"late night"</span></span>
-<span id="cb52-12"><a href="#cb52-12"></a>    ),</span>
-<span id="cb52-13"><a href="#cb52-13"></a>    <span class="at">.keep =</span> <span class="st">"used"</span></span>
-<span id="cb52-14"><a href="#cb52-14"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb52-15"><a href="#cb52-15"></a>  <span class="fu">count</span>(<span class="fu">fct_inorder</span>(timeofday)) <span class="co"># put times of day in order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb46-2"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb46-3"><a href=""></a>    <span class="at">timeofday =</span> <span class="fu">case_when</span>(</span>
+<span id="cb46-4"><a href=""></a>      <span class="fu">is.na</span>(dep_time)      <span class="sc">~</span> <span class="st">"cancelled"</span>,</span>
+<span id="cb46-5"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">0300</span>       <span class="sc">~</span> <span class="st">"late night"</span>,</span>
+<span id="cb46-6"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">0700</span>       <span class="sc">~</span> <span class="st">"early morning"</span>,</span>
+<span id="cb46-7"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1100</span>       <span class="sc">~</span> <span class="st">"morning"</span>,</span>
+<span id="cb46-8"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1400</span>       <span class="sc">~</span> <span class="st">"midday"</span>,</span>
+<span id="cb46-9"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">1700</span>       <span class="sc">~</span> <span class="st">"afternoon"</span>,</span>
+<span id="cb46-10"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">2200</span>       <span class="sc">~</span> <span class="st">"evening"</span>,</span>
+<span id="cb46-11"><a href=""></a>      dep_time <span class="sc">&lt;</span> <span class="dv">2400</span>       <span class="sc">~</span> <span class="st">"late night"</span></span>
+<span id="cb46-12"><a href=""></a>    ),</span>
+<span id="cb46-13"><a href=""></a>    <span class="at">.keep =</span> <span class="st">"used"</span></span>
+<span id="cb46-14"><a href=""></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb46-15"><a href=""></a>  <span class="fu">count</span>(<span class="fu">fct_inorder</span>(timeofday)) <span class="co"># put times of day in order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 2
@@ -1130,10 +1046,24 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
 6 late night                2059
 7 cancelled                17271</code></pre>
 </div>
+</div></div>
+</section>
+<section id="summary" class="slide level2 smaller">
+<h2>Summary</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Logical vectors</strong> are fundamental in data science, consisting of <code>TRUE</code>, <code>FALSE</code>, and <code>NA</code>.</li>
+<li class="fragment">Logical operations include <strong>comparisons</strong> (<code>&gt;</code>, <code>==</code>) and <strong>Boolean algebra</strong> (<code>&amp;</code>, <code>|</code>).</li>
+<li class="fragment">Used extensively in <strong>filtering</strong> (<code>filter()</code>), <strong>summarizing</strong> (<code>summarize()</code>), and <strong>conditional transformations</strong> (<code>mutate()</code> with <code>ifelse()</code> or <code>case_when()</code>).</li>
+<li class="fragment">Logical vectors interact with <strong>missing values (<code>NA</code>)</strong>, which can complicate comparisons and Boolean operations.</li>
+<li class="fragment"><strong>Chicago Flights Dataset</strong> demonstrates logical filtering, summarization, and transformation in real-world data.</li>
+<li class="fragment"><strong>Summarizing</strong>: <code>summarize()</code> can use logical conditions to compute <strong>counts</strong> (<code>sum(condition)</code>), <strong>proportions</strong> (<code>mean(condition)</code>), and <strong>group-based logic</strong> (<code>any()</code>, <code>all()</code>).</li>
+</ul>
 </div>
-</div>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
+</div>
 </div>
 </section></section>
     </div>
@@ -1162,14 +1092,13 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
       // https://revealjs.com/config/
       Reveal.initialize({
 'controlsAuto': true,
-'previewLinksAuto': true,
-'smaller': false,
+'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":false,"theme":"whiteboard"},
+'chalkboard': {"buttons":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1190,7 +1119,7 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1323,7 +1252,7 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1419,18 +1348,7 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1462,11 +1380,50 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1476,8 +1433,17 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1491,7 +1457,11 @@ $ time_hour      &lt;dttm&gt; 2020-01-01 05:00:00, 2020-01-01 05:00:00, 2020-01-
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
