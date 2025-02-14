@@ -56,9 +56,9 @@ What function `func(c(TRUE, FALSE, TRUE, NA), na.rm = TRUE)` will return the pro
 
 Here’s the revised version, formatted to match your long-form notes with **brief bullet points** and **Quarto callout boxes** where relevant. I’ve also **double-checked the variable names in `storms`** to correct errors.
 
-# **Exploring Storms Data**
+# Exploring Storms Data
 
-## **Introduction**
+## Introduction
 
 -   The `storms` dataset (`dplyr` package) contains information on **tropical storms and hurricanes** from 1975 to 2020.
 -   Useful for exploring **numeric operations**, including:
@@ -72,7 +72,7 @@ Here’s the revised version, formatted to match your long-form notes with **bri
 head(storms)
 ```
 
-### **Key Numeric Variables:**
+### Key Numeric Variables:
 
 -   `wind`: **Wind speed** (knots)
 -   `pressure`: **Atmospheric pressure** (millibars)
@@ -83,7 +83,7 @@ head(storms)
 
 -   **Question:** What does the distribution of wind speeds look like?
 
-``` {r}
+```{r}
 ggplot(storms, aes(x = wind)) + 
   geom_histogram(binwidth = 5, fill = "steelblue", color = "white") + 
   labs(title = "Distribution of Wind Speeds",
@@ -93,15 +93,14 @@ ggplot(storms, aes(x = wind)) +
 
 ::: callout-note
 -   Most storms have wind speeds **below 100 knots**.
--   The distribution is **right-skewed**; we may need a ** transformation**.
+-   The distribution is **right-skewed**; we may need a \*\* transformation\*\*.
 :::
-
 
 ## 2. Relationship Between Wind Speed & Pressure
 
 -   **Question:** Does lower atmospheric pressure correspond to higher wind speeds?
 
-``` {r}
+```{r}
 ggplot(storms, aes(x = pressure, y = wind)) + 
   geom_jitter(alpha = 0.25, color = "steelblue") + 
   geom_smooth(color = "red") + 
@@ -121,7 +120,7 @@ ggplot(storms, aes(x = pressure, y = wind)) +
 
 -   **Question:** Can a log transformation make the wind speed distribution more normal?
 
-``` {r}
+```{r}
 ggplot(storms, aes(x = log10(wind))) + 
   geom_density(fill = "cyan", alpha = .25) + 
   labs(title = "Log-Transformed Wind Speed Distribution",
@@ -134,13 +133,11 @@ ggplot(storms, aes(x = log10(wind))) +
 -   Useful for **regression models** and better **visualization** of storm intensity.
 :::
 
-
-
 ## 4. Rounding Wind Speeds for Simplicity
 
 -   **Question:** How can we simplify wind speed values for reporting?
 
-``` {r}
+```{r}
 # Summary of unrounded wind speeds
 storms %>%
   count(wind) %>%
@@ -156,20 +153,17 @@ storms %>%
 ```
 
 ::: callout-note
--   **Rounded to nearest 10 knots**  may be easier to summarize and report.
+-   **Rounded to nearest 10 knots** may be easier to summarize and report.
 -   **Alternative methods:** `ceiling()`, `floor()`, `trunc()` for different rounding behaviors.
 :::
 
-
 ## **Conclusion**
 
-This analysis demonstrates how **numeric data** can be explored and manipulated in R: 
+This analysis demonstrates how **numeric data** can be explored and manipulated in R:
 
-- **Visualizing numeric distributions** (e.g., histograms, scatterplots)   
-- **Transforming data** (e.g., log scaling)   
-- **Rounding for clarity** (e.g., simplifying wind speeds)  
-
-------------------------------------------------------------------------
+-   **Visualizing numeric distributions** (e.g., histograms, scatterplots)\
+-   **Transforming data** (e.g., log scaling)\
+-   **Rounding for clarity** (e.g., simplifying wind speeds)
 
 
 # Going from strings to numbers
