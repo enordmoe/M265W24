@@ -24,11 +24,153 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 # Outline
 
+-   Logicals review
+-   Introduction to the storms dataset
 -   Going from strings to numbers
 -   Fun with `count()`
 -   Numeric transformations and `mutate()`
 -   More ways to `mutate()`
 -   Numeric summaries
+
+# Reviewing Logicals
+
+## Question 1
+
+What are the three possible values a logical vector can take in R?
+
+## Question 2
+
+How do you create a logical vector from a numeric vector `x <- c(3, 5, 0, -2, 8)` that identifies elements greater than 2?
+
+## Question 3
+
+Given `x <- c(1, 0, 3, NA)`, what does `as.logical(x)` return?
+
+## Question 4
+
+What will `sum(c(TRUE, FALSE, TRUE, NA), na.rm = TRUE)` return?
+
+## Question 5
+
+What function `func(c(TRUE, FALSE, TRUE, NA), na.rm = TRUE)` will return the proportion of elements that are true?
+
+Here’s the revised version, formatted to match your long-form notes with **brief bullet points** and **Quarto callout boxes** where relevant. I’ve also **double-checked the variable names in `storms`** to correct errors.
+
+# **Exploring Storms Data**
+
+## **Introduction**
+
+-   The `storms` dataset (`dplyr` package) contains information on **tropical storms and hurricanes** from 1975 to 2020.
+-   Useful for exploring **numeric operations**, including:
+    -   Numeric types (integers & doubles)
+    -   Rounding and transformations
+    -   Handling missing values (`NA`)
+    -   Relationships between numeric variables
+
+```{r}
+# View first few rows
+head(storms)
+```
+
+### **Key Numeric Variables:**
+
+-   `wind`: **Wind speed** (knots)
+-   `pressure`: **Atmospheric pressure** (millibars)
+-   `tropicalstorm_force_diameter`: **Diameter** of tropical storm winds (NA for hurricanes)
+-   `hurricane_force_diameter`: **Diameter** of hurricane-force winds (NA for non-hurricanes)
+
+## 1. Exploring the Distribution of Wind Speeds
+
+-   **Question:** What does the distribution of wind speeds look like?
+
+``` {r}
+ggplot(storms, aes(x = wind)) + 
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "white") + 
+  labs(title = "Distribution of Wind Speeds",
+       x = "Wind Speed (knots)", 
+       y = "Frequency")
+```
+
+::: callout-note
+-   Most storms have wind speeds **below 100 knots**.
+-   The distribution is **right-skewed**; we may need a ** transformation**.
+:::
+
+
+## 2. Relationship Between Wind Speed & Pressure
+
+-   **Question:** Does lower atmospheric pressure correspond to higher wind speeds?
+
+``` {r}
+ggplot(storms, aes(x = pressure, y = wind)) + 
+  geom_jitter(alpha = 0.25, color = "steelblue") + 
+  geom_smooth(color = "red") + 
+  labs(title = "Wind Speed vs. Pressure",
+       x = "Pressure (millibars)", 
+       y = "Wind Speed (knots)")
+```
+
+::: callout-note
+-   **Inverse relationship**: As pressure decreases, wind speed increases.
+-   Some **outliers** suggest additional factors influence storm intensity.
+:::
+
+------------------------------------------------------------------------
+
+## 3. Log Transformation of Wind Speeds
+
+-   **Question:** Can a log transformation make the wind speed distribution more normal?
+
+``` {r}
+ggplot(storms, aes(x = log10(wind))) + 
+  geom_density(fill = "cyan", alpha = .25) + 
+  labs(title = "Log-Transformed Wind Speed Distribution",
+       x = "log10(Wind Speed)", 
+       y = "Frequency")
+```
+
+::: callout-note
+-   The **log transformation** compresses the right tail, making the distribution closer to **bell-shaped**.
+-   Useful for **regression models** and better **visualization** of storm intensity.
+:::
+
+
+
+## 4. Rounding Wind Speeds for Simplicity
+
+-   **Question:** How can we simplify wind speed values for reporting?
+
+``` {r}
+# Summary of unrounded wind speeds
+storms %>%
+  count(wind) %>%
+  arrange(desc(n))
+
+storms <- storms %>%
+  mutate(wind_rounded = round(wind, digits = -1))  # Round to nearest 10
+
+# Summary of rounded wind speeds
+storms %>%
+  count(wind_rounded) %>%
+  arrange(desc(n))
+```
+
+::: callout-note
+-   **Rounded to nearest 10 knots**  may be easier to summarize and report.
+-   **Alternative methods:** `ceiling()`, `floor()`, `trunc()` for different rounding behaviors.
+:::
+
+
+## **Conclusion**
+
+This analysis demonstrates how **numeric data** can be explored and manipulated in R: 
+
+- **Visualizing numeric distributions** (e.g., histograms, scatterplots)   
+- **Transforming data** (e.g., log scaling)   
+- **Rounding for clarity** (e.g., simplifying wind speeds)  
+
+------------------------------------------------------------------------
+
 
 # Going from strings to numbers
 
