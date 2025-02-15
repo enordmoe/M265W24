@@ -467,6 +467,28 @@ What anomalies may be be due to Covid? Why?
 2.  Round `dep_time` and `arr_time` to the nearest five minutes.
 :::
 
+## Practice Answers
+
+```{r}
+df <- chiflights2020 |> 
+  mutate(
+    mins_since_midnight = floor(dep_time/100)*60+dep_time%%100,
+    dep_time_round = if_else(
+      (round((dep_time / 5)) * 5) %% 100==60, # Deal with cases like 859 that would round to 860
+      ceiling(dep_time / 100) * 100,
+      round((dep_time / 5)) * 5
+    ),
+    arr_time_round = if_else(
+      (round((arr_time / 5)) * 5) %% 100==60, # Deal with cases like 859 that would round to 860
+      ceiling(arr_time / 100) * 100,
+      round((arr_time / 5)) * 5
+    ),
+    .keep = "used"
+    ) 
+head(df)
+
+```
+
 # More ways to `mutate()`
 
 ## Ranks
@@ -607,6 +629,8 @@ chiflights2020 |>
   
 ```
 
+The destinations with large IQR are all far away, in Hawaii or in the southwest.
+
 ::: callout-tip
 What modifications could you consider to answer other questions? Is there a relative measure that could be helpful?
 :::
@@ -614,3 +638,30 @@ What modifications could you consider to answer other questions? Is there a rela
 ## More Practice
 
 **Question**: Which destination in the **chiflights2020** dataset shows the greatest variation in air speed? Try measuring variation in at least two different ways to see if you get similar results.
+
+**Answer:** Try this code. They give similar results. Four out of the five are the same.
+
+```{r}
+# copy and edit the code above
+df <-
+  chiflights2020 |> 
+  filter(origin == "ORD") |>  # We can keep this for consistency
+  mutate(airspeed = distance/air_time) |> 
+  group_by(dest) |> 
+  summarize(
+    iqr_airsp= IQR(air_time, na.rm = TRUE), 
+    sd_airsp= sd(air_time, na.rm = TRUE), 
+    n = n()
+    ) |> 
+  filter(n >= 100)  # at least 100 to get a reasonable measure of variability
+
+# By IQR
+df |> 
+  arrange(desc(iqr_airsp)) |> 
+  slice(1:5)
+  
+# By sd
+df |> 
+  arrange(desc(sd_airsp)) |> 
+  slice(1:5)
+```

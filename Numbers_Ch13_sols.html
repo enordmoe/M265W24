@@ -58,16 +58,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Numbers_Ch13_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Numbers_Ch13_files/libs/quarto-html/quarto.js"></script>
-<script src="Numbers_Ch13_files/libs/quarto-html/popper.min.js"></script>
-<script src="Numbers_Ch13_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Numbers_Ch13_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Numbers_Ch13_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Numbers_Ch13_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Numbers_Ch13_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Numbers_Ch13_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Numbers_Ch13_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="Numbers_Ch13_sols_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Numbers_Ch13_sols_files/libs/quarto-html/quarto.js"></script>
+<script src="Numbers_Ch13_sols_files/libs/quarto-html/popper.min.js"></script>
+<script src="Numbers_Ch13_sols_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Numbers_Ch13_sols_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Numbers_Ch13_sols_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Numbers_Ch13_sols_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Numbers_Ch13_sols_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Numbers_Ch13_sols_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Numbers_Ch13_sols_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -155,6 +155,7 @@ window.Quarto = {
   <li><a href="#cumulating" id="toc-cumulating" class="nav-link" data-scroll-target="#cumulating">Cumulating</a></li>
   <li><a href="#cumulating-corrected" id="toc-cumulating-corrected" class="nav-link" data-scroll-target="#cumulating-corrected">Cumulating corrected</a></li>
   <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
+  <li><a href="#practice-answers" id="toc-practice-answers" class="nav-link" data-scroll-target="#practice-answers">Practice Answers</a></li>
   </ul></li>
   <li><a href="#more-ways-to-mutate" id="toc-more-ways-to-mutate" class="nav-link" data-scroll-target="#more-ways-to-mutate">More ways to <code>mutate()</code></a>
   <ul class="collapse">
@@ -792,6 +793,27 @@ Try it yourself
 </div>
 </div>
 </section>
+<section id="practice-answers" class="level2">
+<h2 class="anchored" data-anchor-id="practice-answers">Practice Answers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mins_since_midnight =</span> <span class="fu">floor</span>(dep_time<span class="sc">/</span><span class="dv">100</span>)<span class="sc">*</span><span class="dv">60</span><span class="sc">+</span>dep_time<span class="sc">%%</span><span class="dv">100</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dep_time_round =</span> <span class="fu">if_else</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      (<span class="fu">round</span>((dep_time <span class="sc">/</span> <span class="dv">5</span>)) <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">%%</span> <span class="dv">100</span><span class="sc">==</span><span class="dv">60</span>, <span class="co"># Deal with cases like 859 that would round to 860</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ceiling</span>(dep_time <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>((dep_time <span class="sc">/</span> <span class="dv">5</span>)) <span class="sc">*</span> <span class="dv">5</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">arr_time_round =</span> <span class="fu">if_else</span>(</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      (<span class="fu">round</span>((arr_time <span class="sc">/</span> <span class="dv">5</span>)) <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">%%</span> <span class="dv">100</span><span class="sc">==</span><span class="dv">60</span>, <span class="co"># Deal with cases like 859 that would round to 860</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ceiling</span>(arr_time <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>((arr_time <span class="sc">/</span> <span class="dv">5</span>)) <span class="sc">*</span> <span class="dv">5</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">"used"</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="more-ways-to-mutate" class="level1">
 <h1>More ways to <code>mutate()</code></h1>
@@ -809,23 +831,23 @@ Try it yourself
 <h2 class="anchored" data-anchor-id="ranks-example">Ranks Example</h2>
 <p>Create a small dataset and sort it by the variable of interest:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"Jia"</span>, <span class="st">"Yuki"</span>, <span class="st">"Aarav"</span>, <span class="st">"Sofia"</span>, <span class="st">"Mohammed"</span>, <span class="st">"Priya"</span>, <span class="st">"Liam"</span>, <span class="st">"Chen"</span>, <span class="st">"Amira"</span>),</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Score =</span> <span class="fu">c</span>(<span class="dv">85</span>, <span class="dv">92</span>, <span class="dv">78</span>, <span class="dv">85</span>, <span class="dv">94</span>, <span class="dv">78</span>, <span class="dv">85</span>, <span class="dv">92</span>, <span class="dv">78</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Score))</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Name =</span> <span class="fu">c</span>(<span class="st">"Jia"</span>, <span class="st">"Yuki"</span>, <span class="st">"Aarav"</span>, <span class="st">"Sofia"</span>, <span class="st">"Mohammed"</span>, <span class="st">"Priya"</span>, <span class="st">"Liam"</span>, <span class="st">"Chen"</span>, <span class="st">"Amira"</span>),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Score =</span> <span class="fu">c</span>(<span class="dv">85</span>, <span class="dv">92</span>, <span class="dv">78</span>, <span class="dv">85</span>, <span class="dv">94</span>, <span class="dv">78</span>, <span class="dv">85</span>, <span class="dv">92</span>, <span class="dv">78</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Score))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now attach rankings:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dense_rank =</span> <span class="fu">dense_rank</span>(Score),</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_number =</span> <span class="fu">row_number</span>(Score),</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_rank =</span> <span class="fu">min_rank</span>(Score),</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_rank =</span> <span class="fu">rank</span>(Score, <span class="at">ties.method =</span> <span class="st">"average"</span>) <span class="co"># Base R ranking function</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dense_rank =</span> <span class="fu">dense_rank</span>(Score),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_number =</span> <span class="fu">row_number</span>(Score),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_rank =</span> <span class="fu">min_rank</span>(Score),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_rank =</span> <span class="fu">rank</span>(Score, <span class="at">ties.method =</span> <span class="st">"average"</span>) <span class="co"># Base R ranking function</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p><code>dense_rank()</code> assigns ranks to values in a vector, starting from 1, without any gaps between ranks</p>
@@ -874,26 +896,26 @@ Tip
 <h2 class="anchored" data-anchor-id="offsets-examples">Offsets Examples</h2>
 <p>Create a simple dataset to illustrate:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a sample tribble</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>date,       <span class="sc">~</span>value,</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-01"</span>, <span class="dv">10</span>,</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-02"</span>, <span class="dv">15</span>,</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-03"</span>, <span class="dv">12</span>,</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-04"</span>, <span class="dv">18</span>,</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-05"</span>, <span class="dv">20</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a sample tribble</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>date,       <span class="sc">~</span>value,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-01"</span>, <span class="dv">10</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-02"</span>, <span class="dv">15</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-03"</span>, <span class="dv">12</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-04"</span>, <span class="dv">18</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2024-01-05"</span>, <span class="dv">20</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now compute lags, leads and differences.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lag_value =</span> <span class="fu">lag</span>(value),</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">lead_value =</span> <span class="fu">lead</span>(value),</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_prev =</span> value <span class="sc">-</span> lag_value <span class="co"># Use lag to compute difference</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lag_value =</span> <span class="fu">lag</span>(value),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">lead_value =</span> <span class="fu">lead</span>(value),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_prev =</span> value <span class="sc">-</span> lag_value <span class="co"># Use lag to compute difference</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -951,14 +973,15 @@ Missing values
 <li><p>What do these destinations have in common?</p></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"ORD"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span> </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">iqr_air=</span> <span class="fu">IQR</span>(air_time, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(iqr_air)) <span class="co"># |&gt; </span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># slice(1:5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"ORD"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">iqr_air=</span> <span class="fu">IQR</span>(air_time, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(iqr_air)) <span class="co"># |&gt; </span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># slice(1:5)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The destinations with large IQR are all far away, in Hawaii or in the southwest.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -976,6 +999,31 @@ Tip
 <section id="more-practice" class="level2">
 <h2 class="anchored" data-anchor-id="more-practice">More Practice</h2>
 <p><strong>Question</strong>: Which destination in the <strong>chiflights2020</strong> dataset shows the greatest variation in air speed? Try measuring variation in at least two different ways to see if you get similar results.</p>
+<p><strong>Answer:</strong> Try this code. They give similar results. Four out of the five are the same.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy and edit the code above</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(origin <span class="sc">==</span> <span class="st">"ORD"</span>) <span class="sc">|&gt;</span>  <span class="co"># We can keep this for consistency</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">airspeed =</span> distance<span class="sc">/</span>air_time) <span class="sc">|&gt;</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span> </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">iqr_airsp=</span> <span class="fu">IQR</span>(air_time, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_airsp=</span> <span class="fu">sd</span>(air_time, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">100</span>)  <span class="co"># at least 100 to get a reasonable measure of variability</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="co"># By IQR</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(iqr_airsp)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co"># By sd</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(sd_airsp)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 
