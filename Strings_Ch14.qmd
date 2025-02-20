@@ -1,26 +1,26 @@
 ---
 title: "Chapter 14: Strings"
-author: "Introduction to Data Science"
+subtitle: "Introduction to Data Science"
+author: "MATH 265"
 format:
   revealjs:
-    theme: default 
-    slide-number: true
-    chalkboard: 
-      theme: whiteboard
-      buttons: false
-    preview-links: auto
-    execute:
-      warning: false
-      echo: true
-      cache: true
-    callouts:
-      quote:
-        title: Quote
-        icon: quote
+    chalkboard: true
+    theme: [default, custom.scss]
+    reveal-options:
+      slideNumber: true
+    html-math-method: mathjax
+title-slide-attributes:
+  data-background-color: "#EA6820"
+from: markdown+emoji
+execute:
+  echo: true
+  cache: true
 editor: 
   markdown: 
     wrap: 72
 ---
+
+
 
 ```{r}
 #| label: setup
@@ -47,7 +47,7 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 ::: incremental
 -   Untidy data may contain problematic strings, hidden characters
 
--   Scraping from web sources often requires locating, removing or
+-   Using data from web sources often requires locating, removing or
     replacing strings
 :::
 
@@ -99,7 +99,7 @@ cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
 
 ![](figures/cheat_string_image.png)
 
-##  [What about more challenging string problems?]{style="color: white;"} {background-color="#FE961C"}
+## [What about more challenging string problems?]{style="color: white;"} {background-color="#FE961C"}
 
 ## Regular expressions to the rescue!
 
@@ -146,15 +146,17 @@ Source:https://xkcd.com/1638/
 
 -   Getting just the right regexp command to do the job can be
     challenging!
--   Not a bad use of AI
+-   A very good use of AI
 -   But specify your query carefully and test carefully that it does
     what you want!
 
 ## The Question
 
-In the R tidyverse, how to use a regexp to find all words that start
-with "B" and end with "e"?
+In the R tidyverse using the stringr package, how to use a regexp to
+find all words that start with a capital or small "B" and end with "e"?
 
-## The Answer
+## The Answer {.smaller}
 
-![](images/clipboard-501901405.png)
+ChatGPT output:
+
+![](images/string_chatgpt.png)
