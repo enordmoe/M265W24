@@ -8,7 +8,7 @@
 <link href="Strings_Ch14_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Strings_Ch14_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="Strings_Ch14_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.52">
+  <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="MATH 265">
   <title>Chapter 14: Strings</title>
@@ -408,9 +408,9 @@ MATH 265
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
 <ul>
-<li><p>Numbers review</p></li>
 <li><p>Strings</p></li>
 <li><p>Quick intro to Regular expressions</p></li>
+<li><p>Practice with strings</p></li>
 </ul>
 </section>
 <section>
@@ -434,11 +434,66 @@ MATH 265
 <h2>Strings in the Wild</h2>
 
 <img data-src="figures/activity_roster.png" class="r-stretch"></section>
-<section id="detecting-strings-using-stringr-str_-functions" class="slide level2">
+<section id="creating-strings-in-r" class="slide level2">
+<h2>Creating Strings in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>string_example <span class="ot">&lt;-</span> <span class="st">"Hello, Data Science!"</span></span>
+<span id="cb1-2"><a href=""></a>string_example</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello, Data Science!"</code></pre>
+</div>
+</div>
+<p>Strings in R are represented using <strong>double quotes</strong> (<code>" "</code>) or <strong>single quotes</strong> (<code>' '</code>), but double quotes are more commonly used.</p>
+</section>
+<section id="combining-strings" class="slide level2">
+<h2>Combining Strings</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">paste</span>(<span class="st">"Data"</span>, <span class="st">"Science"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Data Science"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">paste</span>(<span class="st">"Data"</span>, <span class="st">"Science"</span>, <span class="at">sep=</span><span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Data-Science"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">str_c</span>(<span class="st">"Data"</span>, <span class="st">"Science"</span>, <span class="at">sep=</span><span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Data_Science"</code></pre>
+</div>
+</div>
+<p><code>paste()</code> and <code>str_c()</code> allow us to concatenate strings with different separators.</p>
+</section>
+<section id="escaping-special-characters" class="slide level2">
+<h2>Escaping Special Characters</h2>
+<p>Some characters have <strong>special meanings</strong> in strings and must be <strong>escaped</strong> using a backslash (<code>\</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>example_text <span class="ot">&lt;-</span> <span class="st">"This is a </span><span class="sc">\"</span><span class="st">quoted</span><span class="sc">\"</span><span class="st"> word."</span></span>
+<span id="cb9-2"><a href=""></a>example_text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "This is a \"quoted\" word."</code></pre>
+</div>
+</div>
+</section>
+<section id="escaping-backslashes" class="slide level2">
+<h2>Escaping Backslashes</h2>
+<p>Since <code>\</code> is also a special character, we <strong>double it</strong> to represent a single backslash.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>backslash_example <span class="ot">&lt;-</span> <span class="st">"This is a single backslash: </span><span class="sc">\\</span><span class="st">"</span> </span>
+<span id="cb11-2"><a href=""></a>backslash_example</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "This is a single backslash: \\"</code></pre>
+</div>
+</div>
+</section>
+<section id="detecting-strings-using-stringr-str_-functions" class="slide level2 smaller">
 <h2>Detecting Strings Using <strong>stringr</strong> <code>str_()</code> Functions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Arizona"</span>, <span class="st">"California"</span>, <span class="st">"Florida"</span>, <span class="st">"Georgia"</span>, <span class="st">"Indiana"</span>, <span class="st">"Louisiana"</span>, </span>
+<span id="cb13-2"><a href=""></a><span class="st">"Michigan"</span>, <span class="st">"Minnesota"</span>, <span class="st">"Nevada"</span>, <span class="st">"New Jersey"</span>, <span class="st">"Texas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Detect text in a vector of the states that have hosted the super bowl:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Arizona"    "California" "Florida"    "Georgia"    "Indiana"   
  [6] "Louisiana"  "Michigan"   "Minnesota"  "Nevada"     "New Jersey"
@@ -446,29 +501,33 @@ MATH 265
 </div>
 </div>
 </section>
-<section id="str_detect" class="slide level2">
-<h2><code>str_detect()</code></h2>
+<section id="str_detect-and-str_starts" class="slide level2">
+<h2><code>str_detect()</code> and <code>str_starts()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"ana"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"ana"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"ANA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"ANA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">str_starts</span>(states, <span class="st">"T"</span>)  <span class="co"># also str_ends()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</code></pre>
 </div>
 </div>
 </section>
 <section id="str_replace" class="slide level2">
 <h2><code>str_replace()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">str_replace</span>(states, <span class="st">"ana"</span>, <span class="st">"X"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">str_replace</span>(states, <span class="st">"ana"</span>, <span class="st">"X"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Arizona"    "California" "Florida"    "Georgia"    "IndiX"     
  [6] "LouisiX"    "Michigan"   "Minnesota"  "Nevada"     "New Jersey"
 [11] "Texas"     </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">str_replace_all</span>(states, <span class="st">"i"</span>, <span class="st">"X"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">str_replace_all</span>(states, <span class="st">"i"</span>, <span class="st">"X"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "ArXzona"    "CalXfornXa" "FlorXda"    "GeorgXa"    "IndXana"   
  [6] "LouXsXana"  "MXchXgan"   "MXnnesota"  "Nevada"     "New Jersey"
@@ -479,11 +538,11 @@ MATH 265
 <section id="str_sub-and-str_count" class="slide level2">
 <h2><code>str_sub()</code> and <code>str_count()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">str_sub</span>(states, <span class="dv">2</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">str_sub</span>(states, <span class="dv">2</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "riz" "ali" "lor" "eor" "ndi" "oui" "ich" "inn" "eva" "ew " "exa"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">str_count</span>(states, <span class="st">"e"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">str_count</span>(states, <span class="st">"e"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0 0 0 1 0 0 0 1 1 3 1</code></pre>
 </div>
@@ -516,21 +575,66 @@ MATH 265
 <li><p>Try the resources on Moodle</p></li>
 </ul>
 </section>
-<section id="use-str_view-to-verify-regexps" class="slide level2">
-<h2>Use <code>str_view()</code> to verify regexps</h2>
+<section id="anchors-and" class="slide level2 smaller">
+<h2>Anchors: <code>^</code> and <code>$</code></h2>
+<p>Regular expressions use <strong>anchors</strong> to specify positions in a string:</p>
+<ul>
+<li><strong><code>^</code> (caret)</strong> → Matches the <strong>start</strong> of a string.</li>
+<li><strong><code>$</code> (dollar sign)</strong> → Matches the <strong>end</strong> of a string.</li>
+</ul>
+<p>Use <code>str_view()</code> below to verify regexps matches</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co">#starts with M or L</span></span>
-<span id="cb15-2"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"^[ML]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="co"># Starts with M or L</span></span>
+<span id="cb30-2"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"^[ML]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">str_view</span>(states, <span class="st">"^[ML]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">str_view</span>(states, <span class="st">"^[ML]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[6] │ &lt;L&gt;ouisiana
 [7] │ &lt;M&gt;ichigan
 [8] │ &lt;M&gt;innesota</code></pre>
 </div>
 </div>
+</section>
+<section id="examples-of-anchors" class="slide level2">
+<h2>Examples of Anchors</h2>
+<p>Check for states <strong>ending</strong> in “a”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">str_detect</span>(states, <span class="st">"a$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">str_view</span>(states, <span class="st">"a$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] │ Arizon&lt;a&gt;
+[2] │ Californi&lt;a&gt;
+[3] │ Florid&lt;a&gt;
+[4] │ Georgi&lt;a&gt;
+[5] │ Indian&lt;a&gt;
+[6] │ Louisian&lt;a&gt;
+[8] │ Minnesot&lt;a&gt;
+[9] │ Nevad&lt;a&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="more-anchors-examples" class="slide level2">
+<h2>More Anchors Examples</h2>
+<p>Match states that <strong>start and end</strong> with the same letter:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>mywords <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"aviation"</span>, <span class="st">"breadcrumb"</span>, <span class="st">"caloric"</span>, <span class="st">"database"</span>, <span class="st">"fried"</span>, <span class="st">"thirst"</span>)</span>
+<span id="cb38-2"><a href=""></a><span class="fu">str_detect</span>(mywords, <span class="st">"^(.).*</span><span class="sc">\\</span><span class="st">1$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE  TRUE FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="fu">str_view</span>(mywords, <span class="st">"^(.).*</span><span class="sc">\\</span><span class="st">1$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[2] │ &lt;breadcrumb&gt;
+[3] │ &lt;caloric&gt;
+[6] │ &lt;thirst&gt;</code></pre>
+</div>
+</div>
+<p>Anchors are useful for <strong>precisely controlling</strong> what part of a string should match a pattern.</p>
 </section>
 <section id="regexp-its-not-just-another--er-flick" class="slide level2">
 <h2>regexp: It’s not just another \-er flick!</h2>
@@ -561,9 +665,21 @@ MATH 265
 </section>
 <section id="the-answer" class="slide level2 smaller">
 <h2>The Answer</h2>
-<p>ChatGPT output:</p>
-
-<img data-src="images/string_chatgpt.png" class="r-stretch"><div class="quarto-auto-generated-content">
+<p>ChatGPT output</p>
+<p>You can achieve this by using a regular expression with word boundaries and a character class to match either “B” or “b” at the beginning, followed by any number of word characters, and ending with “e”. For example:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="fu">library</span>(stringr)</span>
+<span id="cb42-2"><a href=""></a></span>
+<span id="cb42-3"><a href=""></a>text <span class="ot">&lt;-</span> <span class="st">"Breeze blue Banter beagle Bridge bounce"</span></span>
+<span id="cb42-4"><a href=""></a>matches <span class="ot">&lt;-</span> <span class="fu">str_extract_all</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">b[Bb]</span><span class="sc">\\</span><span class="st">w*e</span><span class="sc">\\</span><span class="st">b"</span>)</span>
+<span id="cb42-5"><a href=""></a><span class="fu">print</span>(matches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Explanation:</strong><br>
+- <strong>\b</strong>: Specifies a word boundary to ensure that we are matching entire words.<br>
+- <strong>[Bb]</strong>: Matches either an uppercase “B” or a lowercase “b”.<br>
+- <strong>\w</strong>*: Matches zero or more word characters.<br>
+- <strong>e</strong>: Matches the literal “e”.<br>
+- <strong>\b</strong>: Another word boundary to ensure the match ends at the end of the word.</p>
+<p>This regular expression will extract all words that start with “B” or “b” and end with “e” in the given text.</p>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>

@@ -21,7 +21,6 @@ editor:
 ---
 
 
-
 ```{r}
 #| label: setup
 #| include: false
@@ -32,11 +31,11 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ## Outline
 
--   Numbers review
-
 -   Strings
 
 -   Quick intro to Regular expressions
+
+-   Practice with strings
 
 # What is a string? {background-image="https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/Spool_of_string.jpg/544px-Spool_of_string.jpg" background-size="cover"}
 
@@ -55,10 +54,46 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ![](figures/activity_roster.png)
 
-## Detecting Strings Using **stringr** `str_()` Functions
+## Creating Strings in R
 
 ```{r}
-#| echo: false
+string_example <- "Hello, Data Science!"
+string_example
+```
+
+Strings in R are represented using **double quotes** (`" "`) or **single quotes** (`' '`), but double quotes are more commonly used.
+
+## Combining Strings
+
+```{r}
+paste("Data", "Science")
+paste("Data", "Science", sep="-")
+str_c("Data", "Science", sep="_")
+```
+
+`paste()` and `str_c()` allow us to concatenate strings with different separators.
+
+## Escaping Special Characters
+
+Some characters have **special meanings** in strings and must be **escaped** using a backslash (`\`).
+
+```{r}
+example_text <- "This is a \"quoted\" word."
+example_text
+```
+
+## Escaping Backslashes
+
+Since `\` is also a special character, we **double it** to represent a single backslash.
+
+```{r}
+backslash_example <- "This is a single backslash: \\" 
+backslash_example
+```
+
+## Detecting Strings Using **stringr** `str_()` Functions {.smaller}
+
+```{r}
 states <- c("Arizona", "California", "Florida", "Georgia", "Indiana", "Louisiana", 
 "Michigan", "Minnesota", "Nevada", "New Jersey", "Texas")
 ```
@@ -69,11 +104,12 @@ Detect text in a vector of the states that have hosted the super bowl:
 states
 ```
 
-## `str_detect()`
+## `str_detect()` and `str_starts()`
 
 ```{r}
 str_detect(states, "ana")
 str_detect(states, "ANA")
+str_starts(states, "T")  # also str_ends()
 ```
 
 ## `str_replace()`
@@ -122,13 +158,43 @@ cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf)!
 
 -   Try the resources on Moodle
 
-## Use `str_view()` to verify regexps
+
+## Anchors: `^` and `$` {.smaller}
+
+Regular expressions use **anchors** to specify positions in a string:
+
+- **`^` (caret)** → Matches the **start** of a string.
+- **`$` (dollar sign)** → Matches the **end** of a string.
+
+Use `str_view()` below to verify regexps matches
+
 
 ```{r}
-#starts with M or L
+# Starts with M or L
 str_detect(states, "^[ML]")
 str_view(states, "^[ML]")
 ```
+
+## Examples of Anchors
+
+Check for states **ending** in "a":
+```{r}
+str_detect(states, "a$")
+str_view(states, "a$")
+```
+
+## More Anchors Examples
+
+Match states that **start and end** with the same letter:
+```{r}
+mywords <- c("aviation", "breadcrumb", "caloric", "database", "fried", "thirst")
+str_detect(mywords, "^(.).*\\1$")
+str_view(mywords, "^(.).*\\1$")
+```
+
+Anchors are useful for **precisely controlling** what part of a string should match a pattern.
+
+
 
 ## regexp: It's not just another \\-er flick!
 
@@ -157,6 +223,23 @@ find all words that start with a capital or small "B" and end with "e"?
 
 ## The Answer {.smaller}
 
-ChatGPT output:
+ChatGPT output
 
-![](images/string_chatgpt.png)
+You can achieve this by using a regular expression with word boundaries and a character class to match either "B" or "b" at the beginning, followed by any number of word characters, and ending with "e". For example:
+
+```r
+library(stringr)
+
+text <- "Breeze blue Banter beagle Bridge bounce"
+matches <- str_extract_all(text, "\\b[Bb]\\w*e\\b")
+print(matches)
+```
+
+**Explanation:**  
+- **\\b**: Specifies a word boundary to ensure that we are matching entire words.  
+- **[Bb]**: Matches either an uppercase "B" or a lowercase "b".  
+- **\\w***: Matches zero or more word characters.  
+- **e**: Matches the literal "e".  
+- **\\b**: Another word boundary to ensure the match ends at the end of the word.  
+
+This regular expression will extract all words that start with "B" or "b" and end with "e" in the given text.
