@@ -8,7 +8,7 @@
 <link href="Factors_Ch16_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Factors_Ch16_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="Factors_Ch16_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.52">
 
   <meta name="author" content="Introduction to Data Science">
   <title>Chapter 16: Factors</title>
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -70,7 +70,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -84,7 +84,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -391,7 +392,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
   <h1 class="title">Chapter 16: Factors</h1>
 
 <div class="quarto-title-authors">
@@ -447,17 +448,17 @@ Introduction to Data Science
 <ul>
 <li>Input data and levels separately</li>
 </ul>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-2_fb7f6482f24e8566b669bdd21c01d320">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>zodiac <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Pig"</span>, <span class="st">"Dog"</span>, <span class="st">"Rabbit"</span>, <span class="st">"Rat"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># Sorting not useful </span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">sort</span>(zodiac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>zodiac <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Pig"</span>, <span class="st">"Dog"</span>, <span class="st">"Rabbit"</span>, <span class="st">"Rat"</span>)</span>
+<span id="cb1-2"><a href=""></a><span class="co"># Sorting not useful </span></span>
+<span id="cb1-3"><a href=""></a><span class="fu">sort</span>(zodiac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Dog"    "Pig"    "Rabbit" "Rat"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>zodiac_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rat"</span>, <span class="st">"Ox"</span>, <span class="st">"Tiger"</span>, <span class="st">"Rabbit"</span>, <span class="st">"Dragon"</span>, </span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="st">"Snake"</span>, <span class="st">"Horse"</span>, <span class="st">"Sheep"</span>, <span class="st">"Monkey"</span>, <span class="st">"Rooster"</span>, <span class="st">"Dog"</span>, <span class="st">"Pig"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>zodiac_fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(zodiac, <span class="at">levels =</span> zodiac_levels)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>zodiac_fac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>zodiac_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Rat"</span>, <span class="st">"Ox"</span>, <span class="st">"Tiger"</span>, <span class="st">"Rabbit"</span>, <span class="st">"Dragon"</span>, </span>
+<span id="cb3-2"><a href=""></a>  <span class="st">"Snake"</span>, <span class="st">"Horse"</span>, <span class="st">"Sheep"</span>, <span class="st">"Monkey"</span>, <span class="st">"Rooster"</span>, <span class="st">"Dog"</span>, <span class="st">"Pig"</span>)</span>
+<span id="cb3-3"><a href=""></a>zodiac_fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(zodiac, <span class="at">levels =</span> zodiac_levels)</span>
+<span id="cb3-4"><a href=""></a>zodiac_fac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] Pig    Dog    Rabbit Rat   
 12 Levels: Rat Ox Tiger Rabbit Dragon Snake Horse Sheep Monkey Rooster ... Pig</code></pre>
@@ -466,7 +467,7 @@ Introduction to Data Science
 </section>
 <section id="comparing-number-character-and-factor-types" class="slide level2 smaller">
 <h2>Comparing Number, Character and Factor Types</h2>
-<table>
+<table class="caption-top">
 <colgroup>
 <col style="width: 15%">
 <col style="width: 27%">
@@ -534,7 +535,7 @@ Introduction to Data Science
 </ul>
 
 <aside><div>
-<p><strong>Source</strong>: Kaggle https://www.kaggle.com/kaggle/kaggle-survey-2017</p>
+<p><strong>Source</strong>: Kaggle <a href="https://www.kaggle.com/kaggle/kaggle-survey-2017">https://www.kaggle.com/kaggle/kaggle-survey-2017</a></p>
 </div></aside></section>
 <section id="data-codebook-in-schema.csv" class="slide level2 smaller">
 <h2>Data codebook in <code>schema.csv</code></h2>
@@ -542,9 +543,9 @@ Introduction to Data Science
 <img data-src="figures/kaggle_schema_lg.png" class="r-stretch"></section>
 <section id="import-and-glimpse-the-data" class="slide level2">
 <h2>Import and Glimpse the Data</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-3_ae3cde6a081d9d6004e347e504deced8">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>ks_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"kaggle-survey-2017_data/multipleChoiceResponses.csv"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">glimpse</span>(ks_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>ks_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"kaggle-survey-2017_data/multipleChoiceResponses.csv"</span>)</span>
+<span id="cb5-2"><a href=""></a><span class="fu">glimpse</span>(ks_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 16,716
 Columns: 228
@@ -786,12 +787,12 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 <img data-src="figures/inspect_factors.png" class="r-stretch"></section>
 <section id="inspecting-the-country-variable" class="slide level2">
 <h2>Inspecting the Country Variable</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-4_0816e5b7a114ab138c6de26dc61c12bd">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># First, convert to a factor, letting R choose levels:  </span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>ks_data <span class="ot">&lt;-</span>  ks_data <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">factor</span>(Country)) </span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># Show unique levels</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="fu">fct_unique</span>(ks_data<span class="sc">$</span>Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># First, convert to a factor, letting R choose levels:  </span></span>
+<span id="cb7-2"><a href=""></a>ks_data <span class="ot">&lt;-</span>  ks_data <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">factor</span>(Country)) </span>
+<span id="cb7-4"><a href=""></a><span class="co"># Show unique levels</span></span>
+<span id="cb7-5"><a href=""></a><span class="fu">fct_unique</span>(ks_data<span class="sc">$</span>Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] Argentina                   Australia                  
  [3] Belarus                     Belgium                    
@@ -826,9 +827,9 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 </section>
 <section id="get-frequencies-of-categories" class="slide level2">
 <h2>Get frequencies of categories</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-5_752c18eb7de62b989d87858cb0694d85">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Note that we don't need a special command for this</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>ks_data <span class="sc">|&gt;</span> <span class="fu">count</span>(Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># Note that we don't need a special command for this</span></span>
+<span id="cb9-2"><a href=""></a>ks_data <span class="sc">|&gt;</span> <span class="fu">count</span>(Country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 53 × 2
    Country            n
@@ -849,28 +850,33 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 </section>
 <section id="lets-get-a-quick-graph" class="slide level2">
 <h2>Let’s get a quick graph</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-6_eb2083e4050394e90e7d9c86dcf18c43">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> Country)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> Country)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
 <section id="forcats-commands-for-reordering-levels" class="slide level2">
-<h2>Forcats commands for reordering levels</h2>
+<h2>Forcats commands for reordering levels:</h2>
+<h3 id="fct_infreq"><code>fct_infreq()</code></h3>
 <ul>
 <li>Reorder by frequency of categories:</li>
 </ul>
-<p><img data-src="figures/fct_infreq.png"></p>
+
+<img data-src="figures/fct_infreq.png" class="r-stretch"></section>
+<section id="forcats-commands-for-reordering-levels-1" class="slide level2">
+<h2>Forcats commands for reordering levels:</h2>
+<h3 id="fct_reorder"><code>fct_reorder()</code></h3>
 <ul>
 <li>Reorder by level of another variable:</li>
 </ul>
-<p><img data-src="figures/fct_reorder.png"></p>
-</section>
+
+<img data-src="figures/fct_reorder.png" class="r-stretch"></section>
 <section id="lets-reorder-by-frequency" class="slide level2">
 <h2>Let’s reorder by frequency</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-7_ca5ac394f13a8a5c1ec0d565f25a29b0">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_infreq</span>(Country))) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_infreq</span>(Country))) <span class="sc">+</span></span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
@@ -880,18 +886,18 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 <img data-src="figures/fct_rev.png" class="r-stretch"></section>
 <section id="put-bars-in-order-from-highest-to-lowest" class="slide level2">
 <h2>Put bars in order from highest to lowest</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-8_3eb2a1ea3b5582e9a0d37cfef40aacd0">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">ggplot</span>(ks_data, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
+<span id="cb13-2"><a href=""></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
 <section id="remove-the-na-values-for-now" class="slide level2">
 <h2>Remove the NA values for now</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-9_01a7ef5e9f00f9ac6ac6b32041adeb5c">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ks_data2 <span class="ot">&lt;-</span> ks_data <span class="sc">|&gt;</span>  <span class="fu">drop_na</span>(Country)</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>ks_data2 <span class="ot">&lt;-</span> ks_data <span class="sc">|&gt;</span>  <span class="fu">drop_na</span>(Country)</span>
+<span id="cb14-2"><a href=""></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
+<span id="cb14-3"><a href=""></a>  <span class="fu">geom_bar</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
@@ -899,29 +905,30 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 <h2>Recoding Levels</h2>
 
 <img data-src="figures/fct_recode.png" class="r-stretch"></section>
-<section id="clean-up-and-shorten-a-few-labels" class="slide level2">
+<section id="clean-up-and-shorten-a-few-labels" class="slide level2 smaller">
 <h2>Clean Up and Shorten a Few Labels</h2>
 <ul>
+<li><p>New labels are on the left</p></li>
 <li><p>The name for China has an extra space and an apostrophe</p></li>
 <li><p>Put in common abbreviations for UK and USA</p></li>
-<li><p>Combine “Taiwan” with “Republic of China”:</p></li>
+<li><p>Recode “Republic of China” as “Taiwan”.</p></li>
 </ul>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-10_0764b0ddc79259926904149b3001c867">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>ks_data2 <span class="ot">&lt;-</span> ks_data2 <span class="sc">|&gt;</span> </span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>      <span class="fu">fct_recode</span>(Country, </span>
-<span id="cb15-4"><a href="#cb15-4"></a>          <span class="st">"China"</span> <span class="ot">=</span>  <span class="st">"People 's Republic of China"</span>,</span>
-<span id="cb15-5"><a href="#cb15-5"></a>          <span class="st">"USA"</span> <span class="ot">=</span> <span class="st">"United States"</span>, </span>
-<span id="cb15-6"><a href="#cb15-6"></a>          <span class="st">"UK"</span> <span class="ot">=</span> <span class="st">"United Kingdom"</span>, </span>
-<span id="cb15-7"><a href="#cb15-7"></a>          <span class="st">"Taiwan"</span> <span class="ot">=</span> <span class="st">"Republic of China"</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>ks_data2 <span class="ot">&lt;-</span> ks_data2 <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">Country =</span></span>
+<span id="cb15-3"><a href=""></a>      <span class="fu">fct_recode</span>(Country, </span>
+<span id="cb15-4"><a href=""></a>          <span class="st">"China"</span> <span class="ot">=</span>  <span class="st">"People 's Republic of China"</span>,</span>
+<span id="cb15-5"><a href=""></a>          <span class="st">"USA"</span> <span class="ot">=</span> <span class="st">"United States"</span>, </span>
+<span id="cb15-6"><a href=""></a>          <span class="st">"UK"</span> <span class="ot">=</span> <span class="st">"United Kingdom"</span>, </span>
+<span id="cb15-7"><a href=""></a>          <span class="st">"Taiwan"</span> <span class="ot">=</span> <span class="st">"Republic of China"</span></span>
+<span id="cb15-8"><a href=""></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="clean-up-and-shorten-a-few-labels-redraw-the-plot" class="slide level2">
 <h2>Clean Up and Shorten a Few Labels: Redraw the Plot</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-11_ddaee458bbdf3ecabbbc59c55ebb0e9e">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(Country)))) <span class="sc">+</span></span>
+<span id="cb16-2"><a href=""></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
@@ -933,51 +940,53 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 <h2>Factors for aggregating levels (cont’d)</h2>
 
 <img data-src="figures/fct_other.png" class="r-stretch"></section>
-<section id="lump-smaller-countries-together-to-focus-on-the-largest" class="slide level2">
+<section id="lump-smaller-countries-together-to-focus-on-the-largest" class="slide level2 smaller">
 <h2>Lump smaller countries together to focus on the largest</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-12_184c935cdd0f7b51c305dae310ebd4e5">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>ks_data2 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(ks_data2, <span class="at">top_country =</span> <span class="fu">fct_lump</span>(Country, <span class="at">prop =</span> .<span class="dv">01</span>))</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(top_country)))) <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Number of Respondents"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6"></a>       <span class="at">title =</span> <span class="st">"Largest responding"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Use <code>fct_recode()</code> to combine new “All Other” with previous “Other”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>ks_data2 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(ks_data2, <span class="at">top_country =</span> <span class="fu">fct_lump_prop</span>(Country, <span class="at">prop =</span> .<span class="dv">01</span>, </span>
+<span id="cb17-2"><a href=""></a>                                                         <span class="at">other_level =</span> <span class="st">"All Other"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">top_country =</span> <span class="fu">fct_recode</span>(top_country, <span class="st">"Other"</span> <span class="ot">=</span> <span class="st">"All Other"</span>))</span>
+<span id="cb17-4"><a href=""></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(top_country)))) <span class="sc">+</span> </span>
+<span id="cb17-5"><a href=""></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
+<span id="cb17-6"><a href=""></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb17-7"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Number of Respondents"</span>,</span>
+<span id="cb17-8"><a href=""></a>       <span class="at">title =</span> <span class="st">"Largest responding"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
 <section id="group-together-by-continent" class="slide level2">
 <h2>Group together by continent</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-13_d543b1a49466898962f2b30cc0015913">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>ks_data2 <span class="ot">&lt;-</span> ks_data2 <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">top_continents =</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">fct_collapse</span>(top_country, </span>
-<span id="cb18-3"><a href="#cb18-3"></a>      <span class="at">Oceania =</span> <span class="fu">c</span>(<span class="st">"Australia"</span>), </span>
-<span id="cb18-4"><a href="#cb18-4"></a>      <span class="at">South_America =</span> <span class="fu">c</span>(<span class="st">"Brazil"</span>),</span>
-<span id="cb18-5"><a href="#cb18-5"></a>      <span class="at">Europe =</span> <span class="fu">c</span>(<span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Italy"</span>, <span class="st">"Netherlands"</span>,</span>
-<span id="cb18-6"><a href="#cb18-6"></a>                  <span class="st">"Poland"</span>, <span class="st">"Spain"</span>, <span class="st">"UK"</span>, <span class="st">"Ukraine"</span>),</span>
-<span id="cb18-7"><a href="#cb18-7"></a>      <span class="at">North_America =</span> <span class="fu">c</span>(<span class="st">"Canada"</span>, <span class="st">"USA"</span>), </span>
-<span id="cb18-8"><a href="#cb18-8"></a>      <span class="at">Asia =</span> <span class="fu">c</span>(<span class="st">"India"</span>, <span class="st">"Japan"</span>, <span class="st">"China"</span>,</span>
-<span id="cb18-9"><a href="#cb18-9"></a>               <span class="st">"Singapore"</span>, <span class="st">"South Korea"</span>, <span class="st">"Taiwan"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>ks_data2 <span class="ot">&lt;-</span> ks_data2 <span class="sc">|&gt;</span>  <span class="fu">mutate</span>(<span class="at">top_continents =</span></span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">fct_collapse</span>(top_country, </span>
+<span id="cb18-3"><a href=""></a>      <span class="at">Oceania =</span> <span class="fu">c</span>(<span class="st">"Australia"</span>), </span>
+<span id="cb18-4"><a href=""></a>      <span class="at">South_America =</span> <span class="fu">c</span>(<span class="st">"Brazil"</span>),</span>
+<span id="cb18-5"><a href=""></a>      <span class="at">Europe =</span> <span class="fu">c</span>(<span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Italy"</span>, <span class="st">"Netherlands"</span>,</span>
+<span id="cb18-6"><a href=""></a>                  <span class="st">"Poland"</span>, <span class="st">"Spain"</span>, <span class="st">"UK"</span>, <span class="st">"Ukraine"</span>),</span>
+<span id="cb18-7"><a href=""></a>      <span class="at">North_America =</span> <span class="fu">c</span>(<span class="st">"Canada"</span>, <span class="st">"USA"</span>), </span>
+<span id="cb18-8"><a href=""></a>      <span class="at">Asia =</span> <span class="fu">c</span>(<span class="st">"India"</span>, <span class="st">"Japan"</span>, <span class="st">"China"</span>,</span>
+<span id="cb18-9"><a href=""></a>               <span class="st">"Singapore"</span>, <span class="st">"South Korea"</span>, <span class="st">"Taiwan"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="graph-counts-for-top-continents-after-collapsing" class="slide level2">
 <h2>Graph counts for top continents after collapsing</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-14_bb1f32a2ff2e10546df14de28cb5966f">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(top_continents)))) <span class="sc">+</span> </span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Number of Respondents"</span>, </span>
-<span id="cb19-5"><a href="#cb19-5"></a>       <span class="at">title =</span> <span class="st">"Largest responding"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">ggplot</span>(ks_data2, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_rev</span>(<span class="fu">fct_infreq</span>(top_continents)))) <span class="sc">+</span> </span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
+<span id="cb19-3"><a href=""></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href=""></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Number of Respondents"</span>, </span>
+<span id="cb19-5"><a href=""></a>       <span class="at">title =</span> <span class="st">"Largest responding"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
 <section id="challenge-graph-average-age-for-top-countries" class="slide level2">
 <h2>Challenge: Graph average age for top countries</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-15_35ad729f8b1eb5e719ba0fb1302d698b">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>ks_data2 <span class="sc">|&gt;</span>  <span class="fu">group_by</span>(top_country) <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(Age, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb20-3"><a href="#cb20-3"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> top_country, <span class="at">y =</span> mean_age)) <span class="sc">+</span> </span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>ks_data2 <span class="sc">|&gt;</span>  <span class="fu">group_by</span>(top_country) <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(Age, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> mean_age, <span class="at">y =</span> top_country)) <span class="sc">+</span> </span>
+<span id="cb20-4"><a href=""></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
@@ -987,24 +996,26 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
 <img data-src="figures/fct_reorder.png" class="r-stretch"></section>
 <section id="challenge-graph-average-age-for-top-countries-1" class="slide level2">
 <h2>Challenge: Graph average age for top countries</h2>
-<div class="cell" data-hash="Factors_Ch16_cache/revealjs/unnamed-chunk-16_f60ecd9dddc9d0b921a04feaeccffa87">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>ks_data2 <span class="sc">|&gt;</span> </span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">group_by</span>(top_country) <span class="sc">|&gt;</span> </span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(Age, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_reorder</span>(top_country, mean_age), <span class="at">x =</span> mean_age)) <span class="sc">+</span> </span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>ks_data2 <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href=""></a>  <span class="fu">group_by</span>(top_country) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(Age, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href=""></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">fct_reorder</span>(top_country, mean_age), <span class="at">x =</span> mean_age)) <span class="sc">+</span> </span>
+<span id="cb21-5"><a href=""></a><span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="Factors_Ch16_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"><ul>
 <li>Oldest respondents in Europe and youngest in Asia?</li>
 </ul>
-</section></section>
-<section id="your-turn-import-the-kaggle-study-data-and-investigate-a-categorical-variable-of-interest" class="title-slide slide level1 center" data-background-color="#FE961C">
-<h1><span style="color: white;">Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest</span></h1>
+</section>
+<section id="your-turn-import-the-kaggle-study-data-and-investigate-a-categorical-variable-of-interest" class="slide level2" data-background-color="#FE961C">
+<h2><span style="color: white;">Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest</span></h2>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section>
+</div>
+</section></section>
     </div>
   </div>
 
@@ -1032,7 +1043,6 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': true,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1288,18 +1298,7 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1331,11 +1330,50 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1345,8 +1383,17 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1360,7 +1407,11 @@ $ JobFactorPublishingOpportunity              &lt;chr&gt; NA, NA, "Very Importan
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {

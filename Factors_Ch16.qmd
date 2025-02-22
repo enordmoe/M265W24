@@ -3,7 +3,7 @@ title: "Chapter 16: Factors"
 author: Introduction to Data Science
 format:
   revealjs:
-    theme: default 
+    theme: [default, custom.scss]
     slide-number: true
     chalkboard: 
       theme: whiteboard
@@ -12,11 +12,13 @@ format:
     execute:
       warning: false
       echo: true
-      cache: true
+#      cache: true
     callouts:
       quote:
         title: Quote
         icon: quote
+title-slide-attributes:
+  data-background-color: "#EA6820"
 editor: 
   markdown: 
     wrap: 72
@@ -119,7 +121,7 @@ zodiac_fac
 * [`multipleChoiceResponses.csv`](https://www.kaggle.com/kaggle/kaggle-survey-2017?select=multipleChoiceResponses.csv) contains over 16K rows and 228 variables
 
 ::: aside
-**Source**: Kaggle https://www.kaggle.com/kaggle/kaggle-survey-2017
+**Source**: Kaggle [https://www.kaggle.com/kaggle/kaggle-survey-2017](https://www.kaggle.com/kaggle/kaggle-survey-2017)
 :::
 
 
@@ -169,11 +171,15 @@ ggplot(ks_data, aes(y = Country)) +
 ```
 
 
-## Forcats commands for reordering levels  
+## Forcats commands for reordering levels: 
+### `fct_infreq()`
 
 * Reorder by frequency of categories:
 
 ![](figures/fct_infreq.png)
+
+## Forcats commands for reordering levels: 
+### `fct_reorder()`
 
 * Reorder by level of another variable:
 
@@ -213,13 +219,15 @@ ggplot(ks_data2, aes(y = fct_rev(fct_infreq(Country)))) +
 
 ![](figures/fct_recode.png)
 
-## Clean Up and Shorten a Few Labels
+## Clean Up and Shorten a Few Labels {.smaller}
+
+* New labels are on the left
 
 * The name for China has an extra space and an apostrophe 
 
 * Put in common abbreviations for UK and USA
 
-* Combine "Taiwan" with "Republic of China":
+* Recode "Republic of China" as "Taiwan".
 
 ```{r}
 ks_data2 <- ks_data2 |> 
@@ -249,10 +257,14 @@ ggplot(ks_data2, aes(y = fct_rev(fct_infreq(Country)))) +
 ![](figures/fct_other.png)
 
 
-## Lump smaller countries together to focus on the largest 
+## Lump smaller countries together to focus on the largest {.smaller}
+
+Use `fct_recode()` to combine new "All Other" with previous "Other"
 
 ```{r}
-ks_data2 <- mutate(ks_data2, top_country = fct_lump(Country, prop = .01))
+ks_data2 <- mutate(ks_data2, top_country = fct_lump_prop(Country, prop = .01, 
+                                                         other_level = "All Other")) |> 
+    mutate(top_country = fct_recode(top_country, "Other" = "All Other"))
 ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_country)))) + 
   geom_bar() + 
   coord_flip() +
@@ -291,10 +303,9 @@ ggplot(ks_data2, aes(x = fct_rev(fct_infreq(top_continents)))) +
 
 ```{r}
 ks_data2 |>  group_by(top_country) |> 
-  summarise(mean_age = mean(Age, na.rm=TRUE)) |> 
-ggplot(aes(x = top_country, y = mean_age)) + 
-geom_point() + 
-  coord_flip()
+  summarize(mean_age = mean(Age, na.rm=TRUE)) |> 
+  ggplot(aes(x = mean_age, y = top_country)) + 
+  geom_point()
 ```
 
 
@@ -316,7 +327,7 @@ geom_point()
 * Oldest respondents in Europe and youngest in Asia? 
 
 
-# [Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest]{style="color: white;"} {background-color="#FE961C"}
+## [Your turn: Import the Kaggle Study Data and Investigate a Categorical Variable of Interest]{style="color: white;"} {background-color="#FE961C"}
 
 
 
