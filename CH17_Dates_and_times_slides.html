@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Introduction to Data Science">
-  <title>Chapter 17: Dates and Times update</title>
+  <title>Chapter 17: Dates and Times</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -392,8 +392,8 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Chapter 17: Dates and Times update</h1>
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
+  <h1 class="title">Chapter 17: Dates and Times</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -453,27 +453,15 @@ Introduction to Data Science
 <section id="those-tricky-dates" class="slide level2">
 <h2>Those tricky dates…</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"March 21st, 1992"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"12th of Jan, 2016"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"March 21st, 1992"</span>)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"12th of Jan, 2016"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="those-tricky-dates-1" class="slide level2">
 <h2>Those tricky dates…</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"1942Jan03"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"July041776 0930"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"1942Jan03"</span>)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">parse_date</span>(<span class="st">"July041776 0930"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="lubridate-to-the-rescue" class="slide level2">
@@ -498,33 +486,21 @@ Introduction to Data Science
 <section id="lubridate-parsing-functions" class="slide level2">
 <h2><strong>lubridate</strong> parsing functions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">mdy</span>(<span class="st">"March 21st, 1992"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "1992-03-21"</code></pre>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">mdy</span>(<span class="st">"March 21st, 1992"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"12th of Jan, 2016"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"12th of Jan, 2016"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2016-01-12"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"1942Jan03"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"1942Jan03"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "1942-01-03"</code></pre>
-</div>
-</div>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">mdy_hm</span>(<span class="st">"July041776 0930"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "1776-07-04 09:30:00 UTC"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">mdy_hm</span>(<span class="st">"July041776 0930"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -532,12 +508,10 @@ Introduction to Data Science
 <h2>Difficult Questions about Dates and Times</h2>
 <h3 id="why-are-these-questions-difficult">Why are these questions difficult?</h3>
 <ul>
-<li><p>What day is one year after January 1, 2019?</p></li>
-<li><p>What day is one month after February 15, 2019 (or 2024?)?</p></li>
-<li><p>What time is 60 minutes after 1:30 am on March 10, 2019?</p>
-<ul>
-<li>What is the last day of February?</li>
-</ul></li>
+<li><p>What day is one year after January 1, 2024?</p></li>
+<li><p>What day is one month after February 15, 2024 (or 2025?)?</p></li>
+<li><p>What time is 60 minutes after 1:30 am on March 9, 2025?</p></li>
+<li><p>What is the last day of February?</p></li>
 </ul>
 </section>
 <section id="lubridate-has-several-ways-of-dealing-with-these-problems" class="slide level2 smaller">
@@ -546,46 +520,25 @@ Introduction to Data Science
 <li>Answers depend on the starting point</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2019"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2020-01-01"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2019"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2020-01-01"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2025"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2025"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <ul>
 <li>Leap year gives different results</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2020"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2021-01-01"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2020"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2020-12-31"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2024"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span>
+<span id="cb8-2"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2024"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="lubridate-has-several-ways-of-dealing-with-these-problems-1" class="slide level2">
 <h2><strong>lubridate</strong> has several ways of dealing with these problems</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"10-Mar-2019 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2019-03-10 01:30:00 EST"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"10-Mar-2019 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">minutes</span>(<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"10-Mar-2019 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">dminutes</span>(<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2019-03-10 03:30:00 EDT"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) </span>
+<span id="cb9-2"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">minutes</span>(<span class="dv">60</span>)</span>
+<span id="cb9-3"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">dminutes</span>(<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="timespans-in-lubridate" class="slide level2 smaller">
@@ -618,7 +571,7 @@ Introduction to Data Science
 <section id="other-useful-functions-rounding-date-times" class="slide level2">
 <h2>Other useful functions: Rounding date-times</h2>
 
-<img data-src="figures/rounding_dates.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section></section>
+<img data-src="figures/rounding_dates.png" class="r-stretch"></section></section>
 <section id="your-turn-complete-the-tutorial-in-inclass265" class="title-slide slide level1 center" data-background-color="#FE961C">
 <h1><span style="color: white;">Your turn: Complete the tutorial in inclass265</span></h1>
 <div class="quarto-auto-generated-content">

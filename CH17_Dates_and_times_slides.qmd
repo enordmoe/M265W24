@@ -1,26 +1,31 @@
 ---
-title: "Chapter 17: Dates and Times update"
+title: "Chapter 17: Dates and Times"
 author: Introduction to Data Science
 format:
   revealjs:
-    theme: default 
+    theme: [default, custom.scss]
     slide-number: true
     chalkboard: 
       theme: whiteboard
       buttons: false
     preview-links: auto
     execute:
+      eval: false
       warning: false
       echo: true
-      cache: true
+#      cache: true
     callouts:
       quote:
         title: Quote
         icon: quote
+title-slide-attributes:
+  data-background-color: "#EA6820"
 editor: 
   markdown: 
     wrap: 72
 ---
+
+
 
 ```{r}
 #| label: setup
@@ -143,21 +148,21 @@ mdy_hm("July041776 0930")
 
 ### Why are these questions difficult?
 
--   What day is one year after January 1, 2019?
+-   What day is one year after January 1, 2024?
 
--   What day is one month after February 15, 2019 (or 2024?)?
+-   What day is one month after February 15, 2024 (or 2025?)?
 
--   What time is 60 minutes after 1:30 am on March 10, 2019?
+-   What time is 60 minutes after 1:30 am on March 9, 2025?
 
-    -   What is the last day of February?
+-   What is the last day of February?
 
 ## **lubridate** has several ways of dealing with these problems {.smaller}
 
 -   Answers depend on the starting point
 
 ```{r}
-dmy("01-Jan-2019") + years(1)
-dmy("01-Jan-2019") + days(365)
+dmy("01-Jan-2025") + years(1)
+dmy("01-Jan-2025") + days(365)
 ```
 
 . . .
@@ -165,16 +170,16 @@ dmy("01-Jan-2019") + days(365)
 -   Leap year gives different results
 
 ```{r}
-dmy("01-Jan-2020") + years(1)
-dmy("01-Jan-2020") + days(365)
+dmy("01-Jan-2024") + years(1)
+dmy("01-Jan-2024") + days(365)
 ```
 
 ## **lubridate** has several ways of dealing with these problems
 
 ```{r}
-dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") 
-dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + minutes(60)
-dmy_hm("10-Mar-2019 01:30", tz = "America/Detroit") + dminutes(60)
+dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") 
+dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") + minutes(60)
+dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") + dminutes(60)
 ```
 
 ## Timespans in **lubridate** {.smaller}
@@ -203,8 +208,6 @@ Sheet](https://rstudio.github.io/cheatsheets/lubridate.pdf) for helpful examples
 
 ## Other useful functions: Rounding date-times
 
-```{r, out.width = '50%', fig.align='center', fig.cap='',echo=FALSE}
-knitr::include_graphics('figures/rounding_dates.png')
-```
+![](figures/rounding_dates.png)
 
 # [Your turn: Complete the tutorial in inclass265]{style="color: white;"} {background-color="#FE961C"}
