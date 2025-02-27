@@ -146,7 +146,6 @@ mdy_hm("July041776 0930")
 
 ## Difficult Questions about Dates and Times
 
-### Why are these questions difficult?
 
 -   What day is one year after January 1, 2024?
 
@@ -156,25 +155,78 @@ mdy_hm("July041776 0930")
 
 -   What is the last day of February?
 
-## **lubridate** has several ways of dealing with these problems {.smaller}
+. . . 
 
--   Answers depend on the starting point
+::: {.callout-note}
+### ❓ Question to Consider
+Why are these questions difficult?
+:::
 
+
+
+## Timespans in **lubridate**
+
+Three different timespans:
+
+* Periods  
+
+* Durations  
+
+* Intervals  
+
+
+## Timespans in **lubridate**: Periods {.smaller}
+
+- **Periods**: Represent human-friendly time units that align with the calendar (e.g., months, years), but they **ignore irregularities** like leap years and daylight savings.
+
+  - Examples: `seconds(30)`, `minutes(5)`, `hours(1)`, `days(10)`, `months(3)`, `years(2)`
+  - Used for **arithmetic operations** that adjust dates/times while preserving real-world meaning.
+  - *Example:*
 ```{r}
-dmy("01-Jan-2025") + years(1)
-dmy("01-Jan-2025") + days(365)
+ymd("2023-03-01") + years(1)  
+ymd("2024-03-01") + years(1)  
+ymd("2024-02-01") + months(1) 
+ymd("2024-03-01") + months(1) 
 ```
 
-. . .
+## Timespans in **lubridate**: Durations {.smaller}
 
--   Leap year gives different results
+- **Durations**: Represent **exact** lengths of time in **fixed seconds** (ignoring calendars).
 
+  - Examples: `dseconds(30)`, `dminutes(5)`, `dhours(1)`, `dweeks(2)`
+  - Always based on **constant** seconds:
+    - 1 day = **86400 seconds**
+    - 1 year = **31,536,000 seconds** (not accounting for leap years!)
+  - *Example:*
 ```{r}
-dmy("01-Jan-2024") + years(1)
-dmy("01-Jan-2024") + days(365)
+ymd("2023-03-01") + dyears(1)   # Moves exactly 365.25 days ahead
+ymd("2024-03-01") + dyears(1)  
+dyears(1)/60 # Can't quite sing this
 ```
 
-## **lubridate** has several ways of dealing with these problems
+## Timespans in **lubridate**: Intervals {.smaller}
+
+- **Intervals**: Represent a **time span between two date-time points**, keeping both **start and end**.
+
+- Created with `interval()` or  `%--%`:  
+
+```{r}
+interval(ymd("2024-01-01"), ymd("2025-01-01"))
+ymd("2024-01-01") %--% ymd("2025-01-01")
+```
+
+- Used to check if a date-time falls within a range:  
+
+```{r}
+ymd("2024-06-15") %within% interval(ymd("2024-01-01"), ymd("2025-01-01"))
+```
+
+**See the [lubridate Cheat Sheet](https://rstudio.github.io/cheatsheets/lubridate.pdf) for more details.**
+
+
+
+
+## Use time zones to see what's going on 
 
 ```{r}
 dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") 
@@ -182,32 +234,24 @@ dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") + minutes(60)
 dmy_hm("09-Mar-2025 01:30", tz = "America/Detroit") + dminutes(60)
 ```
 
-## Timespans in **lubridate** {.smaller}
 
--   **Periods**: track changes in clock times ignoring irregularities
-
-    -   `minutes()`, `years()`, etc.
-    -   No `months()` because they're too irregular
-
-. . .
-
--   **Durations:** track the passage of physical time
-
-    -   `dminutes()`, `dhours()`, `dweeks()`, etc.
-    -    Underlying object stored in seconds
-
-. . .
-
--   **Intervals**: represent specific intervals of the timeline, bounded
-    by start and end date-times
-
-. . . 
-
-Can be very confusing $\Rightarrow$ see **lubridate** [Cheat
-Sheet](https://rstudio.github.io/cheatsheets/lubridate.pdf) for helpful examples
 
 ## Other useful functions: Rounding date-times
 
 ![](figures/rounding_dates.png)
 
 # [Your turn: Complete the tutorial in inclass265]{style="color: white;"} {background-color="#FE961C"}
+
+## Summary: Dates and Times in R {.smaller}
+
+- **Parsing Dates & Times**: Use `ymd()`, `mdy()`, `dmy()`, and their time variants (`ymd_hms()`, etc.) instead of `parse_date()`.
+- **Handling Date Challenges**:
+  - Leap years, daylight savings time, and irregular months make date calculations tricky.
+- **Time Spans in `lubridate`**:
+  - **Periods** (`years(1)`, `months(1)`) respect the calendar.
+  - **Durations** (`dyears(1)`, `dweeks(2)`) are fixed in seconds.
+  - **Intervals** (`interval(start, end)`) define a range of time.
+- **Time Zones Matter!**  
+  - Adding one hour in Detroit during daylight savings behaves differently than in UTC.
+
+**More Resources**: [lubridate Cheat Sheet](https://rstudio.github.io/cheatsheets/lubridate.pdf)

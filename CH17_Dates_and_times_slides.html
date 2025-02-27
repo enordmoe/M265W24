@@ -506,80 +506,135 @@ Introduction to Data Science
 </section>
 <section id="difficult-questions-about-dates-and-times" class="slide level2">
 <h2>Difficult Questions about Dates and Times</h2>
-<h3 id="why-are-these-questions-difficult">Why are these questions difficult?</h3>
 <ul>
 <li><p>What day is one year after January 1, 2024?</p></li>
 <li><p>What day is one month after February 15, 2024 (or 2025?)?</p></li>
 <li><p>What time is 60 minutes after 1:30 am on March 9, 2025?</p></li>
 <li><p>What is the last day of February?</p></li>
 </ul>
-</section>
-<section id="lubridate-has-several-ways-of-dealing-with-these-problems" class="slide level2 smaller">
-<h2><strong>lubridate</strong> has several ways of dealing with these problems</h2>
-<ul>
-<li>Answers depend on the starting point</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2025"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span>
-<span id="cb7-2"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2025"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="fragment">
-<ul>
-<li>Leap year gives different results</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2024"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)</span>
-<span id="cb8-2"><a href=""></a><span class="fu">dmy</span>(<span class="st">"01-Jan-2024"</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>❓ Question to Consider</strong></p>
+</div>
+<div class="callout-content">
+<p>Why are these questions difficult?</p>
+</div>
+</div>
 </div>
 </div>
 </section>
-<section id="lubridate-has-several-ways-of-dealing-with-these-problems-1" class="slide level2">
-<h2><strong>lubridate</strong> has several ways of dealing with these problems</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) </span>
-<span id="cb9-2"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">minutes</span>(<span class="dv">60</span>)</span>
-<span id="cb9-3"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">dminutes</span>(<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="timespans-in-lubridate" class="slide level2 smaller">
+<section id="timespans-in-lubridate" class="slide level2">
 <h2>Timespans in <strong>lubridate</strong></h2>
+<p>Three different timespans:</p>
 <ul>
-<li><p><strong>Periods</strong>: track changes in clock times ignoring irregularities</p>
+<li><p>Periods</p></li>
+<li><p>Durations</p></li>
+<li><p>Intervals</p></li>
+</ul>
+</section>
+<section id="timespans-in-lubridate-periods" class="slide level2 smaller">
+<h2>Timespans in <strong>lubridate</strong>: Periods</h2>
 <ul>
-<li><code>minutes()</code>, <code>years()</code>, etc.</li>
-<li>No <code>months()</code> because they’re too irregular</li>
+<li><p><strong>Periods</strong>: Represent human-friendly time units that align with the calendar (e.g., months, years), but they <strong>ignore irregularities</strong> like leap years and daylight savings.</p>
+<ul>
+<li>Examples: <code>seconds(30)</code>, <code>minutes(5)</code>, <code>hours(1)</code>, <code>days(10)</code>, <code>months(3)</code>, <code>years(2)</code></li>
+<li>Used for <strong>arithmetic operations</strong> that adjust dates/times while preserving real-world meaning.</li>
+<li><em>Example:</em></li>
 </ul></li>
 </ul>
-<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2023-03-01"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)  </span>
+<span id="cb7-2"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-03-01"</span>) <span class="sc">+</span> <span class="fu">years</span>(<span class="dv">1</span>)  </span>
+<span id="cb7-3"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-02-01"</span>) <span class="sc">+</span> <span class="fu">months</span>(<span class="dv">1</span>) </span>
+<span id="cb7-4"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-03-01"</span>) <span class="sc">+</span> <span class="fu">months</span>(<span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="timespans-in-lubridate-durations" class="slide level2 smaller">
+<h2>Timespans in <strong>lubridate</strong>: Durations</h2>
 <ul>
-<li><p><strong>Durations:</strong> track the passage of physical time</p>
+<li><p><strong>Durations</strong>: Represent <strong>exact</strong> lengths of time in <strong>fixed seconds</strong> (ignoring calendars).</p>
 <ul>
-<li><code>dminutes()</code>, <code>dhours()</code>, <code>dweeks()</code>, etc.</li>
-<li>Underlying object stored in seconds</li>
+<li>Examples: <code>dseconds(30)</code>, <code>dminutes(5)</code>, <code>dhours(1)</code>, <code>dweeks(2)</code></li>
+<li>Always based on <strong>constant</strong> seconds:
+<ul>
+<li>1 day = <strong>86400 seconds</strong></li>
+<li>1 year = <strong>31,536,000 seconds</strong> (not accounting for leap years!)</li>
+</ul></li>
+<li><em>Example:</em></li>
 </ul></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2023-03-01"</span>) <span class="sc">+</span> <span class="fu">dyears</span>(<span class="dv">1</span>)   <span class="co"># Moves exactly 365.25 days ahead</span></span>
+<span id="cb8-2"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-03-01"</span>) <span class="sc">+</span> <span class="fu">dyears</span>(<span class="dv">1</span>)  </span>
+<span id="cb8-3"><a href=""></a><span class="fu">dyears</span>(<span class="dv">1</span>)<span class="sc">/</span><span class="dv">60</span> <span class="co"># Can't quite sing this</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="fragment">
+</section>
+<section id="timespans-in-lubridate-intervals" class="slide level2 smaller">
+<h2>Timespans in <strong>lubridate</strong>: Intervals</h2>
 <ul>
-<li><strong>Intervals</strong>: represent specific intervals of the timeline, bounded by start and end date-times</li>
+<li><p><strong>Intervals</strong>: Represent a <strong>time span between two date-time points</strong>, keeping both <strong>start and end</strong>.</p></li>
+<li><p>Created with <code>interval()</code> or <code>%--%</code>:</p></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">interval</span>(<span class="fu">ymd</span>(<span class="st">"2024-01-01"</span>), <span class="fu">ymd</span>(<span class="st">"2025-01-01"</span>))</span>
+<span id="cb9-2"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-01-01"</span>) <span class="sc">%--%</span> <span class="fu">ymd</span>(<span class="st">"2025-01-01"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="fragment">
-<p>Can be very confusing <span class="math inline">\(\Rightarrow\)</span> see <strong>lubridate</strong> <a href="https://rstudio.github.io/cheatsheets/lubridate.pdf">Cheat Sheet</a> for helpful examples</p>
+<ul>
+<li>Used to check if a date-time falls within a range:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">ymd</span>(<span class="st">"2024-06-15"</span>) <span class="sc">%within%</span> <span class="fu">interval</span>(<span class="fu">ymd</span>(<span class="st">"2024-01-01"</span>), <span class="fu">ymd</span>(<span class="st">"2025-01-01"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>See the <a href="https://rstudio.github.io/cheatsheets/lubridate.pdf">lubridate Cheat Sheet</a> for more details.</strong></p>
+</section>
+<section id="use-time-zones-to-see-whats-going-on" class="slide level2">
+<h2>Use time zones to see what’s going on</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) </span>
+<span id="cb11-2"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">minutes</span>(<span class="dv">60</span>)</span>
+<span id="cb11-3"><a href=""></a><span class="fu">dmy_hm</span>(<span class="st">"09-Mar-2025 01:30"</span>, <span class="at">tz =</span> <span class="st">"America/Detroit"</span>) <span class="sc">+</span> <span class="fu">dminutes</span>(<span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="other-useful-functions-rounding-date-times" class="slide level2">
 <h2>Other useful functions: Rounding date-times</h2>
 
 <img data-src="figures/rounding_dates.png" class="r-stretch"></section></section>
+<section>
 <section id="your-turn-complete-the-tutorial-in-inclass265" class="title-slide slide level1 center" data-background-color="#FE961C">
 <h1><span style="color: white;">Your turn: Complete the tutorial in inclass265</span></h1>
+
+</section>
+<section id="summary-dates-and-times-in-r" class="slide level2 smaller">
+<h2>Summary: Dates and Times in R</h2>
+<ul>
+<li><strong>Parsing Dates &amp; Times</strong>: Use <code>ymd()</code>, <code>mdy()</code>, <code>dmy()</code>, and their time variants (<code>ymd_hms()</code>, etc.) instead of <code>parse_date()</code>.</li>
+<li><strong>Handling Date Challenges</strong>:
+<ul>
+<li>Leap years, daylight savings time, and irregular months make date calculations tricky.</li>
+</ul></li>
+<li><strong>Time Spans in <code>lubridate</code></strong>:
+<ul>
+<li><strong>Periods</strong> (<code>years(1)</code>, <code>months(1)</code>) respect the calendar.</li>
+<li><strong>Durations</strong> (<code>dyears(1)</code>, <code>dweeks(2)</code>) are fixed in seconds.</li>
+<li><strong>Intervals</strong> (<code>interval(start, end)</code>) define a range of time.</li>
+</ul></li>
+<li><strong>Time Zones Matter!</strong>
+<ul>
+<li>Adding one hour in Detroit during daylight savings behaves differently than in UTC.</li>
+</ul></li>
+</ul>
+<p><strong>More Resources</strong>: <a href="https://rstudio.github.io/cheatsheets/lubridate.pdf">lubridate Cheat Sheet</a></p>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
