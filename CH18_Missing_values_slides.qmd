@@ -3,13 +3,14 @@ title: "Chapter 18: Missing Values"
 author: Introduction to Data Science
 format:
   revealjs:
-    theme: default 
+    theme: [default, custom.scss]
     slide-number: true
     chalkboard: 
       theme: whiteboard
       buttons: false
     preview-links: auto
     execute:
+#      eval: false
       warning: false
       echo: true
       cache: true
@@ -17,6 +18,8 @@ format:
       quote:
         title: Quote
         icon: quote
+title-slide-attributes:
+  data-background-color: "#EA6820"
 editor: 
   markdown: 
     wrap: 72
@@ -36,9 +39,30 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 -   Explicit Missing Values
 
--   Implicity Missing Values
+-   Implicit Missing Values
 
 -   Factors Revisited
+
+## Review Questions: Dates & Times {.smaller}
+
+1.  What function in **lubridate** would you use to parse `"2024-03-01"`
+    into a date object?
+
+. . .
+
+2.  Why is handling **leap years** and **daylight savings time** tricky
+    in date calculations?
+
+. . .
+
+3.  What’s the difference between **periods** and **durations** in
+    `lubridate`?
+
+. . .
+
+4.  What happens when you add **1 year** to `"2024-02-29"` using:
+    -   `years(1)`?
+    -   `dyears(1)`?
 
 ## Missing Data is Everywhere (???)
 
@@ -54,11 +78,12 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ![](images/clipboard-2144953751.png)
 
-# What does this have to do with missing data?
+# What does this have to do with missing data? {background-color="#FAD9C7"}
 
 ## Import the Enrollment Data
 
 ```{r}
+# The file is in your inclass265 repo
 math_enroll <- read_csv("data/math_enroll.csv")
 head(math_enroll, n = 20)
 ```
@@ -103,8 +128,8 @@ math_enroll |>
 
 -   Example: How many siblings do you have?
 
-```{r}
-x <- c(1, 4,NA, 5, 7, NA, 2, NA)
+```{r, eval=FALSE}
+x <- c(1, 4, NA, 5, 7, NA, 2, NA)
 coalesce(x, 0)
 ```
 
@@ -116,7 +141,7 @@ coalesce(x, 0)
 
 -   Easy to fix with the if-then shortcut `na_if()`
 
-```{r}
+```{r, eval=FALSE}
 # Replace specific value with NA
 df1 <- tibble(x = c(1, 2, 3, 4, 5, 6),
               y = c(10, 999, NA, 40, 50, 999))
@@ -127,9 +152,9 @@ df1 |>
 
 ## Fixed values: Example 2
 
--   Replace "NA" with NA in column name
+-   Replace "NA" with NA in column `name`
 
-```{r}
+```{r, eval=FALSE}
 df2 <- tibble(name = c("Alice", "Bob", "Charlie", "NA"),
               age = c(25, NA, 30, 35))
 df2 |> 
@@ -140,7 +165,7 @@ df2 |>
 
 Some "missing" values occur due to math problems!
 
-```{r}
+```{r, eval=FALSE}
 #| warning: true
 0 / 0 
 0 * Inf
@@ -182,11 +207,24 @@ stocks <- tibble(
 )
 ```
 
--   Explicit missing data in 4th quarter of 2020
+-   **Explicit** missing data in 4th quarter of 2020
 
--   Implicit missing data in 1st quarter of 2021
+-   **Implicit** missing data in 1st quarter of 2021
 
-## Leatherback Sea Turtle Nesting Data
+## Leatherback Sea Turtle Nesting
+
+[![](https://www.entercostarica.com/images/maps/costa-rica-turtle-map-flat-1000.png){width="500"}](https://www.entercostarica.com/images/maps/costa-rica-turtle-map-flat-1000.png)
+
+::: aside
+Source:
+<https://www.entercostarica.com/travel-guide/costa-rica-maps/sea-turtle-map>
+:::
+
+## Leatherback Sea Turtle Nesting Raw Data
+
+![](images/turtle_raw_data.png)
+
+## Leatherback Sea Turtle Nesting Cleaned Data
 
 ![](images/clipboard-2155623770.png){fig-align="center"}
 
@@ -207,7 +245,7 @@ Remedies for implicit missing data
 ## Remedies for implicit missing data
 
 1.  Make explicit by pivoting
-2.  Use of `complete()` function to populate with NA values
+2.  Use `complete()` function to populate with NA values when needed
 
 ## Missing Chicago flight data
 
@@ -242,3 +280,36 @@ chiflights2020 |>
   facet_grid(dest~.) 
 
 ```
+
+## Summary: Missing Values {.smaller}
+
+### Key Concepts
+
+-   **Missing data is everywhere!**
+    -   Can be **explicit** (`NA` values) or **implicit** (entire rows
+        missing).\
+    -   Use `complete()` to make implicit values explicit.
+-   **Handling Missing Values**
+    -   Replace missing values with `fill()`, `coalesce()`, `na_if()`.\
+    -   Imputation techniques include **Last Observation Carried Forward
+        (LOCF)**.
+-   **Not all missing data should be imputed!**
+    -   Sometimes, missing values reveal **important patterns** in the
+        data.\
+    -   Investigate **why** data is missing before filling it.
+
+## Challenges {.smaller}
+
+-   **Implicit vs. Explicit Missing Data** – Know when to use
+    `complete()`.
+-   **NaNs from Math Operations** – Can occur from `0/0`, `log(-1)`,
+    etc.
+-   **Factors & Missing Data** – Be mindful of empty factor levels.
+    -   Use `drop = FALSE` in `scale_x_discrete()` to show all factor
+        levels in visualizations.
+<br>
+<br>
+
+::: callout-tip
+## Handling missing data isn’t just about filling gaps—it’s about understanding the story behind the gaps.
+:::

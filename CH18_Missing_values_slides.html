@@ -8,7 +8,7 @@
 <link href="CH18_Missing_values_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="CH18_Missing_values_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="CH18_Missing_values_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Introduction to Data Science">
   <title>Chapter 18: Missing Values</title>
@@ -31,7 +31,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -70,7 +70,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -84,7 +84,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -223,7 +223,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -391,7 +392,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
   <h1 class="title">Chapter 18: Missing Values</h1>
 
 <div class="quarto-title-authors">
@@ -408,33 +409,59 @@ Introduction to Data Science
 <ul>
 <li><p>A Scary Data Set</p></li>
 <li><p>Explicit Missing Values</p></li>
-<li><p>Implicity Missing Values</p></li>
+<li><p>Implicit Missing Values</p></li>
 <li><p>Factors Revisited</p></li>
 </ul>
+</section>
+<section id="review-questions-dates-times" class="slide level2 smaller">
+<h2>Review Questions: Dates &amp; Times</h2>
+<ol type="1">
+<li>What function in <strong>lubridate</strong> would you use to parse <code>"2024-03-01"</code> into a date object?</li>
+</ol>
+<div class="fragment">
+<ol start="2" type="1">
+<li>Why is handling <strong>leap years</strong> and <strong>daylight savings time</strong> tricky in date calculations?</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="3" type="1">
+<li>What’s the difference between <strong>periods</strong> and <strong>durations</strong> in <code>lubridate</code>?</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="4" type="1">
+<li>What happens when you add <strong>1 year</strong> to <code>"2024-02-29"</code> using:
+<ul>
+<li><code>years(1)</code>?</li>
+<li><code>dyears(1)</code>?</li>
+</ul></li>
+</ol>
+</div>
 </section>
 <section id="missing-data-is-everywhere" class="slide level2">
 <h2>Missing Data is Everywhere (???)</h2>
 <h3 id="mcar-vs-mar-vs-mnar">MCAR vs MAR vs MNAR</h3>
 
-<img data-src="images/41iI8ttkkcL._AC_UF1000,1000_QL80_.jpg" class="r-stretch quarto-figure-center"></section>
+<img data-src="images/41iI8ttkkcL._AC_UF1000,1000_QL80_.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="a-scary-data-set-math-enrollments-1.0" class="slide level2">
 <h2>A Scary Data Set: Math Enrollments 1.0</h2>
 
-<img data-src="images/enroll_v1.png" class="r-stretch quarto-figure-center"></section>
+<img data-src="images/enroll_v1.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="scary-data-2.0" class="slide level2">
 <h2>Scary Data 2.0</h2>
 
 <img data-src="images/clipboard-2144953751.png" class="r-stretch"></section>
 <section>
-<section id="what-does-this-have-to-do-with-missing-data" class="title-slide slide level1 center">
+<section id="what-does-this-have-to-do-with-missing-data" class="title-slide slide level1 center" data-background-color="#FAD9C7">
 <h1>What does this have to do with missing data?</h1>
 
 </section>
 <section id="import-the-enrollment-data" class="slide level2">
 <h2>Import the Enrollment Data</h2>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-2_168df88c2e00fa55db59b35adbcb449c">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>math_enroll <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/math_enroll.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">head</span>(math_enroll, <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># The file is in your inclass265 repo</span></span>
+<span id="cb1-2"><a href=""></a>math_enroll <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/math_enroll.csv"</span>)</span>
+<span id="cb1-3"><a href=""></a><span class="fu">head</span>(math_enroll, <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 7
    Year_beginning Quarter Class_num Section    Instructor Enrollment  ...7
@@ -478,9 +505,9 @@ Introduction to Data Science
 </section>
 <section id="last-observation-carried-forward-example" class="slide level2 smaller">
 <h2>Last Observation Carried Forward Example</h2>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-3_548396504df16fe0da4b0a7adcad0985">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>math_enroll <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">fill</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>math_enroll <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">fill</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 248 × 7
    Year_beginning Quarter Class_num Section Instructor Enrollment  ...7
@@ -502,11 +529,11 @@ Introduction to Data Science
 </section>
 <section id="filling-downward-and-upward" class="slide level2">
 <h2>Filling downward and upward</h2>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-4_246898caa54d498db14c0b81cb0bd14e">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|2|3|4|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>math_enroll <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">rename</span>(<span class="at">qrt_total =</span> <span class="st">`</span><span class="at">...7</span><span class="st">`</span>) <span class="sc">|&gt;</span>  <span class="co">#Deal with the non-syntactic name</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">fill</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">fill</span>(qrt_total, <span class="at">.direction =</span> <span class="st">"up"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|2|3|4|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>math_enroll <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">rename</span>(<span class="at">qrt_total =</span> <span class="st">`</span><span class="at">...7</span><span class="st">`</span>) <span class="sc">|&gt;</span>  <span class="co">#Deal with the non-syntactic name</span></span>
+<span id="cb5-3"><a href=""></a>  <span class="fu">fill</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb5-4"><a href=""></a>  <span class="fu">fill</span>(qrt_total, <span class="at">.direction =</span> <span class="st">"up"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 248 × 7
    Year_beginning Quarter Class_num Section Instructor Enrollment qrt_total
@@ -534,12 +561,9 @@ Introduction to Data Science
 <li><p>Fix NA values that should have nonmissing codes using <code>coalesce()</code></p></li>
 <li><p>Example: How many siblings do you have?</p></li>
 </ul>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-5_39b6fee4ac331f72d9abadcb49c2f7ed">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>,<span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="cn">NA</span>, <span class="dv">2</span>, <span class="cn">NA</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">coalesce</span>(x, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 4 0 5 7 0 2 0</code></pre>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="cn">NA</span>, <span class="dv">2</span>, <span class="cn">NA</span>)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">coalesce</span>(x, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Often, a nonresponse could simply mean zero (or some other value)</li>
@@ -551,88 +575,36 @@ Introduction to Data Science
 <li><p>A specific numerical code may be used for NAs in your data.</p></li>
 <li><p>Easy to fix with the if-then shortcut <code>na_if()</code></p></li>
 </ul>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-6_0cf35ceba8ce78687828cff2af25939b">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Replace specific value with NA</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),</span>
-<span id="cb9-3"><a href="#cb9-3"></a>              <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">999</span>, <span class="cn">NA</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">999</span>))</span>
-<span id="cb9-4"><a href="#cb9-4"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-      x     y
-  &lt;dbl&gt; &lt;dbl&gt;
-1     1    10
-2     2   999
-3     3    NA
-4     4    40
-5     5    50
-6     6   999</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>df1 <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">na_if</span>(y, <span class="dv">999</span>))  <span class="co"># Replace 20 with NA in column y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-      x     y
-  &lt;dbl&gt; &lt;dbl&gt;
-1     1    10
-2     2    NA
-3     3    NA
-4     4    40
-5     5    50
-6     6    NA</code></pre>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="co"># Replace specific value with NA</span></span>
+<span id="cb8-2"><a href=""></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),</span>
+<span id="cb8-3"><a href=""></a>              <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">999</span>, <span class="cn">NA</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">999</span>))</span>
+<span id="cb8-4"><a href=""></a>df1</span>
+<span id="cb8-5"><a href=""></a>df1 <span class="sc">|&gt;</span> </span>
+<span id="cb8-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">y =</span> <span class="fu">na_if</span>(y, <span class="dv">999</span>))  <span class="co"># Replace 20 with NA in column y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fixed-values-example-2" class="slide level2">
 <h2>Fixed values: Example 2</h2>
 <ul>
-<li>Replace “NA” with NA in column name</li>
+<li>Replace “NA” with NA in column <code>name</code></li>
 </ul>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-7_a1c1d72e4d2d794906994e6a963dcbb2">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>, <span class="st">"NA"</span>),</span>
-<span id="cb13-2"><a href="#cb13-2"></a>              <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="cn">NA</span>, <span class="dv">30</span>, <span class="dv">35</span>))</span>
-<span id="cb13-3"><a href="#cb13-3"></a>df2 <span class="sc">|&gt;</span> </span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">na_if</span>(name, <span class="st">"NA"</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 2
-  name      age
-  &lt;chr&gt;   &lt;dbl&gt;
-1 Alice      25
-2 Bob        NA
-3 Charlie    30
-4 &lt;NA&gt;       35</code></pre>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>, <span class="st">"NA"</span>),</span>
+<span id="cb9-2"><a href=""></a>              <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="cn">NA</span>, <span class="dv">30</span>, <span class="dv">35</span>))</span>
+<span id="cb9-3"><a href=""></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">na_if</span>(name, <span class="st">"NA"</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="nans" class="slide level2 smaller">
 <h2>NaNs</h2>
 <p>Some “missing” values occur due to math problems!</p>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-8_9ee1888de3a504ed89476e32dfc6a53c">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="dv">0</span> <span class="sc">/</span> <span class="dv">0</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="dv">0</span> <span class="sc">*</span> <span class="cn">Inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="cn">Inf</span> <span class="sc">-</span> <span class="cn">Inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">sqrt</span>(<span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in sqrt(-1): NaNs produced</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">log</span>(<span class="sc">-</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in log(-10): NaNs produced</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="dv">0</span> <span class="sc">/</span> <span class="dv">0</span> </span>
+<span id="cb10-2"><a href=""></a><span class="dv">0</span> <span class="sc">*</span> <span class="cn">Inf</span></span>
+<span id="cb10-3"><a href=""></a><span class="cn">Inf</span> <span class="sc">-</span> <span class="cn">Inf</span></span>
+<span id="cb10-4"><a href=""></a><span class="fu">sqrt</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-5"><a href=""></a><span class="fu">log</span>(<span class="sc">-</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p>Warning or not, these are not numbers.</p></li>
@@ -662,23 +634,34 @@ An implicit missing value is the absence of a presence.</p>
 <ul>
 <li>Missing entire rows of the data set</li>
 </ul>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-9_8c8e4d87e8d8cb925be7eedeca774bfd">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>stocks <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="at">year  =</span> <span class="fu">c</span>(<span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2021</span>, <span class="dv">2021</span>),</span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="at">qtr   =</span> <span class="fu">c</span>(   <span class="dv">1</span>,    <span class="dv">2</span>,    <span class="dv">3</span>,    <span class="dv">4</span>,    <span class="dv">2</span>,    <span class="dv">3</span>,    <span class="dv">4</span>),</span>
-<span id="cb27-4"><a href="#cb27-4"></a>  <span class="at">price =</span> <span class="fu">c</span>(<span class="fl">1.88</span>, <span class="fl">0.59</span>, <span class="fl">0.35</span>,   <span class="cn">NA</span>, <span class="fl">0.92</span>, <span class="fl">0.17</span>, <span class="fl">2.66</span>)</span>
-<span id="cb27-5"><a href="#cb27-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>stocks <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb11-2"><a href=""></a>  <span class="at">year  =</span> <span class="fu">c</span>(<span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2021</span>, <span class="dv">2021</span>),</span>
+<span id="cb11-3"><a href=""></a>  <span class="at">qtr   =</span> <span class="fu">c</span>(   <span class="dv">1</span>,    <span class="dv">2</span>,    <span class="dv">3</span>,    <span class="dv">4</span>,    <span class="dv">2</span>,    <span class="dv">3</span>,    <span class="dv">4</span>),</span>
+<span id="cb11-4"><a href=""></a>  <span class="at">price =</span> <span class="fu">c</span>(<span class="fl">1.88</span>, <span class="fl">0.59</span>, <span class="fl">0.35</span>,   <span class="cn">NA</span>, <span class="fl">0.92</span>, <span class="fl">0.17</span>, <span class="fl">2.66</span>)</span>
+<span id="cb11-5"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li><p>Explicit missing data in 4th quarter of 2020</p></li>
-<li><p>Implicit missing data in 1st quarter of 2021</p></li>
+<li><p><strong>Explicit</strong> missing data in 4th quarter of 2020</p></li>
+<li><p><strong>Implicit</strong> missing data in 1st quarter of 2021</p></li>
 </ul>
 </section>
-<section id="leatherback-sea-turtle-nesting-data" class="slide level2">
-<h2>Leatherback Sea Turtle Nesting Data</h2>
+<section id="leatherback-sea-turtle-nesting" class="slide level2">
+<h2>Leatherback Sea Turtle Nesting</h2>
+<p><a href="https://www.entercostarica.com/images/maps/costa-rica-turtle-map-flat-1000.png"><img data-src="https://www.entercostarica.com/images/maps/costa-rica-turtle-map-flat-1000.png" width="500"></a></p>
 
-<img data-src="images/clipboard-2155623770.png" class="r-stretch quarto-figure-center"></section>
-<section id="leatherback-sea-turtle-nesting-data-1" class="slide level2">
+<aside><div>
+<p>Source: <a href="https://www.entercostarica.com/travel-guide/costa-rica-maps/sea-turtle-map" class="uri">https://www.entercostarica.com/travel-guide/costa-rica-maps/sea-turtle-map</a></p>
+</div></aside></section>
+<section id="leatherback-sea-turtle-nesting-raw-data" class="slide level2">
+<h2>Leatherback Sea Turtle Nesting Raw Data</h2>
+
+<img data-src="images/turtle_raw_data.png" class="r-stretch"></section>
+<section id="leatherback-sea-turtle-nesting-cleaned-data" class="slide level2">
+<h2>Leatherback Sea Turtle Nesting Cleaned Data</h2>
+
+<img data-src="images/clipboard-2155623770.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="leatherback-sea-turtle-nesting-data" class="slide level2">
 <h2>Leatherback Sea Turtle Nesting Data</h2>
 <p>Causes of implicit missing data</p>
 <ul>
@@ -695,7 +678,7 @@ An implicit missing value is the absence of a presence.</p>
 <h2>Remedies for implicit missing data</h2>
 <ol type="1">
 <li>Make explicit by pivoting</li>
-<li>Use of <code>complete()</code> function to populate with NA values</li>
+<li>Use <code>complete()</code> function to populate with NA values when needed</li>
 </ol>
 </section>
 <section id="missing-chicago-flight-data" class="slide level2">
@@ -704,41 +687,99 @@ An implicit missing value is the absence of a presence.</p>
 <ul>
 <li>Bar chart of carriers for three destinations from Chicago.</li>
 </ul>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-10_6fe4f11e63893d01520c8eb3fd916985">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">mutate</span>(<span class="at">carrier =</span> <span class="fu">factor</span>(carrier)) <span class="sc">|&gt;</span> </span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">filter</span>(dest <span class="sc">==</span> <span class="st">"LGA"</span><span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"DTW"</span> <span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"SFO"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> carrier, <span class="at">fill =</span> carrier)) <span class="sc">+</span></span>
-<span id="cb28-5"><a href="#cb28-5"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb28-6"><a href="#cb28-6"></a>  <span class="fu">facet_grid</span>(dest<span class="sc">~</span>.) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">carrier =</span> <span class="fu">factor</span>(carrier)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href=""></a>  <span class="fu">filter</span>(dest <span class="sc">==</span> <span class="st">"LGA"</span><span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"DTW"</span> <span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"SFO"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> carrier, <span class="at">fill =</span> carrier)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href=""></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb12-6"><a href=""></a>  <span class="fu">facet_grid</span>(dest<span class="sc">~</span>.) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="missing-chicago-flight-data-output" class="slide level2 output-location-slide"><h2>Missing Chicago flight data</h2><div class="cell output-location-slide" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-10_6fe4f11e63893d01520c8eb3fd916985">
+<section id="missing-chicago-flight-data-output" class="slide level2 output-location-slide"><h2>Missing Chicago flight data</h2><div class="cell output-location-slide">
 <div class="cell-output-display">
+<div>
+<figure>
 <p><img data-src="CH18_Missing_values_slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div></section><section id="missing-chicago-flight-data-1" class="slide level2">
 <h2>Missing Chicago flight data</h2>
 <p>Show all airlines whether they flew to these destinations or not using <code>drop = FALSE</code>:</p>
-<div class="cell" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-11_73e65709abbefaed79f43311111e2808">
-<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>chiflights2020 <span class="sc">|&gt;</span> </span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">mutate</span>(<span class="at">carrier =</span> <span class="fu">factor</span>(carrier)) <span class="sc">|&gt;</span> </span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">filter</span>(dest <span class="sc">==</span> <span class="st">"LGA"</span><span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"DTW"</span> <span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"SFO"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> carrier, <span class="at">fill =</span> carrier)) <span class="sc">+</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb29-6"><a href="#cb29-6"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb29-7"><a href="#cb29-7"></a>  <span class="fu">facet_grid</span>(dest<span class="sc">~</span>.) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="|6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>chiflights2020 <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">carrier =</span> <span class="fu">factor</span>(carrier)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href=""></a>  <span class="fu">filter</span>(dest <span class="sc">==</span> <span class="st">"LGA"</span><span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"DTW"</span> <span class="sc">|</span> dest <span class="sc">==</span> <span class="st">"SFO"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> carrier, <span class="at">fill =</span> carrier)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href=""></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href=""></a>  <span class="fu">scale_x_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb13-7"><a href=""></a>  <span class="fu">facet_grid</span>(dest<span class="sc">~</span>.) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
+</section>
+<section id="missing-chicago-flight-data-1-output" class="slide level2 output-location-slide"><h2>Missing Chicago flight data</h2><div class="cell output-location-slide">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="CH18_Missing_values_slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div></section><section id="summary-missing-values" class="slide level2 smaller">
+<h2>Summary: Missing Values</h2>
+<h3 id="key-concepts">Key Concepts</h3>
+<ul>
+<li><strong>Missing data is everywhere!</strong>
+<ul>
+<li>Can be <strong>explicit</strong> (<code>NA</code> values) or <strong>implicit</strong> (entire rows missing).<br>
+</li>
+<li>Use <code>complete()</code> to make implicit values explicit.</li>
+</ul></li>
+<li><strong>Handling Missing Values</strong>
+<ul>
+<li>Replace missing values with <code>fill()</code>, <code>coalesce()</code>, <code>na_if()</code>.<br>
+</li>
+<li>Imputation techniques include <strong>Last Observation Carried Forward (LOCF)</strong>.</li>
+</ul></li>
+<li><strong>Not all missing data should be imputed!</strong>
+<ul>
+<li>Sometimes, missing values reveal <strong>important patterns</strong> in the data.<br>
+</li>
+<li>Investigate <strong>why</strong> data is missing before filling it.</li>
+</ul></li>
+</ul>
+</section>
+<section id="challenges" class="slide level2 smaller">
+<h2>Challenges</h2>
+<ul>
+<li><strong>Implicit vs.&nbsp;Explicit Missing Data</strong> – Know when to use <code>complete()</code>.</li>
+<li><strong>NaNs from Math Operations</strong> – Can occur from <code>0/0</code>, <code>log(-1)</code>, etc.</li>
+<li><strong>Factors &amp; Missing Data</strong> – Be mindful of empty factor levels.
+<ul>
+<li>Use <code>drop = FALSE</code> in <code>scale_x_discrete()</code> to show all factor levels in visualizations. <br> <br></li>
+</ul></li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Handling missing data isn’t just about filling gaps—it’s about understanding the story behind the gaps.</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section><section id="missing-chicago-flight-data-1-output" class="slide level2 output-location-slide"><h2>Missing Chicago flight data</h2><div class="cell output-location-slide" data-hash="CH18_Missing_values_slides_cache/revealjs/unnamed-chunk-11_73e65709abbefaed79f43311111e2808">
-<div class="cell-output-display">
-<p><img data-src="CH18_Missing_values_slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
 </div>
-</div></section></section>
+</section></section>
     </div>
   </div>
 
@@ -766,7 +807,6 @@ An implicit missing value is the absence of a presence.</p>
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': true,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1022,18 +1062,7 @@ An implicit missing value is the absence of a presence.</p>
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1065,11 +1094,50 @@ An implicit missing value is the absence of a presence.</p>
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1079,8 +1147,17 @@ An implicit missing value is the absence of a presence.</p>
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1094,7 +1171,11 @@ An implicit missing value is the absence of a presence.</p>
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
