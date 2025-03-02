@@ -3,7 +3,7 @@ title: "Introduction to Choropleth Maps"
 author: Introduction to Data Science
 format:
   revealjs:
-    theme: default 
+    theme: [default, custom.scss]
     slide-number: true
     chalkboard: 
       theme: whiteboard
@@ -12,15 +12,19 @@ format:
     execute:
       warning: false
       echo: true
-      cache: true
+#      cache: true
     callouts:
       quote:
         title: Quote
         icon: quote
+title-slide-attributes:
+  data-background-color: "#EA6820"
 editor: 
   markdown: 
     wrap: 72
 ---
+
+
 
 ```{r}
 #| label: setup
@@ -73,4 +77,19 @@ You can make heat maps with the R package **maps**!
 
 -   Use `geom_points()` to add specific points to your maps.
 
--   See the tutorial for details.
+-   See the tutorial in **inclass265** for details.
+
+-   Consider including a map for the data in your group project.
+
+-   Check out the other links on Moodle
+
+## Or Give Leaflets a Try
+
+```{r}
+library(leaflet)
+leaflet() |> 
+  addTiles() |> 
+   setView(-85.601195, 42.290479, zoom = 17) |> 
+  addPopups(-85.601195, 42.290479, 'Here is <b>Olds Upton</b>')
+```
+
