@@ -3,13 +3,14 @@ title: "Chapter 19: Joins"
 author: Introduction to Data Science
 format:
   revealjs:
-    theme: default 
+    theme: [default, custom.scss]
     slide-number: true
     chalkboard: 
       theme: whiteboard
       buttons: false
     preview-links: auto
     execute:
+#      eval: false
       warning: false
       echo: true
       cache: true
@@ -17,6 +18,8 @@ format:
       quote:
         title: Quote
         icon: quote
+title-slide-attributes:
+  data-background-color: "#EA6820"
 editor: 
   markdown: 
     wrap: 72
@@ -30,6 +33,34 @@ library(tidyverse)
 chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chiflight2020.csv")
 ```
 
+## Missing Values Review 
+
+::: incremental
+1.  What are the risks of simply removing rows with missing values from
+    a dataset?
+<br><br><br>
+2.  Given a dataset with missing values, what are some ways you can detect them in R?
+:::
+
+## Missing Values Review continued {.smaller}
+
+::: incremental
+3.  What functions in the tidyverse can be used to handle missing values? How do they differ?
+  - `drop_na()`: Removes rows with missing values.  
+  - `replace_na()`: Replaces `NA` values with a specific value (e.g., `0`, `"Unknown"`).  
+  - `na_if()`: Converts a specific placeholder value (e.g., `-99`, `"Missing"`) into `NA`, making the data cleaner.  
+  - `coalesce()`: Replaces `NA` values by selecting the first available non-missing value from multiple columns or values.  
+  - `fill()`: Fills missing values using the previous or next values (useful for time series).  
+:::
+
+## Missing Values Review continued
+
+::: incremental
+4. Is it ever okay to *ignore* missing data? Why or why not?
+:::
+
+
+
 ## Outline
 
 -   Tables
@@ -41,6 +72,9 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 -   Filtering Joins
 
 ## Keys {.smaller}
+
+![](images/sec19_keys.jpg){.absolute top=200 right=100  height="150"}
+
 
 -   A variable or set of variables used to connect each pair of tables
     are called **keys**
@@ -199,10 +233,12 @@ $\Rightarrow$ Remove duplicates with `distinct()`
 
 Use a "Filtering Join" to filter one table against the rows of another.
 
-* Very useful for determining which rows in a table do not have matches and identifying anomalous cases
+-   Very useful for determining which rows in a table do not have
+    matches and identifying anomalous cases
 
-+ *Have* a match (`semi_join()`)  
-+ Do *not* have a match (`anti_join()`)
+-   *Have* a match (`semi_join()`)\
+
+-   Do *not* have a match (`anti_join()`)
 
 ## Kinds of Filtering Joins
 
@@ -226,7 +262,6 @@ Thought experiment: For these two tables, think about what tibble would
 be produced by each of the 6 joins. Draw the tibble you expect to be
 produced and answer the following?
 
-
 1)  How many rows and columns?
 
 2)  Which rows are included/excluded?
@@ -234,7 +269,6 @@ produced and answer the following?
 3)  Are NA values produced by join? Where?
 
 4)  Which columns are included/excluded?
-
 
 ## Reflection Questions
 
