@@ -63,9 +63,9 @@ chiflights2020 <- read_csv("https://people.kzoo.edu/enordmoe/math265/data/chifli
 
 ## Outline
 
--   Tables
-
 -   Keys
+
+-   Tables
 
 -   Mutating Joins
 
