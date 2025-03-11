@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Chapter 25 Functions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Eric Nordmoe" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="scrollingbox.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Chapter 25 Functions
+]
+.subtitle[
+## MATH 265
+]
+.author[
+### Eric Nordmoe
+]
+
+---
+
+
+
+
+
+
+
+
+# Agenda
+
+* Introduction to Functions  
+
+* Investigation: Applications to scraping
+
+
+---
+class: inverse, center, middle
+
+# Functions  
+
+---
+## From Calculus  
+
+* A function is a rule  
+
+* For every input we can only get one output  
+
+* Passes vertical line test  
+
+![](Ch25_Function_vw25_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+---
+
+## Functions in Computer Science
+
+&lt;img src="figures/Function_machine2.svg.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Why Functions?  
+
+
+``` r
+#  x^2 - 5x - 14 = 0 
+(-(-5) +c(-1,1)*sqrt((-5)^2 - 4*1*(-14)))/( 2*1) 
+```
+
+```
+## [1] -2  7
+```
+
+
+``` r
+# 2x^2 + 2x − 12 = 0
+(-(2) +c(-1,1)*sqrt((2)^2 - 4*(2)*(-12)))/( 2*2) 
+```
+
+```
+## [1] -3  2
+```
+
+
+``` r
+#  x^2 - 4x + 4 = 0 
+(-(-4) +c(-1,1)*sqrt((-4)^2 - 4*1*(4)))/( 2*1) 
+```
+
+```
+## [1] 2 2
+```
+
+
+---
+
+## Write a Famous Function
+
+
+``` r
+quad_roots &lt;- function(aval, bval, cval){
+  (-bval +c(-1,1)*sqrt(bval^2 - 4*aval*cval))/( 2*aval) 
+}
+quad_roots(1, -5, -14)  
+```
+
+```
+## [1] -2  7
+```
+
+``` r
+quad_roots(2, 2, -12)  
+```
+
+```
+## [1] -3  2
+```
+
+``` r
+quad_roots(1, -4, 4)  # Gives repeated roots
+```
+
+```
+## [1] 2 2
+```
+
+---
+
+## What goes in/What comes out?
+
+* Functions take input(s) defined in the function definition
+
+
+``` r
+function([inputs separated by commas]){
+  # what to do with those inputs
+}
+```
+
+* By default they return the last value computed in the function
+
+* You can also define more outputs to be returned in a list as well as nice print methods
+
+---
+## Anonymous Functions
+
+**Anonymous functions** are:
+* Small, temporary functions
+* Don't have an explicit name
+* Created on the spot to perform a specific task such as transforming data
+* Often used within a string of piped functions
+* Typically used just once for a "customized" pupose.
+
+Example: 
+
+``` r
+df_miss |&gt; 
+  summarize(
+    across(a:d, \(x) median(x, na.rm = TRUE)),
+    n = n()
+  )
+```
+
+* Read Chapter 26 to learn about iteration with `across()`.
+
+
+
+---
+class: inverse, center, middle
+
+# Functions and Automation: Scotland First Minister's COVID speeches
+
+---
+
+
+## Goal
+
+Use to scrape all the first minister's speeches that contain COVID in the title and create a dataset of speeches containing the following information about the speeches:
+
+1. Title
+
+2. Date
+
+3. Location
+
+4. Abstract
+
+5. Text of the speech
+
+6. URL address of the speech
+
+---
+
+## Website Table of Contents 
+
+![](figs/first_min_contents.png)
+
+---
+
+## The Goal
+
+![](figs/first_min_speeches_df.png)
+
+---
+
+## Getting Oriented
+
+#### [https://www.gov.scot/collections/first-ministers-speeches/](https://www.gov.scot/collections/first-ministers-speeches/)
+
+
+![](figs/fm_speeches_p1.png)
+---
+
+![:scale 80%](figs/fm_speeches_p2.png)
+
+
+---
+## Plan
+
+1. Scrape `title`, `date`, `location`, `abstract`, and `text` from a few COVID-19 speech pages to develop the code
+
+2. Write a function that scrapes `title`, `date`, `location`, `abstract`, and `text` from COVID-19 speech pages
+
+3. Scrape the `url`s of COVID-19 speeches from the main page
+
+4. Use this function to scrape from each individual COVID-19 speech from these `url`s and create a data frame with the columns `title`, `date`, `location`, `abstract`, `text`, and `url`
+
+---
+class:  middle
+
+## 1. Scrape data from a few COVID-19 speech pages
+
+---
+background-image: url("figs/fm_speeches_picture_oct20.png")
+background-size: 25%
+background-position: 90% 90%
+
+## Read page for  October 26, 2020 speech
+
+
+``` r
+# url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+speech_page &lt;- read_html("https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/")
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+```
+
+
+``` r
+speech_page
+```
+
+---
+
+## Extract title
+
+Use Selector Gadget to find the appropriate node
+
+
+``` r
+title &lt;- speech_page |&gt;
+    html_elements(".ds_page-header__title") |&gt;
+    html_text()
+title
+```
+
+```
+## [1] "Coronavirus (COVID-19) update: First Minister's speech 26 October"
+```
+
+---
+
+
+## Extract date
+
+* Use `dmy()` to format
+
+
+``` r
+library(lubridate)
+date &lt;- speech_page |&gt;
+    html_elements("#sg-meta__publication-date") |&gt;
+    html_text() |&gt;
+  dmy()
+date
+```
+
+```
+## [1] "2020-10-26"
+```
+
+
+---
+
+## Extract location
+
+
+
+``` r
+location &lt;- speech_page |&gt;
+    html_elements(".ds_metadata__item:nth-child(5) strong") |&gt;
+    html_text() 
+location
+```
+
+```
+## [1] "St Andrew's House, Edinburgh"
+```
+
+
+
+---
+
+## Extract abstract
+
+
+
+``` r
+abstract &lt;- speech_page |&gt;
+    html_elements(".ds_no-margin--bottom") |&gt;
+    html_text() 
+abstract
+```
+
+```
+## [1] "Statement given by First Minister Nicola Sturgeon at a media briefing in St Andrew's House on Monday 26 October 2020."
+```
+
+
+
+---
+
+## Extract text
+
+
+
+``` r
+text &lt;- speech_page |&gt;
+    html_elements("#preamble p") |&gt;
+    html_text() |&gt;
+  list()
+text
+```
+
+```
+## [[1]]
+##  [1] " Good afternoon, and thanks for joining us. I want to start with the usual daily report on the COVID statistics."                                                                                                                                                                                                                                                                                                                   
+##  [2] "The total number of positive cases reported yesterday was 1,122."                                                                                                                                                                                                                                                                                                                                                                   
+##  [3] "This represents 7.1% of the total number of tests carried out. 428 of the new cases were in Greater Glasgow and Clyde, 274 in Lanarkshire, 105 in Lothian and 97 in Ayrshire and Arran. "                                                                                                                                                                                                                                           
+##  [4] "The remaining cases were spread across the mainland health board regions. "                                                                                                                                                                                                                                                                                                                                                         
+##  [5] "The total number of confirmed cases is now 57,874."                                                                                                                                                                                                                                                                                                                                                                                 
+##  [6] "I can also confirm that 1,152 people are in hospital – that is an increase of 36 from yesterday"                                                                                                                                                                                                                                                                                                                                    
+##  [7] "90 people are in intensive care, which is four more than yesterday."                                                                                                                                                                                                                                                                                                                                                                
+##  [8] "And I regret to say that in the last 24 hours, one further death has been registered of a patient who first tested positive over the previous 28 days.  It is important though to remember that registration offices tend not to be open as normal over the weekend so the Sunday and Monday figures are often lower."                                                                                                              
+##  [9] "We also reported 11 deaths on Saturday, and one yesterday.  So since the last briefing on Friday, 13 additional deaths have been registered. That takes the total number of deaths, under this measurement, to 2,701."                                                                                                                                                                                                              
+## [10] "That reminds us again of how dangerous this virus can be and I want to send my condolences to everyone who has lost someone."                                                                                                                                                                                                                                                                                                       
+## [11] "I am joined by the Cabinet Secretary for Health who will say a few words about the Scottish Government’s revised testing strategy and about preparations for winter."                                                                                                                                                                                                                                                               
+## [12] "Firstly, I will give a brief preview of the week ahead, before updating you on one particular issue."                                                                                                                                                                                                                                                                                                                               
+## [13] "On Friday, the Scottish Government published our strategic framework for tackling COVID. The framework includes the proposed levels that will apply to different parts of the country, depending on the prevalence of the virus."                                                                                                                                                                                                   
+## [14] "As you recall on Friday we published our strategic framework for tackling COVID."                                                                                                                                                                                                                                                                                                                                                   
+## [15] "That framework included the proposed levels that will apply to different parts of the country, depending on prevalence of the virus."                                                                                                                                                                                                                                                                                               
+## [16] "Over the weekend, we've discussed the framework with partners and considered further public health advice. These discussions are continuing as are discussions with local councils."                                                                                                                                                                                                                                                
+## [17] "There are likely to be some clarifications to the detail of the measures we set out on Friday and so we will publish a revised version, ahead of the parliamentary debate that will take place tomorrow."                                                                                                                                                                                                                           
+## [18] " And of course we will keep the detail of the levels under ongoing review as the pandemic develops"                                                                                                                                                                                                                                                                                                                                 
+## [19] "I will also set out more detail ahead of tomorrow's debate on the factors that will guide decisions on which levels apply to different parts of the country."                                                                                                                                                                                                                                                                       
+## [20] "And assuming Parliament agrees the draft framework tomorrow, Ministers will decide later in the week on advice from the national incident management team, and our chief advisors and in consultation with local councils, what levels will initially apply in what parts of the country from Monday November 2."                                                                                                                   
+## [21] "And I would remind you that in broad terms, the current restrictions in place in the central belt are equivalent to the proposed level three. And those in the rest of the country, broadly equivalent to level two. So for many places there may be no immediate change."                                                                                                                                                          
+## [22] "For an area to come down a level, we want to see a fall in the prevalence of the virus be sustained, not just seen on one or two days."                                                                                                                                                                                                                                                                                             
+## [23] "And that I think is important and giving business stability but also in giving people confidence that we are not going to take unnecessary risks when we start to lift restrictions."                                                                                                                                                                                                                                               
+## [24] "So the next few days will see some important decisions which of course will have an impact on all of us."                                                                                                                                                                                                                                                                                                                           
+## [25] "I think it is important for context for all of us to remember, given how tough all of this is, that these decisions are one that Scotland is facing in common with countries across these islands, across Europe, and of course, across the world. Many countries are facing having to impose or re-impose tough restrictions, especially on hospitality, as a second wave of COVID takes hold."                                    
+## [26] "The purpose of adopting tough restrictions just over two weeks ago here was to try to curb the increase in COVID cases that we were seeing before the virus ran further out of control."                                                                                                                                                                                                                                            
+## [27] "The daily figures I have been reporting recently as I indicated on Friday  suggest that these restrictions are starting to have an effect. We do think that the increase in case numbers is slowing but it's not yet in decline, which is why we can't be complacent, but we should take encouragement from the daily numbers at the moment because they suggest that the sacrifices that everybody is making are starting to work."
+## [28] "Once the new five levels approach is adopted and once people get more familiar with it, which I know will take a bit of time, I hope people will be better able to understand, on an ongoing basis the spread of COVID in their particular area, and also what measures are necessary to tackle it."                                                                                                                                
+## [29] "Hopefully that in turn will underline a key point. The best way of moving to a lower level of restrictions – and of living more freely – is to have a lower level of transmission. And the best way we have of driving transmission lower – and keeping it low – is for all of us to stick to the rules that are in place at any given time. That is of course a collective responsibility for all of us."                          
+## [30] "The second point I want to highlight is that two more walk-through testing sites have opened in the last few days."                                                                                                                                                                                                                                                                                                                 
+## [31] "On Thursday, a new site opened in the centre of Greenock in Inverclyde, and on Saturday, one opened at the Highland Council headquarters in Inverness."                                                                                                                                                                                                                                                                             
+## [32] "That means that in total we have 11 walk-through testing sites now open to meet the needs of local communities across Scotland and to try to make access to testing easier for people."                                                                                                                                                                                                                                             
+## [33] "I want to take this opportunity to thank everyone involved in setting up these sites and all those who are helping to run them."                                                                                                                                                                                                                                                                                                    
+## [34] "This walk-through centres are only part of our testing infrastructure but they are an important way to make testing more accessible in Scotland’s towns and cities. So we will continue to work with partners – including the UK Government -  to establish more of them in the weeks and months ahead.."                                                                                                                           
+## [35] "It is possible to book a test at a walk-through site by going to the NHS Inform website. Please remember that though they are walk-through sites, you should seek to walk, cycle or drive to them, but do not use public transport to travel to any testing centre."                                                                                                                                                                
+## [36] "If you do not have a car - and cannot walk or cycle - please book a home testing kit through NHS Inform."                                                                                                                                                                                                                                                                                                                           
+## [37] "The reason for that, is to ensure you do not transmit the virus on the way to or from the testing centre."                                                                                                                                                                                                                                                                                                                          
+## [38] "I would remind everybody again that if you experience an of the symptoms of COVID it is really important to self-isolate immediately and take steps to get tested."                                                                                                                                                                                                                                                                 
+## [39] "I want to end, as usual, by stressing the other key rules and guidelines."                                                                                                                                                                                                                                                                                                                                                          
+## [40] "If you live in Lothian, Lanarkshire, Forth Valley, Ayrshire and Arran and Greater Glasgow and Clyde, you should not travel outside those areas unless you have a clear need to do so."                                                                                                                                                                                                                                              
+## [41] "People living in other parts of Scotland should not travel to these areas unless necessary."                                                                                                                                                                                                                                                                                                                                        
+## [42] "None of us should be visiting each other’s homes just now, except for very specific purposes such as childcare or looking after a vulnerable person."                                                                                                                                                                                                                                                                               
+## [43] "And when we do meet people from other households - outdoors, or at a café - the maximum group size is 6, from a maximum of two households."                                                                                                                                                                                                                                                                                         
+## [44] "Avoid car-sharing if you can. Work from home if you can. And remember to download the Protect Scotland app, if you haven’t already done so."                                                                                                                                                                                                                                                                                        
+## [45] "And finally, remember the FACTS – the five rules which will help to remind you how to do the right thing."                                                                                                                                                                                                                                                                                                                          
+## [46] "If we all stick to these rules then hopefully the encouraging signs we are seeing in the figures that we are reporting every day will not just continue but accelerate, and a slowing of the increase over the weeks to come will become a decline in the number of daily new cases."                                                                                                                                               
+## [47] "Thank you all very much."
+```
+
+
+---
+
+## Put it all in a data frame
+
+
+``` r
+oct_26_speech &lt;- tibble(
+  title    = title,
+  date     = date,
+  location = location,
+  abstract = abstract,
+  text     = text,
+  url      = url
+)
+oct_26_speech
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                 date       location abstract text  url  
+##   &lt;chr&gt;                                 &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;    &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First… 2020-10-26 St Andr… Stateme… &lt;chr&gt; http…
+```
+
+---
+
+## Read page for October 23, 2020 speech
+
+
+``` r
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/"
+speech_page &lt;- read_html(url)
+```
+
+
+``` r
+speech_page
+```
+
+```
+## {html_document}
+## &lt;html dir="ltr" lang="en"&gt;
+## [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+## [2] &lt;body&gt;\n    &lt;input type="hidden" id="site-root-path" value="/"&gt;&lt;!-- Googl ...
+```
+
+---
+
+## Extract components of the October 23, 2020 speech
+
+
+``` r
+title &lt;- speech_page |&gt;
+  html_elements(".ds_page-header__title") |&gt;
+  html_text()
+date &lt;- speech_page |&gt;
+  html_elements("#sg-meta__publication-date") |&gt;
+  html_text() |&gt;
+  dmy()
+location &lt;- speech_page |&gt;
+  html_elements(".ds_metadata__item:nth-child(5) strong") |&gt;
+  html_text()
+abstract &lt;- speech_page |&gt;
+  html_elements(".ds_no-margin--bottom") |&gt;
+  html_text()
+text &lt;- speech_page |&gt;
+  html_elements("#preamble p") |&gt;
+  html_text() |&gt;
+  list()
+```
+
+---
+
+## Put it all in a data frame
+
+
+``` r
+oct_23_speech &lt;- tibble(
+  title    = title,
+  date     = date,
+  location = location,
+  abstract = abstract,
+  text     = text,
+  url      = url
+)
+oct_23_speech
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                 date       location abstract text  url  
+##   &lt;chr&gt;                                 &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;    &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First… 2020-10-23 St Andr… Stateme… &lt;chr&gt; http…
+```
+
+
+---
+class: inverse, center, middle
+
+# Isn't there a way to speed this up?
+
+---
+class:  center, middle
+
+# Functions to the Rescue
+
+---
+
+## When should you write a function?
+
+* When you’ve copied and pasted a block of code more than twice.
+
+---
+
+### How many times would we need to copy and paste the code we developed to scrape data on all of First Minister's COVID-19 speeches?
+
+![:scale 50%](figs/fm_speeches_p3.png)
+
+---
+
+## Why functions?
+  
+Automate common tasks in a more powerful and general way than copy-and-pasting:  
+  
+* Use names that indicate what the purpose of the function
+   + Avoid reserved R names: like `c`, `sum`
+
+* Make updating code easier allowing you to update in just one place instead of many
+
+* Eliminate mistakes with copying and pasting
+   + Forgetting to make corresponding changes in all places
+
+* Learn to write and share your own functions!
+
+---
+
+### Assuming that the page structure is the same for each speech page, how many "things" do you need to know for each speech page to scrape the data we want from it?
+
+.small-code[
+
+``` r
+url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/"
+speech_page &lt;- read_html(url)
+title &lt;- speech_page |&gt;
+  html_elements(".ds_page-header__title") |&gt;
+  html_text()
+date &lt;- speech_page |&gt;
+  html_elements("#sg-meta__publication-date") |&gt;
+  html_text() |&gt;
+  dmy()
+location &lt;- speech_page |&gt;
+  html_elements(".ds_metadata__item:nth-child(5) strong") |&gt;
+  html_text()
+abstract &lt;- speech_page |&gt;
+  html_elements(".ds_no-margin--bottom") |&gt;
+  html_text()
+text &lt;- speech_page |&gt;
+  html_elements("#preamble p") |&gt;
+  html_text() |&gt;
+  list()
+tibble(title = title, date  = date, location = location,  
+       abstract = abstract, text = text,  url = url)
+```
+]
+
+---
+
+## Turn your code into a function
+
+* Pick a short informative name, preferably a verb.
+
+* List inputs, or **arguments**, to the function inside `function`. If we had more the call would look like `function(x, y, z)`.
+
+* Place the code you have developed in body of the function, a `{` block that immediately follows `function(...)`.
+
+
+``` r
+scrape_speech &lt;- function(url){
+  # code we developed earlier to scrape info 
+  # on a single speech goes here
+}
+```
+
+---
+## Define the function scrape_speech()
+
+.small-code[
+
+``` r
+scrape_speech &lt;- function(url) {
+  speech_page &lt;- read_html(url)
+  title &lt;- speech_page |&gt;
+  html_elements(".ds_page-header__title") |&gt;
+  html_text()
+date &lt;- speech_page |&gt;
+  html_elements("#sg-meta__publication-date") |&gt;
+  html_text() |&gt;
+  dmy()
+location &lt;- speech_page |&gt;
+  html_elements(".ds_metadata__item:nth-child(5) strong") |&gt;
+  html_text()
+abstract &lt;- speech_page |&gt;
+  html_elements(".ds_no-margin--bottom") |&gt;
+  html_text()
+text &lt;- speech_page |&gt;
+  html_elements("#preamble p") |&gt;
+  html_text() |&gt;
+  list()
+tibble(
+  title = title, date = date, location = location,
+  abstract = abstract, text = text, url = url
+)
+}
+```
+]
+
+---
+
+## Function scrape_speech() in action
+### October 23, 2020
+
+
+``` r
+scrape_speech(url = "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-23-october/") |&gt;
+glimpse()
+```
+
+```
+## Rows: 1
+## Columns: 6
+## $ title    &lt;chr&gt; "Coronavirus (COVID-19) update: First Minister's speech 23 Oc…
+## $ date     &lt;date&gt; 2020-10-23
+## $ location &lt;chr&gt; "St Andrew's House, Edinburgh"
+## $ abstract &lt;chr&gt; "Statement given by First Minister Nicola Sturgeon at a medi…
+## $ text     &lt;list&gt; &lt;" Good afternoon everyone. Thank you very much for joining u…
+## $ url      &lt;chr&gt; "https://www.gov.scot/publications/coronavirus-covid-19-updat…
+```
+
+---
+
+## Function scrape_speech() in action
+### October 26, 2020
+
+
+``` r
+scrape_speech(url = "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/") |&gt;
+glimpse()
+```
+
+```
+## Rows: 1
+## Columns: 6
+## $ title    &lt;chr&gt; "Coronavirus (COVID-19) update: First Minister's speech 26 Oc…
+## $ date     &lt;date&gt; 2020-10-26
+## $ location &lt;chr&gt; "St Andrew's House, Edinburgh"
+## $ abstract &lt;chr&gt; "Statement given by First Minister Nicola Sturgeon at a medi…
+## $ text     &lt;list&gt; &lt;" Good afternoon, and thanks for joining us. I want to start…
+## $ url      &lt;chr&gt; "https://www.gov.scot/publications/coronavirus-covid-19-updat…
+```
+
+---
+
+## Automation?  
+  
+* We now have a function for scraping speech info given `url`?  
+
+* How can we get a list of speech `url`s?
+  
+---
+
+class:  center, middle
+
+# Inputs
+
+---
+
+## All URLs
+
+
+``` r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page |&gt;
+  html_elements(".collections-list a") |&gt;
+  html_attr("href") 
+```
+
+```
+##   [1] "/publications/international-solidarity-to-support-ukraine-first-ministers-statement-4-march-2025/"                                 
+##   [2] "/publications/a-new-initiative-to-bring-scotland-together-first-ministers-speech-26-february-2025/"                                
+##   [3] "/publications/climate-action-first-ministers-speech-19-february/"                                                                  
+##   [4] "/publications/securing-a-future-for-grangemouth-first-ministers-statement-17-february-2025/"                                       
+##   [5] "/publications/new-deal-for-agriculture-nfus-first-ministers-speech/"                                                               
+##   [6] "/publications/improving-public-services-and-nhs-renewal-first-ministers-speech/"                                                   
+##   [7] "/publications/the-paths-to-prosperity-for-scotland-first-ministers-speech/"                                                        
+##   [8] "/publications/first-ministers-speech-vision-for-eradicating-child-poverty-in-scotland/"                                            
+##   [9] "/publications/first-ministers-speech-a-budget-for-hope-and-recovery/"                                                              
+##  [10] "/publications/first-ministers-speech-royal-society-of-edinburgh/"                                                                  
+...
+```
+
+
+---
+
+## COVID-19 URLs fragments
+
+
+``` r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page |&gt;
+  html_elements(".collections-list a") |&gt;
+  html_attr("href") |&gt;
+  str_subset("covid-19")
+```
+
+```
+##   [1] "/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+## Combine to get COVID-19 URLs
+
+
+``` r
+all_speeches_page &lt;- read_html("https://www.gov.scot/collections/first-ministers-speeches/")
+all_speeches_page |&gt;
+  html_elements(".collections-list a") |&gt;
+  html_attr("href") |&gt;
+  str_subset("covid-19") |&gt; 
+  (\(.x) str_c("https://www.gov.scot", .x))() # Use anonymous function to paste pipe as second argument 
+```
+
+```
+##   [1] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+
+## Save COVID-19 URLs
+
+
+``` r
+covid_speech_urls &lt;- 
+  all_speeches_page |&gt;
+  html_elements(".collections-list a") |&gt;
+  html_attr("href") |&gt;
+  str_subset("covid-19") |&gt; 
+  (\(.x) str_c("https://www.gov.scot", .x))()  # Use anonymous function to paste pipe as second argument 
+
+covid_speech_urls
+```
+
+```
+##   [1] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-tuesday-22-february-2022/"     
+##   [2] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-8-february-2022/"           
+##   [3] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-1-february-2022/"           
+##   [4] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-25-january-2022/"           
+##   [5] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-18-january-2022/"           
+##   [6] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-11-january-2022/"           
+##   [7] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-5-january-2022/"            
+##   [8] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-21-december-2021/"          
+##   [9] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-17-december-2021/"             
+##  [10] "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-statement-14-december-2021/"          
+...
+```
+
+---
+
+class:  center, middle
+
+# Iteration
+
+---
+
+## Define the task
+
+* Goal: Scrape info on all COVID-19 speeches of the First Minister
+* So far:
+.very-small-code[
+
+``` r
+scrape_speech(covid_speech_urls[1])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                 date       location abstract text  url  
+##   &lt;chr&gt;                                 &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;    &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First… 2022-02-22 Scottis… Stateme… &lt;chr&gt; http…
+```
+
+
+``` r
+scrape_speech(covid_speech_urls[2])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                 date       location abstract text  url  
+##   &lt;chr&gt;                                 &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;    &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First… 2022-02-08 Scottis… Stateme… &lt;chr&gt; http…
+```
+
+
+``` r
+scrape_speech(covid_speech_urls[3])
+```
+
+```
+## # A tibble: 1 × 6
+##   title                                 date       location abstract text  url  
+##   &lt;chr&gt;                                 &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;    &lt;lis&gt; &lt;chr&gt;
+## 1 Coronavirus (COVID-19) update: First… 2022-02-01 Scottis… Stateme… &lt;chr&gt; http…
+```
+]
+
+---
+
+## Now what?
+
+* What else do we need to do?
+  + Run the `scrape_speech()` function on all COVID-19 speech links
+  + Combine the resulting data frames from each run into one giant data frame
+
+---
+
+## Iteration
+
+* How can we tell R to apply the `scrape_speech()` function to each link in `covid_speech_urls`?
+
+---
+class: inverse, center, top
+
+background-image: url(figures/purrr.png)
+background-position: 50% 75%
+background-size: 50% 50%
+
+## Look at Chapter 26 for the `purrr`fect solution! 
+
+
+---
+# Acknowledgement  
+
+Web scraping introduction to functions adapted from materials provided by [Data Science in a Box](https://datasciencebox.org/) at https://github.com/rstudio-education/datascience-box. 
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

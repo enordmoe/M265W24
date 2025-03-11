@@ -1,31 +1,228 @@
 ---
-title: "Introduction to Data Science"
-author: "MATH 265"
+title: "Chapter 25: Functions"
+author: Introduction to Data Science
 format:
   revealjs:
-    chalkboard: true
     theme: [default, custom.scss]
-    reveal-options:
-      slideNumber: true
-    html-math-method: mathjax
+    slide-number: true
+    chalkboard: 
+      theme: whiteboard
+      buttons: false
+    preview-links: auto
+    execute:
+      warning: false
+      echo: true
+      cache: true
+    callouts:
+      quote:
+        title: Quote
+        icon: quote
 title-slide-attributes:
   data-background-color: "#EA6820"
-from: markdown+emoji
-execute:
-  echo: true
-  cache: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
-```{r, echo=F, message = FALSE}
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(rvest)
+#library(backports)
+```
+
+## Agenda
+
+-   Introduction to Functions
+
+-   Investigation: Applications to scraping
+
+# Functions {background-color="#FAD9C7"}
+
+## From Calculus
+
+-   A function is a rule
+
+-   For every input we can only get one output
+
+-   Passes vertical line test
+
+```{r, echo = F, warning = FALSE}
+x <- seq(-2, 6, .05)
+y <- x^3 - 6*x^2 + 4*x + 12
+plot(x, y, 
+     type="l", 
+     xaxt='n', yaxt='n', 
+     bty='n', 
+     xlab='', ylab='', 
+     col="blue")
+##  Next add in your axis arrows:
+arrows(min(x), 0, max(x), 0, lwd=1, length=0.15)
+arrows(0, min(y), 0, max(y), lwd=1, length=0.15)
+##  And plot your x/y labels.  Note that if you want them
+##    actually at the end of the arrows you would need to 
+##    remove the pos= argument and shorten your arrows by
+##    a small amount.  To match your original figure, you can
+##    alter the x/y coordinate to be the max() instead.
+text(0, max(y), "f(x)", pos=2)
+text(max(x), 0, "x", pos=3)
+#axis(1)
+#axis(2)
+```
+
+## Functions in Computer Science
+
+![](figures/Function_machine2.svg.png)
+
+## Why Functions?
+
+```{r}
+#  x^2 - 5x - 14 = 0 
+(-(-5) +c(-1,1)*sqrt((-5)^2 - 4*1*(-14)))/( 2*1) 
+```
+
+```{r}
+# 2x^2 + 2x − 12 = 0
+(-(2) +c(-1,1)*sqrt((2)^2 - 4*(2)*(-12)))/( 2*2) 
+```
+
+```{r}
+#  x^2 - 4x + 4 = 0 
+(-(-4) +c(-1,1)*sqrt((-4)^2 - 4*1*(4)))/( 2*1) 
+```
+
+## Write a Famous Function
+
+```{r}
+quad_roots <- function(aval, bval, cval){
+  (-bval +c(-1,1)*sqrt(bval^2 - 4*aval*cval))/( 2*aval) 
+}
+quad_roots(1, -5, -14)  
+quad_roots(2, 2, -12)  
+quad_roots(1, -4, 4)  # Gives repeated roots
+```
+
+## What goes in/What comes out?
+
+-   Functions take input(s) defined in the function definition
+
+```{r, eval = FALSE}
+function([inputs separated by commas]){
+  # what to do with those inputs
+}
+```
+
+-   By default they return the last value computed in the function
+
+-   You can also define more outputs to be returned in a list as well as
+    nice print methods
+
+## Anonymous Functions {.smaller}
+
+-   Small, temporary functions\
+-   Don't have an explicit name\
+-   Created on the spot to perform a specific task such as transforming
+    data\
+-   Often used within a string of piped functions\
+-   Typically used just once for a "customized" purpose.
+
+Example:
+
+```{r, eval = FALSE}
+df_miss |> 
+  summarize(
+    across(a:d, \(x) median(x, na.rm = TRUE)),
+    n = n()
+  )
+```
+
+-   Check out Chapter 26 on iteration to learn more about `across()`.
+
+##  {.center .middle background-color="#FAD9C7"}
+
+### Functions and Automation:\n Scotland First Minister's COVID speeches
+
+## Goal
+
+Use to scrape all the first minister's speeches that contain COVID in
+the title and create a dataset of speeches containing the following
+information about the speeches:
+
+1.  Title
+
+2.  Date
+
+3.  Location
+
+4.  Abstract
+
+5.  Text of the speech
+
+6.  URL address of the speech
+
+## Website Table of Contents
+
+![](figs/first_min_contents.png)
+
+## The Goal
+
+![](figs/first_min_speeches_df.png)
+
+## Getting Oriented
+
+**[https://www.gov.scot/collections/first-ministers-speeches/](https://www.gov.scot/collections/first-ministers-speeches/)**
+
+::::: columns
+::: {.column width="50%"}
+
+![](figs/fm_speeches_p1.png)
+:::
+
+::: {.column width="50%"}
+
+![](figs/fm_speeches_p2.png)
+:::
+
+:::::
+
+
+## Plan
+
+1. Scrape `title`, `date`, `location`, `abstract`, and `text` from a few COVID-19 speech pages to develop the code
+
+2. Write a function that scrapes `title`, `date`, `location`, `abstract`, and `text` from COVID-19 speech pages
+
+3. Scrape the `url`s of COVID-19 speeches from the main page
+
+4. Use this function to scrape from each individual COVID-19 speech from these `url`s and create a data frame with the columns `title`, `date`, `location`, `abstract`, `text`, and `url`
+
+
+
+## 1. Scrape data from a few COVID-19 speech pages
+
+## Read page for  October 26, 2020 speech
+
+```{r, read-page}
+# url <- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+speech_page <- read_html("https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/")
+url <- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"
+```
+
+```{r, eval=FALSE}
+speech_page
 ```
 
 
-## What is Data Science? 
-
-### A Picture is Worth 1000 Words
+![](figs/fm_speeches_picture_oct20.png){.absolute top=400 right=100  height="250"}
 
 
-```{r, out.width='100%', fig.align='center', fig.cap='',echo=FALSE}
-knitr::include_graphics('https://r4ds.hadley.nz/diagrams/data-science/base.png')
+## Extract title
+
+Use Selector Gadget to find the appropriate node
+
+```{r read-title}
+title <- speech_page |>
+    html_elements(".ds_page-header__title") |>
+    html_text()
+title
 ```
+

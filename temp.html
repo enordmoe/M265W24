@@ -10,8 +10,8 @@
 <link href="temp_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.52">
 
-  <meta name="author" content="MATH 265">
-  <title>Introduction to Data Science</title>
+  <meta name="author" content="Introduction to Data Science">
+  <title>Chapter 25: Functions</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="temp_files/libs/revealjs/dist/theme/quarto.css">
   <link href="temp_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -328,27 +393,189 @@
     <div class="slides">
 
 <section id="title-slide" data-background-color="#EA6820" class="quarto-title-block center">
-  <h1 class="title">Introduction to Data Science</h1>
+  <h1 class="title">Chapter 25: Functions</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-MATH 265 
+Introduction to Data Science 
 </div>
 </div>
 </div>
 
 </section>
-<section id="what-is-data-science" class="slide level2">
-<h2>What is Data Science?</h2>
-<h3 id="a-picture-is-worth-1000-words">A Picture is Worth 1000 Words</h3>
+<section id="agenda" class="slide level2">
+<h2>Agenda</h2>
+<ul>
+<li><p>Introduction to Functions</p></li>
+<li><p>Investigation: Applications to scraping</p></li>
+</ul>
+</section>
+<section>
+<section id="functions" class="title-slide slide level1 center" data-background-color="#FAD9C7">
+<h1>Functions</h1>
 
-<img data-src="https://r4ds.hadley.nz/diagrams/data-science/base.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><div class="quarto-auto-generated-content">
+</section>
+<section id="from-calculus" class="slide level2">
+<h2>From Calculus</h2>
+<ul>
+<li><p>A function is a rule</p></li>
+<li><p>For every input we can only get one output</p></li>
+<li><p>Passes vertical line test</p></li>
+</ul>
+
+<img data-src="temp_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section id="functions-in-computer-science" class="slide level2">
+<h2>Functions in Computer Science</h2>
+
+<img data-src="figures/Function_machine2.svg.png" class="r-stretch"></section>
+<section id="why-functions" class="slide level2">
+<h2>Why Functions?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co">#  x^2 - 5x - 14 = 0 </span></span>
+<span id="cb1-2"><a href=""></a>(<span class="sc">-</span>(<span class="sc">-</span><span class="dv">5</span>) <span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">*</span><span class="fu">sqrt</span>((<span class="sc">-</span><span class="dv">5</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">1</span><span class="sc">*</span>(<span class="sc">-</span><span class="dv">14</span>)))<span class="sc">/</span>( <span class="dv">2</span><span class="sc">*</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -2  7</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># 2x^2 + 2x − 12 = 0</span></span>
+<span id="cb3-2"><a href=""></a>(<span class="sc">-</span>(<span class="dv">2</span>) <span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">*</span><span class="fu">sqrt</span>((<span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>(<span class="dv">2</span>)<span class="sc">*</span>(<span class="sc">-</span><span class="dv">12</span>)))<span class="sc">/</span>( <span class="dv">2</span><span class="sc">*</span><span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -3  2</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co">#  x^2 - 4x + 4 = 0 </span></span>
+<span id="cb5-2"><a href=""></a>(<span class="sc">-</span>(<span class="sc">-</span><span class="dv">4</span>) <span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">*</span><span class="fu">sqrt</span>((<span class="sc">-</span><span class="dv">4</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">1</span><span class="sc">*</span>(<span class="dv">4</span>)))<span class="sc">/</span>( <span class="dv">2</span><span class="sc">*</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 2</code></pre>
+</div>
+</div>
+</section>
+<section id="write-a-famous-function" class="slide level2">
+<h2>Write a Famous Function</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>quad_roots <span class="ot">&lt;-</span> <span class="cf">function</span>(aval, bval, cval){</span>
+<span id="cb7-2"><a href=""></a>  (<span class="sc">-</span>bval <span class="sc">+</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">*</span><span class="fu">sqrt</span>(bval<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>aval<span class="sc">*</span>cval))<span class="sc">/</span>( <span class="dv">2</span><span class="sc">*</span>aval) </span>
+<span id="cb7-3"><a href=""></a>}</span>
+<span id="cb7-4"><a href=""></a><span class="fu">quad_roots</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">14</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -2  7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">quad_roots</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="sc">-</span><span class="dv">12</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -3  2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">quad_roots</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)  <span class="co"># Gives repeated roots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 2</code></pre>
+</div>
+</div>
+</section>
+<section id="what-goes-inwhat-comes-out" class="slide level2">
+<h2>What goes in/What comes out?</h2>
+<ul>
+<li>Functions take input(s) defined in the function definition</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="cf">function</span>([inputs separated by commas]){</span>
+<span id="cb13-2"><a href=""></a>  <span class="co"># what to do with those inputs</span></span>
+<span id="cb13-3"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>By default they return the last value computed in the function</p></li>
+<li><p>You can also define more outputs to be returned in a list as well as nice print methods</p></li>
+</ul>
+</section>
+<section id="anonymous-functions" class="slide level2 smaller">
+<h2>Anonymous Functions</h2>
+<ul>
+<li>Small, temporary functions<br>
+</li>
+<li>Don’t have an explicit name<br>
+</li>
+<li>Created on the spot to perform a specific task such as transforming data<br>
+</li>
+<li>Often used within a string of piped functions<br>
+</li>
+<li>Typically used just once for a “customized” purpose.</li>
+</ul>
+<p>Example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>df_miss <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">summarize</span>(</span>
+<span id="cb14-3"><a href=""></a>    <span class="fu">across</span>(a<span class="sc">:</span>d, \(x) <span class="fu">median</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb14-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb14-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Check out Chapter 26 on iteration to learn more about <code>across()</code>.</li>
+</ul>
+</section>
+<section id="section" class="slide level2 center middle" data-background-color="#FAD9C7">
+<h2></h2>
+<h3 id="functions-and-automationscotland-first-ministers-covid-speeches">Functions and Automation:Scotland First Minister’s COVID speeches</h3>
+</section>
+<section id="goal" class="slide level2">
+<h2>Goal</h2>
+<p>Use to scrape all the first minister’s speeches that contain COVID in the title and create a dataset of speeches containing the following information about the speeches:</p>
+<ol type="1">
+<li><p>Title</p></li>
+<li><p>Date</p></li>
+<li><p>Location</p></li>
+<li><p>Abstract</p></li>
+<li><p>Text of the speech</p></li>
+<li><p>URL address of the speech</p></li>
+</ol>
+</section>
+<section id="website-table-of-contents" class="slide level2">
+<h2>Website Table of Contents</h2>
+
+<img data-src="figs/first_min_contents.png" class="r-stretch"></section>
+<section id="the-goal" class="slide level2">
+<h2>The Goal</h2>
+
+<img data-src="figs/first_min_speeches_df.png" class="r-stretch"></section>
+<section id="getting-oriented" class="slide level2">
+<h2>Getting Oriented</h2>
+<p><strong><a href="https://www.gov.scot/collections/first-ministers-speeches/">https://www.gov.scot/collections/first-ministers-speeches/</a></strong></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="figs/fm_speeches_p1.png"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="figs/fm_speeches_p2.png"></p>
+</div></div>
+</section>
+<section id="plan" class="slide level2">
+<h2>Plan</h2>
+<ol type="1">
+<li><p>Scrape <code>title</code>, <code>date</code>, <code>location</code>, <code>abstract</code>, and <code>text</code> from a few COVID-19 speech pages to develop the code</p></li>
+<li><p>Write a function that scrapes <code>title</code>, <code>date</code>, <code>location</code>, <code>abstract</code>, and <code>text</code> from COVID-19 speech pages</p></li>
+<li><p>Scrape the <code>url</code>s of COVID-19 speeches from the main page</p></li>
+<li><p>Use this function to scrape from each individual COVID-19 speech from these <code>url</code>s and create a data frame with the columns <code>title</code>, <code>date</code>, <code>location</code>, <code>abstract</code>, <code>text</code>, and <code>url</code></p></li>
+</ol>
+</section>
+<section id="scrape-data-from-a-few-covid-19-speech-pages" class="slide level2">
+<h2>1. Scrape data from a few COVID-19 speech pages</h2>
+</section>
+<section id="read-page-for-october-26-2020-speech" class="slide level2">
+<h2>Read page for October 26, 2020 speech</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># url &lt;- "https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"</span></span>
+<span id="cb15-2"><a href=""></a>speech_page <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"</span>)</span>
+<span id="cb15-3"><a href=""></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.gov.scot/publications/coronavirus-covid-19-update-first-ministers-speech-26-october/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>speech_page</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img data-src="figs/fm_speeches_picture_oct20.png" class="absolute" style="top: 400px; right: 100px; height: 250px; "></p>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -375,13 +602,13 @@ MATH 265
       // https://revealjs.com/config/
       Reveal.initialize({
 'controlsAuto': true,
-'previewLinksAuto': false,
+'previewLinksAuto': true,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":true},
+'chalkboard': {"buttons":false,"theme":"whiteboard"},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -402,7 +629,7 @@ MATH 265
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -535,7 +762,7 @@ MATH 265
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
